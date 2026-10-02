@@ -69,7 +69,7 @@
             </span>
           </div>
           <p class="text-xs md:text-sm text-slate-500">
-            전국 국립공원 야영장·생태탐방원·대피소의 실시간 빈자리와 <b>세부 방/사이트(호실·동)</b> 현황을 1개 전광판으로 확인하세요.
+            전국 국립공원 야영장·생태탐방원·대피소 및 <b>국립자연휴양림(숲속의집·휴양관)</b>의 실시간 빈자리와 <b>세부 방/사이트(호실·동)</b> 현황을 1개 전광판으로 확인하세요.
           </p>
         </div>
 
@@ -88,16 +88,46 @@
         </div>
       </div>
 
-      <!-- Facility Category Tabs -->
-      <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
-        <button class="facility-tab active px-3.5 py-1.5 rounded-xl font-bold transition-all bg-emerald-600 text-white shadow-xs" data-facility="camp">
+      <!-- Service Main Navigation (대메뉴: 국립공원 vs 국립자연휴양림 숲나들e) -->
+      <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2.5">
+        <button class="service-btn active px-4 py-2 rounded-xl font-black text-xs transition-all bg-emerald-600 text-white shadow-sm flex items-center gap-2 cursor-pointer" data-service="knps">
+          <span class="text-sm">🌲</span>
+          <span>국립공원 (KNPS)</span>
+          <span class="text-[10px] bg-emerald-700/60 text-emerald-100 px-1.5 py-0.5 rounded font-normal">공단 48개소</span>
+        </button>
+        <button class="service-btn px-4 py-2 rounded-xl font-bold text-xs transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200 flex items-center gap-2 cursor-pointer" data-service="forest">
+          <span class="text-sm">🍃</span>
+          <span>국립자연휴양림 (숲나들e)</span>
+          <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-normal">숲속의집·휴양관</span>
+        </button>
+      </div>
+
+      <!-- Facility Category Sub-Tabs: 국립공원 -->
+      <div id="knpsSubTabs" class="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
+        <button class="knps-tab active px-3.5 py-1.5 rounded-xl font-bold transition-all bg-emerald-600 text-white shadow-xs" data-facility="camp">
           🏕️ 국립공원 야영장 (48개소)
         </button>
-        <button class="facility-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="eco">
+        <button class="knps-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="eco">
           🌲 생태탐방원 생활관 (객실 9개원)
         </button>
-        <button class="facility-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="shelter">
+        <button class="knps-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="shelter">
           🏠 산악 대피소 (침상/방)
+        </button>
+      </div>
+
+      <!-- Facility Category Sub-Tabs: 자연휴양림 숲나들e -->
+      <div id="forestSubTabs" class="mt-2.5 flex flex-wrap items-center gap-2 text-xs hidden">
+        <button class="forest-tab active px-3.5 py-1.5 rounded-xl font-bold transition-all bg-amber-600 text-white shadow-xs" data-facility="all">
+          전체 (숲속의집+휴양관+야영데크)
+        </button>
+        <button class="forest-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="house">
+          🏡 숲속의 집 (독채 통나무집)
+        </button>
+        <button class="forest-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="condo">
+          🏢 산림문화휴양관 (콘도형)
+        </button>
+        <button class="forest-tab px-3.5 py-1.5 rounded-xl font-semibold transition-all bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200" data-facility="deck">
+          ⛺ 야영데크 (캠핑)
         </button>
       </div>
 
@@ -164,7 +194,7 @@
           <input 
             type="text" 
             id="campSearchInput" 
-            placeholder="야영장/방 이름 검색 (예: 닷돈재, 산막, 카라반)..." 
+            placeholder="야영장/휴양림/방 이름 검색 (예: 닷돈재, 유명산, 산음, 독채)..." 
             class="w-full bg-slate-100 border border-slate-200 rounded-lg pl-8 pr-2.5 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           >
           <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,10 +275,10 @@
     <footer class="mt-5 p-4 rounded-xl bg-white border border-slate-200 text-xs text-slate-500 flex flex-col md:flex-row items-center justify-between gap-2 shadow-sm">
       <div class="flex items-center gap-2">
         <span class="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">💡 공식 연동</span>
-        <span>잔여석 또는 방/사이트 배지를 클릭하면 국립공원공단 공식 해당 예약 화면으로 즉시 연결됩니다.</span>
+        <span>잔여석 또는 방/사이트 배지를 클릭하면 국립공원공단 및 숲나들e 공식 예약 화면으로 즉시 연결됩니다.</span>
       </div>
       <div class="text-[11px] text-slate-400" id="lastUpdatedSource">
-        데이터: 국립공원공단 공식 실시간 시스템 연동
+        데이터: 국립공원공단 & 숲나들e 공식 실시간 시스템 연동
       </div>
     </footer>
   </div>

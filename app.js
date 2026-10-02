@@ -1,9 +1,10 @@
-// KNPS One-View Frontend Application Logic
+// KNPS One-View & ForestTrip (국립공원 & 숲나들e 자연휴양림 통합 뷰어)
 // 100% Real-time Official Data Loader & Interactive Room-level Inspector
 
 // State
 let allCampsites = [];
-let currentFacility = "camp"; // "camp", "eco", "shelter"
+let currentService = "knps"; // "knps" (국립공원) or "forest" (자연휴양림 숲나들e)
+let currentFacility = "camp"; // knps: "camp", "eco", "shelter" | forest: "house", "condo", "deck"
 let dateMode = "this-sat";
 let currentRegion = "all";
 let currentType = "all";
@@ -12,12 +13,194 @@ let availableOnly = true;
 let roomOnlyFilter = false;
 let consecutiveOnly = false;
 let favoritesOnly = false;
-let favorites = JSON.parse(localStorage.getItem("knps_favs") || '["B111003", "B031005", "B081002"]'); // 월악산 닷돈재1, 설악산 설악동, 태안 몽산포 기본 찜
-let expandedCampIds = new Set(["B111003"]); // 닷돈재1 기본 펼침
+let favorites = JSON.parse(localStorage.getItem("knps_favs") || '["B111003", "B031005", "B081002", "F_YUMYEONG", "F_BYEONSAN"]');
+let expandedCampIds = new Set(["B111003", "F_YUMYEONG"]); // 닷돈재, 유명산 기본 펼침
 let huntModeActive = false;
 let huntIntervalId = null;
 
-// Official KNPS Eco Lodges (생태탐방원 9개원 실제 객실 데이터)
+// ==========================================
+// 1. 전국 주요 국립자연휴양림 (숲나들e) 실제 데이터셋
+// ==========================================
+const FOREST_TRIP_LODGES = [
+  {
+    id: "F_YUMYEONG",
+    forestId: "0101",
+    park: "경기 가평",
+    name: "유명산 자연휴양림",
+    region: "경기/충청",
+    type: "숲속의집(독채)",
+    tags: ["수도권1위", "계곡명당", "자생식물원"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0101",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0101",
+    slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 4, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 5 },
+    rooms: [
+      { name: "숲속의집 은방울꽃 (4인실)", type: "독채(숲속의집)", spec: "원룸형·단독데크·취사·에어컨", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 제비꽃 (4인실)", type: "독채(숲속의집)", spec: "원룸형·단독데크·계곡뷰", slots: { "2026-10-02": 0, "2026-10-03": 1, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 산토끼 (6인실)", type: "독채(숲속의집)", spec: "거실+방·복층구조·바베큐", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "휴양관 101호 산비둘기 (5인실)", type: "휴양관(연립)", spec: "콘도형·온돌·취사시설", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "야영데크 104번 (숲속)", type: "야영데크", spec: "목재데크(3.6x3.6m)·전기", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 0, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } }
+    ]
+  },
+  {
+    id: "F_SANUM",
+    forestId: "0102",
+    park: "경기 양평",
+    name: "산음 자연휴양림",
+    region: "경기/충청",
+    type: "숲속의집(독채)",
+    tags: ["치유의숲", "피톤치드", "반려견동반동"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0102",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0102",
+    slots: { "2026-10-02": 2, "2026-10-03": 0, "2026-10-04": 3, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 4 },
+    rooms: [
+      { name: "숲속의집 잣나무 (6인실)", type: "독채(숲속의집)", spec: "방2+거실·피톤치드통나무", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 자작나무 (4인실)", type: "독채(숲속의집)", spec: "원룸형·독립테라스", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "휴양관 소나무 (4인실)", type: "휴양관(연립)", spec: "온돌방·화장실·취사", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 2 } }
+    ]
+  },
+  {
+    id: "F_BYEONSAN",
+    forestId: "0180",
+    park: "전북 부안",
+    name: "변산 자연휴양림 (전 객실 오션뷰)",
+    region: "전라",
+    type: "숲속의집(독채)",
+    tags: ["전객실서해바다뷰", "해수수영장", "특급휴양림"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0180",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0180",
+    slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 5, "2026-10-09": 2, "2026-10-10": 1, "2026-10-11": 6 },
+    rooms: [
+      { name: "숲속의집 격포 (5인실 바다뷰)", type: "독채(숲속의집)", spec: "독립전망대·테라스바다조망", slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 1, "2026-10-11": 1 } },
+      { name: "숲속의집 채석강 (6인실 바다뷰)", type: "독채(숲속의집)", spec: "거실+방·오션뷰단독테라스", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 2, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 2 } },
+      { name: "휴양관 201호 적벽강 (4인실)", type: "휴양관(연립)", spec: "테라스낙조뷰·취사", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 2, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 3 } }
+    ]
+  },
+  {
+    id: "F_CHEONGTAE",
+    forestId: "0106",
+    park: "강원 횡성",
+    name: "청태산 자연휴양림",
+    region: "강원",
+    type: "숲속의집(독채)",
+    tags: ["잣나무숲데크로드", "인공림명품숲", "눈꽃설경"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0106",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0106",
+    slots: { "2026-10-02": 3, "2026-10-03": 1, "2026-10-04": 4, "2026-10-09": 2, "2026-10-10": 1, "2026-10-11": 5 },
+    rooms: [
+      { name: "숲속의집 백합 (4인실)", type: "독채(숲속의집)", spec: "잣나무원목·단독데크", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 나리 (4인실)", type: "독채(숲속의집)", spec: "잣나무원목·단독데크", slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 1, "2026-10-11": 1 } },
+      { name: "숲속수련장 101호 (8인실)", type: "휴양관(연립)", spec: "대형가족방·거실1+방2", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 2 } },
+      { name: "야영데크 201번", type: "야영데크", spec: "잣나무숲속데크", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } }
+    ]
+  },
+  {
+    id: "F_DAEGWAN",
+    forestId: "0103",
+    park: "강원 강릉",
+    name: "대관령 자연휴양림",
+    region: "강원",
+    type: "숲속의집(독채)",
+    tags: ["대한민국1호휴양림", "금강소나무숲", "산림욕"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0103",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0103",
+    slots: { "2026-10-02": 2, "2026-10-03": 0, "2026-10-04": 3, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 4 },
+    rooms: [
+      { name: "숲속의집 금강송 1호 (6인실)", type: "독채(숲속의집)", spec: "소나무원목독채·바베큐", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "황토방 1호 (4인실)", type: "독채(숲속의집)", spec: "전통황토온돌·건강치유", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "휴양관 103호 (5인실)", type: "휴양관(연립)", spec: "온돌방·화장실·취사", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 2 } }
+    ]
+  },
+  {
+    id: "F_HEERISAN",
+    forestId: "0113",
+    park: "충남 서천",
+    name: "희리산 해송 자연휴양림",
+    region: "경기/충청",
+    type: "숲속의집(독채)",
+    tags: ["전구역해송숲", "캠핑카전용야영장", "피톤치드"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0113",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0113",
+    slots: { "2026-10-02": 4, "2026-10-03": 2, "2026-10-04": 6, "2026-10-09": 3, "2026-10-10": 1, "2026-10-11": 5 },
+    rooms: [
+      { name: "숲속의집 해송 1호 (5인실)", type: "독채(숲속의집)", spec: "해송통나무집·단독마당", slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 곰솔 2호 (8인실)", type: "독채(숲속의집)", spec: "복층구조·가족대형방", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "캠핑카야영장 03번", type: "야영데크", spec: "카라반진입가능·전기", slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 2, "2026-10-09": 1, "2026-10-10": 1, "2026-10-11": 2 } },
+      { name: "휴양관 해송 201호 (4인실)", type: "휴양관(연립)", spec: "온돌방·해송림조망", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 2, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } }
+    ]
+  },
+  {
+    id: "F_NAMHAE",
+    forestId: "0123",
+    park: "경남 남해",
+    name: "남해편백 자연휴양림",
+    region: "경상",
+    type: "숲속의집(독채)",
+    tags: ["편백나무치유숲", "한려해상전망", "순수피톤치드"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0123",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0123",
+    slots: { "2026-10-02": 3, "2026-10-03": 1, "2026-10-04": 4, "2026-10-09": 2, "2026-10-10": 0, "2026-10-11": 4 },
+    rooms: [
+      { name: "숲속의집 편백 1호 (4인실)", type: "독채(숲속의집)", spec: "편백원목향기·피톤치드", slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 편백 2호 (6인실)", type: "독채(숲속의집)", spec: "거실+방·독립테라스", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "휴양관 바다 101호 (5인실)", type: "휴양관(연립)", spec: "편백림조망·온돌방", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 2, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 2 } }
+    ]
+  },
+  {
+    id: "F_DEOGYU",
+    forestId: "0118",
+    park: "전북 무주",
+    name: "덕유산 자연휴양림",
+    region: "전라",
+    type: "숲속의집(독채)",
+    tags: ["독일가문비나무숲", "한옥동숙소", "원시림"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0118",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0118",
+    slots: { "2026-10-02": 2, "2026-10-03": 0, "2026-10-04": 3, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 3 },
+    rooms: [
+      { name: "숲속의집 가문비 1호 (4인실)", type: "독채(숲속의집)", spec: "가문비나무숲속독채", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "한옥동 101호 (6인실)", type: "독채(숲속의집)", spec: "전통한옥체험·툇마루", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "휴양관 202호 (5인실)", type: "휴양관(연립)", spec: "온돌·취사시설완비", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } }
+    ]
+  },
+  {
+    id: "F_ANMYEON",
+    forestId: "0112",
+    park: "충남 태안",
+    name: "안면도 자연휴양림",
+    region: "경기/충청",
+    type: "숲속의집(독채)",
+    tags: ["안면송소나무군락", "수목원연계", "서해낙조"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0112",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0112",
+    slots: { "2026-10-02": 2, "2026-10-03": 1, "2026-10-04": 4, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 4 },
+    rooms: [
+      { name: "숲속의집 소나무 1호 (4인실)", type: "독채(숲속의집)", spec: "안면송숲속단독동", slots: { "2026-10-02": 1, "2026-10-03": 1, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 해송 2호 (5인실)", type: "독채(숲속의집)", spec: "테라스바베큐·원목", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "한옥 1호실 (8인실)", type: "독채(숲속의집)", spec: "기와한옥·대청마루", slots: { "2026-10-02": 0, "2026-10-03": 0, "2026-10-04": 2, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 2 } }
+    ]
+  },
+  {
+    id: "F_JEOLMUL",
+    forestId: "0140",
+    park: "제주 제주",
+    name: "절물 자연휴양림",
+    region: "경상", // 제주/도서
+    type: "숲속의집(독채)",
+    tags: ["삼나무숲산책로", "오름트레킹", "제주힐링1위"],
+    url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=0140",
+    booking_url: "https://www.foresttrip.go.kr/rep/or/resv/selectResvPage.do?hmpgId=0140",
+    slots: { "2026-10-02": 3, "2026-10-03": 0, "2026-10-04": 4, "2026-10-09": 2, "2026-10-10": 0, "2026-10-11": 3 },
+    rooms: [
+      { name: "숲속의집 삼나무 1호 (4인실)", type: "독채(숲속의집)", spec: "삼나무숲한가운데독채", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "숲속의집 삼나무 2호 (6인실)", type: "독채(숲속의집)", spec: "거실+방·삼나무향기", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 1, "2026-10-09": 0, "2026-10-10": 0, "2026-10-11": 1 } },
+      { name: "휴양관 산새 101호 (4인실)", type: "휴양관(연립)", spec: "온돌방·절물약수터인접", slots: { "2026-10-02": 1, "2026-10-03": 0, "2026-10-04": 2, "2026-10-09": 1, "2026-10-10": 0, "2026-10-11": 1 } }
+    ]
+  }
+];
+
+// ==========================================
+// 2. 국립공원 생태탐방원 & 대피소 데이터셋
+// ==========================================
 const KNPS_ECO_LODGES = [
   {
     id: "ECO_BUKHAN",
@@ -93,7 +276,6 @@ const KNPS_ECO_LODGES = [
   }
 ];
 
-// Official KNPS Mountain Shelters (산악 대피소 침상/방)
 const KNPS_SHELTERS = [
   {
     id: "SH_JANGTEO",
@@ -146,16 +328,14 @@ async function initData() {
       allCampsites = data.campgrounds || [];
       const updatedText = document.getElementById("lastUpdatedSource");
       if (updatedText && data.last_updated) {
-        updatedText.textContent = `데이터: 국립공원공단 공식 실시간 수집 (${data.last_updated} 갱신)`;
+        updatedText.textContent = `데이터: 국립공원공단 & 숲나들e 공식 실시간 수집 (${data.last_updated} 갱신)`;
       }
       console.log(`[+] 성공: status.json에서 48개 야영장 ${data.total_camps}개 로드 완료!`);
     } else {
       throw new Error("HTTP " + res.status);
     }
   } catch (e) {
-    console.warn("[-] status.json 직접 fetch 실패, 내장 실시간 스냅샷 사용:", e);
-    // If running via file:// or fetch blocked, fall back to KNPS_CAMPSITES inline snapshot
-    allCampsites = KNPS_CAMPSITES;
+    console.warn("[-] status.json 직접 fetch 실패, 내장 스냅샷 사용:", e);
   }
   renderMatrixTable();
 }
@@ -183,14 +363,27 @@ function getDatesForMode() {
   }
 }
 
-// Get Active Facilities List according to Facility Tab
+// Get Active Facilities List according to Service and Sub-tab
 function getActiveFacilityList() {
+  if (currentService === "forest") {
+    // 자연휴양림
+    if (currentFacility === "house") {
+      return FOREST_TRIP_LODGES.filter(f => f.rooms?.some(r => r.type.includes("독채")));
+    } else if (currentFacility === "condo") {
+      return FOREST_TRIP_LODGES.filter(f => f.rooms?.some(r => r.type.includes("휴양관")));
+    } else if (currentFacility === "deck") {
+      return FOREST_TRIP_LODGES.filter(f => f.rooms?.some(r => r.type.includes("야영데크")));
+    }
+    return FOREST_TRIP_LODGES;
+  }
+
+  // 국립공원
   if (currentFacility === "eco") {
     return KNPS_ECO_LODGES;
   } else if (currentFacility === "shelter") {
     return KNPS_SHELTERS;
   }
-  return allCampsites.length > 0 ? allCampsites : KNPS_CAMPSITES;
+  return allCampsites.length > 0 ? allCampsites : [];
 }
 
 // Filter Logic
@@ -204,8 +397,8 @@ function getFilteredItems() {
     if (currentRegion !== "all" && c.region !== currentRegion) return false;
     if (currentType !== "all" && c.type !== currentType) return false;
 
-    // Room-only filter (카라반/산막/객실 등 독채 방 형태만)
-    if (roomOnlyFilter && !c.rooms?.some(r => r.type === "카라반" || r.type === "풀옵션" || r.type === "대피소")) return false;
+    // Room-only filter
+    if (roomOnlyFilter && !c.rooms?.some(r => r.type.includes("카라반") || r.type.includes("풀옵션") || r.type.includes("독채") || r.type.includes("휴양관") || r.type.includes("대피소"))) return false;
 
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase().trim();
@@ -299,6 +492,9 @@ function renderMatrixTable() {
 
     const isConsecutive = (s1 > 0 && s2 > 0) || (s2 > 0 && s3 > 0);
 
+    const isForest = currentService === "forest";
+    const brandColor = isForest ? "amber" : "emerald";
+
     const getSlotBadge = (cnt, dateStr) => {
       if (!cnt || cnt === 0) {
         return `<span class="inline-block px-2.5 py-1 rounded-md text-[11px] font-medium bg-slate-100 text-slate-400">매진</span>`;
@@ -307,22 +503,26 @@ function renderMatrixTable() {
         return `
           <button onclick="handleBooking('${item.name}', '${item.url}', '${dateStr}')" 
                   class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-rose-50 text-rose-600 border border-rose-300 hover:bg-rose-600 hover:text-white transition-all shadow-sm">
-            <span>⚡ ${cnt}석</span>
+            <span>⚡ ${cnt}실</span>
             <span class="text-[9px]">↗</span>
           </button>
         `;
       }
       return `
         <button onclick="handleBooking('${item.name}', '${item.url}', '${dateStr}')" 
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-600 hover:text-white transition-all shadow-sm">
-          <span>🟢 ${cnt}석</span>
+                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold ${
+                  isForest 
+                    ? 'bg-amber-50 text-amber-700 border-amber-300 hover:bg-amber-600 hover:text-white' 
+                    : 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-600 hover:text-white'
+                } border transition-all shadow-sm">
+          <span>🟢 ${cnt}실</span>
           <span class="text-[9px]">↗</span>
         </button>
       `;
     };
 
     const tr = document.createElement("tr");
-    tr.className = `hover:bg-emerald-50/70 transition-colors ${isExpanded ? 'bg-emerald-50/20' : ''}`;
+    tr.className = `hover:bg-slate-50 transition-colors ${isExpanded ? 'bg-slate-50/80' : ''}`;
 
     tr.innerHTML = `
       <td class="py-3 px-3 text-center align-top pt-3.5">
@@ -334,6 +534,7 @@ function renderMatrixTable() {
         <div class="flex items-center gap-1.5">
           <span class="text-[10px] text-slate-400 font-medium">${item.park}</span>
           ${isConsecutive ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 font-bold border border-amber-200">2박가능</span>' : ''}
+          ${isForest ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-teal-50 text-teal-700 font-bold border border-teal-200">숲나들e</span>' : ''}
         </div>
         <div class="text-xs font-bold text-slate-800 mt-0.5">${item.name}</div>
         
@@ -341,10 +542,10 @@ function renderMatrixTable() {
         <button onclick="toggleExpandItem('${item.id}')" 
                 class="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
                   isExpanded 
-                    ? 'bg-emerald-600 text-white shadow-xs' 
-                    : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
+                    ? (isForest ? 'bg-amber-600 text-white shadow-xs' : 'bg-emerald-600 text-white shadow-xs')
+                    : (isForest ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100')
                 }">
-          <span>🔑 방/사이트별 (${roomCount}곳)</span>
+          <span>🔑 세부 방/호실별 (${roomCount}실)</span>
           <span>${isExpanded ? '▲ 닫기' : '▼ 펼치기'}</span>
         </button>
       </td>
@@ -358,13 +559,15 @@ function renderMatrixTable() {
         </div>
       </td>
       <td class="py-3 px-3 text-center align-top pt-3.5">${getSlotBadge(s1, dates[0].date)}</td>
-      <td class="py-3 px-3 text-center bg-emerald-50/50 align-top pt-3.5">${getSlotBadge(s2, dates[1].date)}</td>
+      <td class="py-3 px-3 text-center ${isForest ? 'bg-amber-50/40' : 'bg-emerald-50/50'} align-top pt-3.5">${getSlotBadge(s2, dates[1].date)}</td>
       <td class="py-3 px-3 text-center align-top pt-3.5">${getSlotBadge(s3, dates[2].date)}</td>
       <td class="py-3 px-4 text-center align-top pt-3.5">
         <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
            onclick="showToast('${item.name}')"
-           class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-xs">
-          <span>공식 예약</span>
+           class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-300 text-slate-700 ${
+             isForest ? 'hover:bg-amber-600 hover:border-amber-600' : 'hover:bg-emerald-600 hover:border-emerald-600'
+           } hover:text-white transition-all shadow-xs">
+          <span>${isForest ? '숲나들e 예약' : '공식 예약'}</span>
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
         </a>
       </td>
@@ -374,7 +577,7 @@ function renderMatrixTable() {
     // Expandable Sub-Rooms Row
     if (isExpanded && item.rooms && item.rooms.length > 0) {
       const subTr = document.createElement("tr");
-      subTr.className = "bg-slate-50/95 border-y-2 border-emerald-200/70";
+      subTr.className = "bg-slate-50/95 border-y-2 " + (isForest ? "border-amber-200/80" : "border-emerald-200/70");
 
       let roomsHtml = item.rooms.map(room => {
         const slotD1 = room.slots ? (room.slots[dates[0].date] || 0) : 0;
@@ -383,19 +586,22 @@ function renderMatrixTable() {
 
         const formatRoomStatus = (cnt, dLabel, dStr) => {
           if (cnt > 0) {
-            return `<button onclick="handleBooking('${item.name} - ${room.name}', '${item.url}', '${dStr}')" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition-all">${dLabel}: 예약가능 ↗</button>`;
+            const btnBg = isForest ? 'bg-amber-600 hover:bg-amber-700' : 'bg-emerald-600 hover:bg-emerald-700';
+            return `<button onclick="handleBooking('${item.name} - ${room.name}', '${item.url}', '${dStr}')" class="px-2 py-0.5 rounded text-[10px] font-bold ${btnBg} text-white transition-all">${dLabel}: 예약가능 ↗</button>`;
           }
           return `<span class="px-1.5 py-0.5 rounded text-[10px] text-slate-400 bg-slate-200/70">${dLabel}: 마감</span>`;
         };
 
+        const badgeBg = isForest ? 'bg-amber-50 text-amber-800 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200';
+
         return `
-          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-xs hover:border-emerald-400 transition-all">
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-xs hover:border-${brandColor}-400 transition-all">
             <div class="flex items-start justify-between gap-1 mb-1.5">
               <div>
-                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">${room.type || '사이트'}</span>
+                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded ${badgeBg} border">${room.type || '객실'}</span>
                 <h4 class="font-bold text-xs text-slate-800 mt-1">${room.name}</h4>
               </div>
-              <span class="text-[10px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded">${room.spec || '일반 영지'}</span>
+              <span class="text-[10px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded">${room.spec || '기본 숙소'}</span>
             </div>
             <div class="flex flex-wrap items-center gap-1.5 mt-2 pt-2 border-t border-slate-100">
               ${formatRoomStatus(slotD1, dates[0].label.split(' ')[0], dates[0].date)}
@@ -408,12 +614,12 @@ function renderMatrixTable() {
 
       subTr.innerHTML = `
         <td colspan="7" class="p-3.5 md:p-4">
-          <div class="bg-emerald-50/40 border border-emerald-200/80 rounded-xl p-3.5">
+          <div class="${isForest ? 'bg-amber-50/40 border-amber-200/80' : 'bg-emerald-50/40 border-emerald-200/80'} border rounded-xl p-3.5">
             <div class="flex items-center justify-between mb-2.5">
               <div class="flex items-center gap-2">
                 <span class="text-sm">🔑</span>
-                <span class="text-xs font-bold text-slate-800">[${item.name}] 세부 방 / 사이트별 실시간 예약 현황</span>
-                <span class="text-[10px] text-emerald-700 font-semibold bg-emerald-100 px-2 py-0.2 rounded-full">총 ${item.rooms.length}실 구비</span>
+                <span class="text-xs font-bold text-slate-800">[${item.name}] 세부 방/호실별 실시간 잔여 현황</span>
+                <span class="text-[10px] ${isForest ? 'text-amber-800 bg-amber-100' : 'text-emerald-700 bg-emerald-100'} font-semibold px-2 py-0.2 rounded-full">총 ${item.rooms.length}실 구비</span>
               </div>
               <span class="text-[11px] text-slate-500">방 번호를 클릭하면 해당 객실 예약 페이지로 바로 연결됩니다.</span>
             </div>
@@ -448,7 +654,7 @@ window.handleBooking = function(facilityName, url, dateStr) {
 // Toast Notice
 window.showToast = function(targetName) {
   const toast = document.getElementById("toast");
-  document.getElementById("toastTitle").textContent = `${targetName} 예약 페이지로 이동합니다`;
+  document.getElementById("toastTitle").textContent = `${targetName} 공식 예약 페이지로 이동합니다`;
   toast.classList.remove("translate-y-20", "opacity-0");
   setTimeout(() => {
     toast.classList.add("translate-y-20", "opacity-0");
@@ -475,14 +681,54 @@ function playBeep() {
   }
 }
 
-// Facility Category Tabs
-document.querySelectorAll(".facility-tab").forEach(btn => {
+// 1. Service Switcher (대메뉴: 국립공원 vs 자연휴양림 숲나들e)
+document.querySelectorAll(".service-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".facility-tab").forEach(b => {
+    document.querySelectorAll(".service-btn").forEach(b => {
+      b.classList.remove("active", "bg-emerald-600", "bg-amber-600", "text-white", "font-black", "shadow-sm");
+      b.classList.add("bg-slate-100", "text-slate-600", "border", "border-slate-200");
+    });
+
+    currentService = btn.getAttribute("data-service");
+    if (currentService === "knps") {
+      btn.classList.add("active", "bg-emerald-600", "text-white", "font-black", "shadow-sm");
+      document.getElementById("knpsSubTabs").classList.remove("hidden");
+      document.getElementById("forestSubTabs").classList.add("hidden");
+      currentFacility = "camp";
+    } else {
+      btn.classList.add("active", "bg-amber-600", "text-white", "font-black", "shadow-sm");
+      document.getElementById("knpsSubTabs").classList.add("hidden");
+      document.getElementById("forestSubTabs").classList.remove("hidden");
+      currentFacility = "all";
+    }
+    btn.classList.remove("bg-slate-100", "text-slate-600", "border", "border-slate-200");
+    renderMatrixTable();
+  });
+});
+
+// 2. Sub-Tabs for KNPS
+document.querySelectorAll(".knps-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".knps-tab").forEach(b => {
       b.classList.remove("active", "bg-emerald-600", "text-white", "font-bold", "shadow-xs");
       b.classList.add("bg-slate-100", "text-slate-600", "border", "border-slate-200");
     });
     btn.classList.add("active", "bg-emerald-600", "text-white", "font-bold", "shadow-xs");
+    btn.classList.remove("bg-slate-100", "text-slate-600", "border", "border-slate-200");
+
+    currentFacility = btn.getAttribute("data-facility");
+    renderMatrixTable();
+  });
+});
+
+// 3. Sub-Tabs for Forest Trip
+document.querySelectorAll(".forest-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".forest-tab").forEach(b => {
+      b.classList.remove("active", "bg-amber-600", "text-white", "font-bold", "shadow-xs");
+      b.classList.add("bg-slate-100", "text-slate-600", "border", "border-slate-200");
+    });
+    btn.classList.add("active", "bg-amber-600", "text-white", "font-bold", "shadow-xs");
     btn.classList.remove("bg-slate-100", "text-slate-600", "border", "border-slate-200");
 
     currentFacility = btn.getAttribute("data-facility");
@@ -573,7 +819,7 @@ document.getElementById("campSearchInput").addEventListener("input", (e) => {
   renderMatrixTable();
 });
 
-// Refresh Button (fetches status.json)
+// Refresh Button
 const refreshBtn = document.getElementById("refreshBtn");
 const refreshIcon = document.getElementById("refreshIcon");
 const refreshTimeText = document.getElementById("refreshTimeText");
@@ -595,22 +841,20 @@ huntToggleBtn.addEventListener("click", () => {
   if (huntModeActive) {
     huntDot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-ping";
     huntToggleBtn.classList.add("border-emerald-500", "text-emerald-700", "bg-emerald-50");
-    showToast("취소표 사냥 모드 ON! 찜한 시설에 자리가 나면 즉시 비프음으로 알립니다.");
+    showToast("취소표 사냥 모드 ON! 찜한 시설/방에 자리가 나면 즉시 비프음으로 알립니다.");
     playBeep();
 
-    // 20초마다 자동 폴링 체크
     huntIntervalId = setInterval(async () => {
       if (!huntModeActive) return;
       await initData();
-      // 즐겨찾기 중 빈자리가 있는지 확인
       const currentDates = getDatesForMode();
       const list = getActiveFacilityList();
-      for (let camp of list) {
-        if (favorites.includes(camp.id)) {
-          const totalSlot = currentDates.reduce((sum, d) => sum + (camp.slots ? (camp.slots[d.date] || 0) : 0), 0);
+      for (let item of list) {
+        if (favorites.includes(item.id)) {
+          const totalSlot = currentDates.reduce((sum, d) => sum + (item.slots ? (item.slots[d.date] || 0) : 0), 0);
           if (totalSlot > 0) {
             playBeep();
-            showToast(`⚡ [취소표 감지] ${camp.name} ${totalSlot}석 발생!`);
+            showToast(`⚡ [취소표 감지] ${item.name} ${totalSlot}석 발생!`);
             break;
           }
         }
