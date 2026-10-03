@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>국공뷰어 & 숲나들e 알리미 - 국립공원 야영장·자연휴양림 실시간 빈자리 알리미</title>
+  <title>숲나들e 대기알리미 & 국공뷰어 - 국립자연휴양림 대기 1순위 선점 & 취소표 레이더</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Custom Scrollbar */
@@ -47,16 +47,17 @@
       <!-- 서비스 로고 -->
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center text-white font-black text-sm">
-          국
+          숲
         </div>
         <div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5">
             <span class="font-bold text-lg text-gray-900 tracking-tight">
-              국공뷰어 <span class="text-emerald-700 font-extrabold text-base">알리미</span>
+              숲나들e <span class="text-emerald-700 font-extrabold text-base">알리미</span>
             </span>
+            <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded border border-amber-300">+국공뷰어</span>
           </div>
           <p class="text-[11px] text-gray-500 hidden sm:block">
-            국립공원 & 숲나들e 실시간 빈자리 모니터링
+            자연휴양림 대기 1순위 골든티켓 & 취소석 레이더
           </p>
         </div>
       </div>
@@ -85,25 +86,25 @@
     <div class="bg-white rounded-xl border border-gray-300 p-5 sm:p-7 shadow-2xs mb-6">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md mb-2 border border-emerald-200">
-            <span>⚡ 실시간 빈자리 안내</span>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md mb-2 border border-amber-300">
+            <span>🍃 숲나들e 대기 1순위 & 국립공원 실시간 예약 레이더</span>
           </div>
           <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-            국립공원 & 숲나들e 실시간 예약 전광판
+            숲나들e & 국립공원 실시간 예약 레이더
           </h1>
           <p class="text-sm text-gray-600 mt-1.5 leading-relaxed">
-            전국 국립공원 48개 야영장과 숲나들e 주요 자연휴양림의 실시간 잔여석, 연박 가능 여부, 세부 방/호실 규격을 요약해 드립니다.
+            주말 상시 전실 매진인 <strong>국립자연휴양림의 [대기 1순위 골든티켓]</strong>과 국립공원 야영장 취소 잔여석을 실시간 탐색합니다.
           </p>
         </div>
 
         <div class="text-left md:text-right shrink-0">
-          <span class="text-xs text-gray-500 block">실시간 예약 / 대기 현황</span>
-          <div class="flex flex-wrap items-baseline gap-2 md:justify-end">
+          <span class="text-xs text-gray-500 block font-medium" id="kpiSubTitle">숲나들e 대기 순번 선점 현황</span>
+          <div class="flex flex-wrap items-baseline gap-2 md:justify-end mt-0.5">
             <span class="text-2xl font-black text-gray-900" id="availableCampCountWrap">
-              <span id="availableCampCount">0개소 진행 중</span>
+              <span id="availableCampCount">🎯 대기 1순위 12개소</span>
             </span>
-            <span id="waitlistCampBadge" class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">
-              🎯 대기 1순위 <span id="waitlistCampCount">0</span>곳
+            <span id="waitlistCampBadge" class="text-xs font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md border border-gray-200">
+              🟢 실시간 빈자리: <span id="waitlistCampCount">0</span>석
             </span>
           </div>
         </div>
@@ -129,46 +130,33 @@
       </div>
     </div>
 
-    <!-- 1. 대메뉴 탭 (공모주 알리미 세그먼트 컨트롤: bg-gray-200/90) -->
+    <!-- 1. 대메뉴 탭 (공모주 알리미 세그먼트 컨트롤: bg-gray-200/90 - 휴양림 메인) -->
     <div class="mb-4">
       <div class="flex items-center gap-1.5 p-1.5 rounded-xl bg-gray-200/90 text-xs sm:text-sm font-bold overflow-x-auto scrollbar-none touch-pan-x">
-        <button class="service-btn active px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer bg-emerald-700 text-white shadow-xs" data-service="knps">
-          🌲 국립공원 (KNPS 48개소)
+        <button class="service-btn active px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer bg-emerald-700 text-white shadow-xs" data-service="forest">
+          🍃 국립자연휴양림 (숲나들e 메인)
         </button>
-        <button class="service-btn px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer text-gray-700 hover:text-gray-900 hover:bg-gray-300/60" data-service="forest">
-          🍃 국립자연휴양림 (숲나들e)
+        <button class="service-btn px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer text-gray-700 hover:text-gray-900 hover:bg-gray-300/60" data-service="knps">
+          🌲 국립공원 (KNPS 48개소)
         </button>
       </div>
     </div>
 
-    <!-- 숲나들e 주말 잔여석 실시간 안내 배너 -->
-    <div id="forestNoticeBanner" class="hidden mb-4 p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 flex items-start gap-2.5 shadow-2xs">
+    <!-- 숲나들e 주말 잔여석 실시간 안내 배너 (기본 노출) -->
+    <div id="forestNoticeBanner" class="mb-4 p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 flex items-start gap-2.5 shadow-2xs">
       <span class="text-base shrink-0">💡</span>
       <div class="leading-relaxed">
-        <strong class="font-extrabold text-amber-900">숲나들e 주말(토요일) 잔여석 안내:</strong>
-        <span>인기 국립자연휴양림(유명산·산음·변산 등)은 <strong>즉시 예약 가능한 빈자리가 0석(전실 매진)</strong>입니다. 결제 미납·취소표 발생 시 24시간 우선 결제권이 자동 배정되는 <strong>[대기 1순위 신청]</strong>을 추천합니다.</span>
+        <strong class="font-extrabold text-amber-900">숲나들e 예약 필승 공식 (대기 1·2순위 제도 안내):</strong>
+        <span>인기 국립자연휴양림(유명산·산음·변산 등)은 <strong>주말 상시 전실 매진(빈자리 0석)</strong>이 정상 상태입니다. 객실별 <strong>[🎯 대기 1순위]</strong>를 신청해두시면 미결제 취소(목요일 23:00) 및 입실 7일 전 무료취소 시점에 <strong>약 45~55% 확률로 24시간 우선 결제권이 카카오톡으로 자동 승계</strong>됩니다!</span>
       </div>
     </div>
 
     <!-- 2. 세부 시설 탭 & 뷰 모드 토글 -->
     <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-      <!-- 국립공원 서브탭 -->
-      <div id="knpsSubTabs" class="flex items-center gap-1.5 text-xs font-bold overflow-x-auto scrollbar-none">
-        <button class="knps-tab active px-3.5 py-2 rounded-lg bg-gray-900 text-white shadow-2xs cursor-pointer" data-facility="camp">
-          🏕️ 야영장 (48개소)
-        </button>
-        <button class="knps-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="eco">
-          🌲 생태탐방원 생활관
-        </button>
-        <button class="knps-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="shelter">
-          🏠 산악 대피소
-        </button>
-      </div>
-
-      <!-- 숲나들e 서브탭 -->
-      <div id="forestSubTabs" class="flex items-center gap-1.5 text-xs font-bold overflow-x-auto scrollbar-none hidden">
+      <!-- 숲나들e 서브탭 (기본 노출) -->
+      <div id="forestSubTabs" class="flex items-center gap-1.5 text-xs font-bold overflow-x-auto scrollbar-none">
         <button class="forest-tab active px-3.5 py-2 rounded-lg bg-gray-900 text-white shadow-2xs cursor-pointer" data-facility="all">
-          전체 휴양림
+          전체 휴양림 (12개소)
         </button>
         <button class="forest-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="house">
           🏡 숲속의 집 (독채)
@@ -178,6 +166,19 @@
         </button>
         <button class="forest-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="deck">
           ⛺ 야영데크
+        </button>
+      </div>
+
+      <!-- 국립공원 서브탭 (knps 전환 시 노출) -->
+      <div id="knpsSubTabs" class="flex items-center gap-1.5 text-xs font-bold overflow-x-auto scrollbar-none hidden">
+        <button class="knps-tab active px-3.5 py-2 rounded-lg bg-gray-900 text-white shadow-2xs cursor-pointer" data-facility="camp">
+          🏕️ 야영장 (48개소)
+        </button>
+        <button class="knps-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="eco">
+          🌲 생태탐방원 생활관
+        </button>
+        <button class="knps-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="shelter">
+          🏠 산악 대피소
         </button>
       </div>
 
@@ -212,23 +213,23 @@
           </div>
         </div>
 
-        <!-- 퀵 체크박스 토글 -->
+        <!-- 퀵 체크박스 토글 (대기 1순위 최우선 배치) -->
         <div class="flex flex-wrap items-center gap-3">
+          <label class="flex items-center gap-1.5 cursor-pointer select-none text-amber-900 font-bold bg-amber-50 px-2.5 py-1 rounded-md border border-amber-300 hover:bg-amber-100 transition-colors shadow-2xs">
+            <input type="checkbox" id="waitlistOnlyToggle" class="rounded text-amber-600 focus:ring-amber-500">
+            <span>🎯 대기 1순위만</span>
+          </label>
           <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
             <input type="checkbox" id="availableOnlyToggle" class="rounded text-emerald-700 focus:ring-emerald-600">
-            <span>빈자리만</span>
-          </label>
-          <label class="flex items-center gap-1.5 cursor-pointer select-none text-amber-900 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-300 hover:bg-amber-100 transition-colors">
-            <input type="checkbox" id="waitlistOnlyToggle" class="rounded text-amber-600 focus:ring-amber-500">
-            <span>🎯 대기 1순위 가능만</span>
-          </label>
-          <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
-            <input type="checkbox" id="roomOnlyToggle" class="rounded text-indigo-700 focus:ring-indigo-600">
-            <span>🏠 방/객실만</span>
+            <span>🟢 즉시 빈자리만</span>
           </label>
           <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
             <input type="checkbox" id="consecutiveOnlyToggle" class="rounded text-emerald-700 focus:ring-emerald-600">
             <span>🔥 2박(연박)만</span>
+          </label>
+          <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
+            <input type="checkbox" id="roomOnlyToggle" class="rounded text-indigo-700 focus:ring-indigo-600">
+            <span>🏠 방/객실만</span>
           </label>
           <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
             <input type="checkbox" id="favoritesOnlyToggle" class="rounded text-amber-500 focus:ring-amber-500">

@@ -3,8 +3,8 @@
 
 // State
 let allCampsites = [];
-let currentService = "knps"; // "knps" | "forest"
-let currentFacility = "camp"; // knps: "camp", "eco", "shelter" | forest: "all", "house", "condo", "deck"
+let currentService = "forest"; // "forest" (국립자연휴양림 메인 기본) | "knps"
+let currentFacility = "all"; // forest: "all", "house", "condo", "deck"
 let dateMode = "this-sat";
 let viewMode = "card"; // "card" (기본 피드) | "matrix" (테이블)
 let currentRegion = "all";
@@ -615,18 +615,19 @@ function renderAllViews() {
       if (sum.availRooms > 0) availCount++;
       if (sum.wait1Rooms > 0) wait1Count++;
     });
+    const subTitleEl = document.getElementById("kpiSubTitle");
+    if (subTitleEl) subTitleEl.textContent = "숲나들e 대기 순번 선점 현황";
+
     const availEl = document.getElementById("availableCampCount");
     if (availEl) {
-      if (availCount === 0) {
-        availEl.innerHTML = `<span class="text-rose-600 font-extrabold text-xl sm:text-2xl">0개소</span> <span class="text-xs font-semibold text-gray-500">(빈자리 없음/주말 매진)</span>`;
-      } else {
-        availEl.textContent = `${availCount}개소 즉시 가능`;
-      }
+      availEl.innerHTML = `<span class="text-amber-800 font-black text-2xl sm:text-3xl">🎯 대기 1순위 ${wait1Count}개소</span>`;
     }
-    const waitEl = document.getElementById("waitlistCampCount");
-    if (waitEl) waitEl.textContent = wait1Count;
     const badgeEl = document.getElementById("waitlistCampBadge");
-    if (badgeEl) badgeEl.style.display = "inline-block";
+    if (badgeEl) {
+      badgeEl.className = "text-xs font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200";
+      badgeEl.innerHTML = `🟢 즉시 빈자리: <strong class="${availCount > 0 ? 'text-emerald-700 font-extrabold' : 'text-gray-500'}">${availCount}석${availCount === 0 ? ' (주말 전실매진)' : ''}</strong>`;
+      badgeEl.style.display = "inline-block";
+    }
   } else {
     currentList.forEach(c => {
       if (c.slots) {
@@ -637,10 +638,19 @@ function renderAllViews() {
         if (sum > 0) availCount++;
       }
     });
+    const subTitleEl = document.getElementById("kpiSubTitle");
+    if (subTitleEl) subTitleEl.textContent = "국립공원 실시간 잔여석 현황";
+
     const availEl = document.getElementById("availableCampCount");
-    if (availEl) availEl.textContent = `${availCount}개소 잔여`;
+    if (availEl) {
+      availEl.innerHTML = `<span class="text-emerald-700 font-black text-2xl sm:text-3xl">${availCount}개소 잔여</span>`;
+    }
     const badgeEl = document.getElementById("waitlistCampBadge");
-    if (badgeEl) badgeEl.style.display = "none";
+    if (badgeEl) {
+      badgeEl.className = "text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200";
+      badgeEl.innerHTML = `🌲 야영장 48개소 가동 중`;
+      badgeEl.style.display = "inline-block";
+    }
   }
 
   document.getElementById("colDate0").textContent = dates[0].label;
