@@ -743,22 +743,17 @@ function renderCardFeed(items, dates) {
       specTableHtml = `
         <div class="rounded-lg border border-gray-200 bg-gray-50/60 p-3 text-xs space-y-2 mb-3">
           <div class="flex justify-between items-center py-0.5 border-b border-gray-200/80 pb-1.5">
-            <span class="text-gray-500 font-medium">실시간 빈자리</span>
+            <span class="text-gray-500 font-medium">실시간 잔여</span>
             <span class="font-extrabold text-sm text-gray-900">${emptySpotHtml}</span>
           </div>
 
           <div class="flex justify-between items-center py-0.5 border-b border-gray-200/80 pb-1.5">
-            <span class="text-gray-500 font-medium">예약 대기 접수</span>
+            <span class="text-gray-500 font-medium">예약 대기</span>
             <span class="font-extrabold text-sm text-gray-900">${waitSpotHtml}</span>
           </div>
 
-          <div class="flex justify-between items-center py-0.5 border-b border-gray-200/80 pb-1.5">
-            <span class="text-gray-500 font-medium">💡 대기 승계 제도</span>
-            <span class="font-bold text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">미결제 취소 시 24h 우선권 자동 배정</span>
-          </div>
-
           <div class="flex justify-between items-center py-0.5">
-            <span class="text-gray-500 font-medium">예약 오픈 정책</span>
+            <span class="text-gray-500 font-medium">예약 오픈</span>
             <span class="font-semibold text-gray-800 truncate max-w-[180px]">${item.policy || '공식 시스템 선착순/추첨'}</span>
           </div>
         </div>
@@ -833,22 +828,12 @@ function renderCardFeed(items, dates) {
               return `<span class="bg-gray-100 text-gray-400 text-[10px] px-1.5 py-0.5 rounded">${lbl}: 마감</span>`;
             }
           };
-          let tipHtml = "";
-          if (d0.status === "wait1") {
-            tipHtml = `<div class="text-[10px] text-amber-800 font-semibold mt-1.5 flex items-center justify-between bg-amber-50/70 p-1.5 rounded border border-amber-200">
-              <span>🎯 취소 시 승계 예상 확률: <strong class="underline text-amber-950 font-black">${d0.cancelRate || 50}%</strong></span>
-              <span class="text-gray-400 text-[9px]">(결제마감 익일 23시)</span>
-            </div>`;
-          } else if (d0.status === "avail") {
-            tipHtml = `<div class="text-[10px] text-emerald-700 font-bold mt-1.5 bg-emerald-50/70 p-1.5 rounded border border-emerald-200">🟢 취소석 즉시 결제 가능 (결제 기한 익일 23:00)</div>`;
-          }
           roomStatusHtml = `
             <div class="flex flex-wrap items-center gap-1 mt-1.5">
               ${getPill(d0, dates[0].label.split(' ')[0])}
               ${getPill(d1, dates[1].label.split(' ')[0])}
               ${getPill(d2, dates[2].label.split(' ')[0])}
             </div>
-            ${tipHtml}
           `;
         } else if (room.slots) {
           const r1 = room.slots[dates[0].date] || 0;
@@ -874,8 +859,8 @@ function renderCardFeed(items, dates) {
       roomsDrawerHtml = `
         <div class="rounded-lg border border-gray-200 bg-gray-50/70 p-3 mt-3 space-y-2">
           <div class="flex items-center justify-between pb-1 border-b border-gray-200 text-xs font-bold text-gray-800">
-            <span>🔑 세부 방/호실 목록 (${item.rooms.length}실)</span>
-            <span class="text-[10px] ${isForest ? 'text-amber-800 font-bold' : 'text-gray-500'}">${isForest ? '💡 대기 1순위 신청 가능' : '1-클릭 공식 연결'}</span>
+            <span>객실 목록 (${item.rooms.length}실)</span>
+            <span class="text-[10px] text-gray-500">${item.type}</span>
           </div>
           <div class="grid grid-cols-1 gap-2 pt-1">
             ${roomItemsHtml}
@@ -938,36 +923,6 @@ function renderCardFeed(items, dates) {
 
     container.appendChild(cardDiv);
 
-    // [광고 영역 2]: 3번째 카드 뒤에 GoogleAdSlot 스타일 인피드 슬롯 삽입
-    if (index === 2) {
-      const adSlot = document.createElement("div");
-      adSlot.className = "rounded-xl border border-dashed border-gray-300 bg-gray-50/80 p-5 text-center flex flex-col justify-between";
-      adSlot.innerHTML = `
-        <div>
-          <div class="flex items-center justify-between text-xs text-gray-400 mb-3">
-            <span>광고 | AD</span>
-            <span class="font-mono text-[10px]">Google AdSense Space</span>
-          </div>
-          <div class="py-4 space-y-1.5">
-            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 inline-block mb-1">
-              추천 기획전
-            </span>
-            <h4 class="text-lg font-bold text-gray-900">
-              국립공원 & 숲나들e 캠핑 필수 꿀템 TOP 10
-            </h4>
-            <p class="text-xs text-gray-500 max-w-xs mx-auto">
-              공단 규격 승인 방염포, 동계 난연 침낭, 감성 랜턴 최대 45% 할인전
-            </p>
-          </div>
-        </div>
-        <div class="pt-3 border-t border-gray-200 mt-3">
-          <a href="https://m.search.naver.com/search.naver?query=캠핑용품+특가" target="_blank" rel="noopener noreferrer" class="block w-full py-2.5 px-3 rounded-lg bg-gray-900 hover:bg-black text-white text-xs font-bold text-center shadow-xs transition-colors">
-            특가 상품 둘러보기 ↗
-          </a>
-        </div>
-      `;
-      container.appendChild(adSlot);
-    }
   });
 }
 
@@ -1129,19 +1084,12 @@ function renderMatrixTable(items, dates) {
               return `<span class="bg-gray-100 text-gray-400 text-[10px] px-1.5 py-0.5 rounded">${lbl}: 마감</span>`;
             }
           };
-          let tipHtml = "";
-          if (d0.status === "wait1") {
-            tipHtml = `<div class="text-[10px] text-amber-800 font-semibold mt-1">🎯 승계 예상: <strong class="underline">${d0.cancelRate || 50}%</strong></div>`;
-          } else if (d0.status === "avail") {
-            tipHtml = `<div class="text-[10px] text-emerald-700 font-bold mt-1">🟢 취소석 즉시 결제</div>`;
-          }
           roomSlotsHtml = `
             <div class="flex flex-wrap items-center gap-1 mt-1">
               ${getPill(d0, dates[0].label.split(' ')[0])}
               ${getPill(d1, dates[1].label.split(' ')[0])}
               ${getPill(d2, dates[2].label.split(' ')[0])}
             </div>
-            ${tipHtml}
           `;
         } else if (room.slots) {
           const r1 = room.slots[dates[0].date] || 0;
@@ -1168,8 +1116,8 @@ function renderMatrixTable(items, dates) {
         <td colspan="7" class="p-3">
           <div class="p-3 bg-white border border-gray-200 rounded-lg">
             <div class="text-xs font-bold text-gray-700 mb-2 flex items-center justify-between">
-              <span>🔑 [${item.name}] 세부 방/호실 규격 (${item.rooms.length}실)</span>
-              <span class="text-[10px] ${isForest ? 'text-amber-800 font-bold' : 'text-gray-400'}">${isForest ? '💡 대기 1순위 신청 가능' : '1-클릭 공식 예약 지원'}</span>
+              <span>[${item.name}] 객실별 상세 (${item.rooms.length}실)</span>
+              <span class="text-[10px] text-gray-400">${item.type}</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
               ${roomsHtml}
@@ -1232,12 +1180,10 @@ document.querySelectorAll(".service-btn").forEach(btn => {
     if (currentService === "knps") {
       document.getElementById("knpsSubTabs").classList.remove("hidden");
       document.getElementById("forestSubTabs").classList.add("hidden");
-      document.getElementById("forestNoticeBanner")?.classList.add("hidden");
       currentFacility = "camp";
     } else {
       document.getElementById("knpsSubTabs").classList.add("hidden");
       document.getElementById("forestSubTabs").classList.remove("hidden");
-      document.getElementById("forestNoticeBanner")?.classList.remove("hidden");
       currentFacility = "all";
     }
     renderAllViews();
