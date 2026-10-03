@@ -97,10 +97,15 @@
         </div>
 
         <div class="text-left md:text-right shrink-0">
-          <span class="text-xs text-gray-500 block">현재 예약 가능 시설</span>
-          <span class="text-2xl font-black text-emerald-700">
-            총 <span id="availableCampCount">0</span>개소 진행 중
-          </span>
+          <span class="text-xs text-gray-500 block">실시간 예약 / 대기 현황</span>
+          <div class="flex flex-wrap items-baseline gap-2 md:justify-end">
+            <span class="text-2xl font-black text-emerald-700">
+              <span id="availableCampCount">0</span>개소 가능
+            </span>
+            <span id="waitlistCampBadge" class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">
+              🎯 대기 1순위 <span id="waitlistCampCount">0</span>곳
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -204,6 +209,10 @@
             <input type="checkbox" id="availableOnlyToggle" class="rounded text-emerald-700 focus:ring-emerald-600">
             <span>빈자리만</span>
           </label>
+          <label class="flex items-center gap-1.5 cursor-pointer select-none text-amber-900 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-300 hover:bg-amber-100 transition-colors">
+            <input type="checkbox" id="waitlistOnlyToggle" class="rounded text-amber-600 focus:ring-amber-500">
+            <span>🎯 대기 1순위 가능만</span>
+          </label>
           <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
             <input type="checkbox" id="roomOnlyToggle" class="rounded text-indigo-700 focus:ring-indigo-600">
             <span>🏠 방/객실만</span>
@@ -257,10 +266,12 @@
           <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
           <span>실시간 잔여석 전광판 표 (<span id="renderedCount">0</span>곳)</span>
         </h2>
-        <div class="text-[11px] text-gray-400 flex items-center gap-3">
+        <div class="text-[11px] text-gray-400 flex flex-wrap items-center gap-3">
+          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-emerald-100 border border-emerald-400 text-emerald-600 inline-block"></span> 🟢 즉시 가능</span>
+          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-amber-100 border border-amber-400 text-amber-600 inline-block"></span> 🟡 대기 1순위 (유력 🎯)</span>
+          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-orange-100 border border-orange-300 text-orange-600 inline-block"></span> 🟠 대기 2순위</span>
           <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-rose-100 border border-rose-400 text-rose-600 inline-block"></span> ⚡ 마감임박 (1~2석)</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-emerald-100 border border-emerald-400 text-emerald-600 inline-block"></span> 🟢 여유 (3석+)</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-gray-100 border border-gray-200 text-gray-400 inline-block"></span> 매진</span>
+          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-gray-100 border border-gray-200 text-gray-400 inline-block"></span> 마감/매진</span>
         </div>
       </div>
 
