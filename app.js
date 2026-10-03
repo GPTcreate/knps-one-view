@@ -38,10 +38,10 @@ const FOREST_TRIP_LODGES = [
     booking_url: "https://www.foresttrip.go.kr/0101",
     rooms: [
       { name: "숲속의집 은방울꽃 (4인실)", type: "독채(숲속의집)", spec: "원룸형·단독데크·취사", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 52 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 50 } },
-      { name: "숲속의집 제비꽃 (4인실)", type: "독채(숲속의집)", spec: "원룸형·단독데크·계곡뷰", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "숲속의집 산토끼 (6인실)", type: "독채(숲속의집)", spec: "거실+방·복층구조·바베큐", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 25 }, defaultFri: { status: "full", rank: 3, label: "대기 3순위 마감", cancelRate: 5 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } },
-      { name: "휴양관 101호 산비둘기 (5인실)", type: "휴양관(연립)", spec: "콘도형·온돌·취사시설", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "야영데크 104번 (숲속명당)", type: "야영데크", spec: "목재데크(3.6x3.6m)·전기", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "숲속의집 제비꽃 (4인실)", type: "독채(숲속의집)", spec: "원룸형·단독데크·계곡뷰", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 } },
+      { name: "숲속의집 산토끼 (6인실)", type: "독채(숲속의집)", spec: "거실+방·복층구조·바베큐", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 25 }, defaultFri: { status: "full", rank: 3, label: "대기 3순위 마감", cancelRate: 5 }, defaultSun: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 } },
+      { name: "휴양관 101호 산비둘기 (5인실)", type: "휴양관(연립)", spec: "콘도형·온돌·취사시설", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 46 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 25 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
+      { name: "야영데크 104번 (숲속명당)", type: "야영데크", spec: "목재데크(3.6x3.6m)·전기", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
   {
@@ -56,9 +56,9 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0103",
     booking_url: "https://www.foresttrip.go.kr/0103",
     rooms: [
-      { name: "숲속의집 잣나무 (6인실)", type: "독채(숲속의집)", spec: "방2+거실·피톤치드통나무", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 46 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
+      { name: "숲속의집 잣나무 (6인실)", type: "독채(숲속의집)", spec: "방2+거실·피톤치드통나무", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 46 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 } },
       { name: "숲속의집 자작나무 (4인실)", type: "독채(숲속의집)", spec: "원룸형·독립테라스", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
-      { name: "휴양관 소나무 (4인실)", type: "휴양관(연립)", spec: "온돌방·화장실·취사", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
+      { name: "휴양관 소나무 (4인실)", type: "휴양관(연립)", spec: "온돌방·화장실·취사", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 44 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } },
       { name: "반려견동반 객실 (4인실)", type: "독채(숲속의집)", spec: "전용 펜스·반려견특화", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 35 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 } }
     ]
   },
@@ -75,9 +75,9 @@ const FOREST_TRIP_LODGES = [
     booking_url: "https://www.foresttrip.go.kr/0189",
     rooms: [
       { name: "숲속의집 격포 (5인실 바다뷰)", type: "독채(숲속의집)", spec: "독립전망대·테라스 바다조망", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 55 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 50 } },
-      { name: "숲속의집 채석강 (6인실 바다뷰)", type: "독채(숲속의집)", spec: "거실+방·오션뷰단독테라스", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 24 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
+      { name: "숲속의집 채석강 (6인실 바다뷰)", type: "독채(숲속의집)", spec: "거실+방·오션뷰단독테라스", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 24 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
       { name: "숲속의집 모항 (4인실 바다뷰)", type: "독채(숲속의집)", spec: "전면창 서해낙조 뷰", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 50 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 } },
-      { name: "휴양관 201호 적벽강 (4인실)", type: "휴양관(연립)", spec: "테라스낙조뷰·콘도형", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "휴양관 201호 적벽강 (4인실)", type: "휴양관(연립)", spec: "테라스낙조뷰·콘도형", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 24 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
   {
@@ -92,10 +92,10 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0106",
     booking_url: "https://www.foresttrip.go.kr/0106",
     rooms: [
-      { name: "숲속의집 백합 (4인실)", type: "독채(숲속의집)", spec: "잣나무원목·단독데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 44 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "숲속의집 나리 (4인실)", type: "독채(숲속의집)", spec: "잣나무원목·단독데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 19 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "숲속수련장 101호 (8인실)", type: "휴양관(연립)", spec: "대형가족방·거실1+방2", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "야영데크 201번", type: "야영데크", spec: "잣나무숲속 힐링데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "숲속의집 백합 (4인실)", type: "독채(숲속의집)", spec: "잣나무원목·단독데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 44 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
+      { name: "숲속의집 나리 (4인실)", type: "독채(숲속의집)", spec: "잣나무원목·단독데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 19 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } },
+      { name: "숲속수련장 101호 (8인실)", type: "휴양관(연립)", spec: "대형가족방·거실1+방2", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 } },
+      { name: "야영데크 201번", type: "야영데크", spec: "잣나무숲속 힐링데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 35 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
   {
@@ -110,9 +110,9 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0111",
     booking_url: "https://www.foresttrip.go.kr/0111",
     rooms: [
-      { name: "숲속의집 금강송 1호 (6인실)", type: "독채(숲속의집)", spec: "100년 금강송 원목독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 47 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "황토방 1호 (4인실)", type: "독채(숲속의집)", spec: "전통황토온돌·건강치유", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "휴양관 103호 (5인실)", type: "휴양관(연립)", spec: "온돌방·화장실·취사", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "숲속의집 금강송 1호 (6인실)", type: "독채(숲속의집)", spec: "100년 금강송 원목독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 47 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 44 } },
+      { name: "황토방 1호 (4인실)", type: "독채(숲속의집)", spec: "전통황토온돌·건강치유", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultSun: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 } },
+      { name: "휴양관 103호 (5인실)", type: "휴양관(연립)", spec: "온돌방·화장실·취사", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 43 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
   {
@@ -127,10 +127,10 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0187",
     booking_url: "https://www.foresttrip.go.kr/0187",
     rooms: [
-      { name: "숲속의집 해송 1호 (5인실)", type: "독채(숲속의집)", spec: "해송통나무집·단독마당", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 41 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "숲속의집 곰솔 2호 (8인실)", type: "독채(숲속의집)", spec: "복층구조·가족대형방", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 15 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "캠핑카야영장 03번", type: "야영데크", spec: "카라반진입가능·전기시설", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "휴양관 해송 201호 (4인실)", type: "휴양관(연립)", spec: "온돌방·해송림조망", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "숲속의집 해송 1호 (5인실)", type: "독채(숲속의집)", spec: "해송통나무집·단독마당", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 41 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
+      { name: "숲속의집 곰솔 2호 (8인실)", type: "독채(숲속의집)", spec: "복층구조·가족대형방", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 15 }, defaultSun: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 } },
+      { name: "캠핑카야영장 03번", type: "야영데크", spec: "카라반진입가능·전기시설", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 35 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 } },
+      { name: "휴양관 해송 201호 (4인실)", type: "휴양관(연립)", spec: "온돌방·해송림조망", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
   {
@@ -145,9 +145,9 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0192",
     booking_url: "https://www.foresttrip.go.kr/0192",
     rooms: [
-      { name: "숲속의집 편백 1호 (4인실)", type: "독채(숲속의집)", spec: "편백원목향기·피톤치드", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "숲속의집 편백 2호 (6인실)", type: "독채(숲속의집)", spec: "거실+방·독립테라스", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 21 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "휴양관 바다 101호 (5인실)", type: "휴양관(연립)", spec: "편백림조망·온돌방", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 39 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "숲속의집 편백 1호 (4인실)", type: "독채(숲속의집)", spec: "편백원목향기·피톤치드", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
+      { name: "숲속의집 편백 2호 (6인실)", type: "독채(숲속의집)", spec: "거실+방·독립테라스", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 21 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 }, defaultSun: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 } },
+      { name: "휴양관 바다 101호 (5인실)", type: "휴양관(연립)", spec: "편백림조망·온돌방", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 39 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 36 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
   {
@@ -162,9 +162,9 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0141",
     booking_url: "https://www.foresttrip.go.kr/0141",
     rooms: [
-      { name: "숲속의집 가문비 1호 (4인실)", type: "독채(숲속의집)", spec: "가문비나무숲속독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 43 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
+      { name: "숲속의집 가문비 1호 (4인실)", type: "독채(숲속의집)", spec: "가문비나무숲속독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 43 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
       { name: "전통한옥 1호실 (8인실)", type: "독채(숲속의집)", spec: "기와한옥·툇마루·가족형", defaultSat: { status: "full", rank: 3, label: "대기 3순위 마감", cancelRate: 8 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 16 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 } },
-      { name: "야영데크 101번", type: "야영데크", spec: "가문비나무그늘 데크", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "야영데크 101번", type: "야영데크", spec: "가문비나무그늘 데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 39 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 35 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 } }
     ]
   },
   {
@@ -180,8 +180,8 @@ const FOREST_TRIP_LODGES = [
     booking_url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030050",
     rooms: [
       { name: "숲속의집 잣나무 1동 (4인실)", type: "독채(숲속의집)", spec: "단독테라스·원룸형", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 52 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 46 } },
-      { name: "산림휴양관 201호 (6인실)", type: "휴양관(연립)", spec: "거실+방 콘도형", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 25 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "야영데크 101번 (잣나무명당)", type: "야영데크", spec: "피톤치드 최상급 데크", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "산림휴양관 201호 (6인실)", type: "휴양관(연립)", spec: "거실+방 콘도형", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 25 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } },
+      { name: "야영데크 101번 (잣나무명당)", type: "야영데크", spec: "피톤치드 최상급 데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 41 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } }
     ]
   },
   {
@@ -196,8 +196,8 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030086",
     booking_url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030086",
     rooms: [
-      { name: "숲속의집 소나무 1호 (4인실)", type: "독채(숲속의집)", spec: "안면송숲속단독동", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 47 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "숲속의집 해송 2호 (5인실)", type: "독채(숲속의집)", spec: "테라스바베큐·원목", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 17 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
+      { name: "숲속의집 소나무 1호 (4인실)", type: "독채(숲속의집)", spec: "안면송숲속단독동", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 47 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 } },
+      { name: "숲속의집 해송 2호 (5인실)", type: "독채(숲속의집)", spec: "테라스바베큐·원목", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 20 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 17 }, defaultSun: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 18 } },
       { name: "한옥 1호실 (8인실)", type: "독채(숲속의집)", spec: "기와한옥·대청마루", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 44 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 19 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   },
@@ -214,8 +214,8 @@ const FOREST_TRIP_LODGES = [
     booking_url: "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030031",
     rooms: [
       { name: "숲속의집 밤나무 (6인실)", type: "독채(숲속의집)", spec: "잔디마당단독독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 53 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 46 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 47 } },
-      { name: "목조체험주택 핀란드관 (8인실)", type: "독채(숲속의집)", spec: "유럽풍 친환경 목조독채", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 26 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 21 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "야영데크 101번", type: "야영데크", spec: "전기사용가능 목재데크", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "목조체험주택 핀란드관 (8인실)", type: "독채(숲속의집)", spec: "유럽풍 친환경 목조독채", defaultSat: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 26 }, defaultFri: { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 21 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } },
+      { name: "야영데크 101번", type: "야영데크", spec: "전기사용가능 목재데크", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 41 } }
     ]
   },
   {
@@ -230,25 +230,36 @@ const FOREST_TRIP_LODGES = [
     url: "https://www.foresttrip.go.kr/0224",
     booking_url: "https://www.foresttrip.go.kr/0224",
     rooms: [
-      { name: "숲속의집 잣나무 (5인실)", type: "독채(숲속의집)", spec: "단독데크·원목독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } },
-      { name: "한옥연립동 운악 (4인실)", type: "휴양관(연립)", spec: "전통한옥온돌방", defaultSat: { status: "avail", rank: 0, label: "즉시 예약 가능 (잔여 1실)", cancelRate: 100 }, defaultFri: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 }, defaultSun: { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 } }
+      { name: "숲속의집 잣나무 (5인실)", type: "독채(숲속의집)", spec: "단독데크·원목독채", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 45 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 42 } },
+      { name: "한옥연립동 운악 (4인실)", type: "휴양관(연립)", spec: "전통한옥온돌방", defaultSat: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 44 }, defaultFri: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 38 }, defaultSun: { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 } }
     ]
   }
 ];
 
 // 숲나들e 객실별 대기 상태 조회 헬퍼
 function getForestRoomWaitStatus(room, dateStr) {
-  if (room.dates && room.dates[dateStr]) {
-    return room.dates[dateStr];
-  }
   const d = new Date(dateStr + "T00:00:00");
   const day = d.getDay(); // 0: Sun, 5: Fri, 6: Sat
-  if (day === 6) {
-    return room.defaultSat || { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 };
-  } else if (day === 5) {
+
+  if (room.dates && room.dates[dateStr]) {
+    const customStatus = room.dates[dateStr];
+    // 토요일에 avail로 잘못 들어간 경우 대기 1순위로 강제 보정 (주말 빈자리 0석 보장)
+    if (day === 6 && customStatus.status === "avail") {
+      return { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 };
+    }
+    return customStatus;
+  }
+
+  if (day === 6) { // 토요일: 주말 인기 전실 매진 (0석) - 대기 접수만 가능
+    const satStatus = room.defaultSat || { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 };
+    if (satStatus.status === "avail") {
+      return { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 48 };
+    }
+    return satStatus;
+  } else if (day === 5) { // 금요일
     return room.defaultFri || { status: "wait2", rank: 2, label: "대기 2순위 가능", cancelRate: 22 };
-  } else if (day === 0) {
-    return room.defaultSun || { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 };
+  } else if (day === 0) { // 일요일
+    return room.defaultSun || { status: "wait1", rank: 1, label: "대기 1순위 가능 🎯", cancelRate: 40 };
   } else {
     return { status: "avail", rank: 0, label: "즉시 예약 가능", cancelRate: 100 };
   }
@@ -605,7 +616,13 @@ function renderAllViews() {
       if (sum.wait1Rooms > 0) wait1Count++;
     });
     const availEl = document.getElementById("availableCampCount");
-    if (availEl) availEl.textContent = availCount;
+    if (availEl) {
+      if (availCount === 0) {
+        availEl.innerHTML = `<span class="text-rose-600 font-extrabold text-xl sm:text-2xl">0개소</span> <span class="text-xs font-semibold text-gray-500">(빈자리 없음/주말 매진)</span>`;
+      } else {
+        availEl.textContent = `${availCount}개소 즉시 가능`;
+      }
+    }
     const waitEl = document.getElementById("waitlistCampCount");
     if (waitEl) waitEl.textContent = wait1Count;
     const badgeEl = document.getElementById("waitlistCampBadge");
@@ -621,7 +638,7 @@ function renderAllViews() {
       }
     });
     const availEl = document.getElementById("availableCampCount");
-    if (availEl) availEl.textContent = availCount;
+    if (availEl) availEl.textContent = `${availCount}개소 잔여`;
     const badgeEl = document.getElementById("waitlistCampBadge");
     if (badgeEl) badgeEl.style.display = "none";
   }
@@ -684,48 +701,50 @@ function renderCardFeed(items, dates) {
       if (waitSummary.availRooms > 0) {
         statusBadgeText = `즉시 예약 (${waitSummary.availRooms}실)`;
         statusBadgeClass = "bg-emerald-700 text-white font-bold";
-        slotsText = `<span class="text-emerald-700 font-extrabold">${waitSummary.availRooms}실 즉시 예약 가능</span>`;
-        consecutiveText = `<span class="text-emerald-700 font-bold">가능</span>`;
         actionBtnText = "즉시 예약 ↗";
         actionBtnClass = "bg-emerald-700 hover:bg-emerald-800 text-white font-bold";
       } else if (waitSummary.wait1Rooms > 0) {
-        statusBadgeText = `대기 1순위 가능 (${waitSummary.wait1Rooms}실) 🎯`;
+        statusBadgeText = `🎯 대기 1순위 (${waitSummary.wait1Rooms}실)`;
         statusBadgeClass = "bg-amber-600 text-white font-black shadow-xs ring-1 ring-amber-400";
-        slotsText = `<span class="text-amber-800 font-black">🎯 대기 1순위 ${waitSummary.wait1Rooms}실 접수 가능</span>`;
-        consecutiveText = `<span class="text-amber-700 font-bold">대기 1순위 연계</span>`;
         actionBtnText = "대기 1순위 신청 ↗";
         actionBtnClass = "bg-amber-600 hover:bg-amber-700 text-white font-bold shadow-xs";
       } else if (waitSummary.wait2Rooms > 0) {
         statusBadgeText = `대기 2순위 (${waitSummary.wait2Rooms}실)`;
         statusBadgeClass = "bg-orange-600 text-white font-bold";
-        slotsText = `<span class="text-orange-700 font-bold">대기 2순위 ${waitSummary.wait2Rooms}실 가능</span>`;
-        consecutiveText = `<span class="text-gray-500 font-medium">대기 2순위 연계</span>`;
         actionBtnText = "대기 2순위 신청 ↗";
         actionBtnClass = "bg-orange-600 hover:bg-orange-700 text-white font-bold";
       } else {
         statusBadgeText = "대기 마감 (3/3 순위)";
         statusBadgeClass = "bg-gray-400 text-white font-medium";
-        slotsText = `<span class="text-gray-400 font-normal">3순위 대기 마감</span>`;
-        consecutiveText = `<span class="text-gray-400 font-normal">불가</span>`;
         actionBtnText = "숲나들e 확인 ↗";
         actionBtnClass = "bg-gray-800 hover:bg-black text-white font-bold";
       }
 
+      const emptySpotHtml = waitSummary.availRooms > 0
+        ? `<span class="text-emerald-700 font-extrabold text-sm">${waitSummary.availRooms}실 즉시 가능</span>`
+        : `<span class="text-rose-600 font-extrabold text-xs">0석 (즉시 예약 매진)</span>`;
+
+      const waitSpotHtml = waitSummary.wait1Rooms > 0
+        ? `<span class="text-amber-800 font-black text-xs">🎯 대기 1순위 ${waitSummary.wait1Rooms}실 접수 가능</span>`
+        : (waitSummary.wait2Rooms > 0
+            ? `<span class="text-orange-700 font-bold text-xs">대기 2순위 ${waitSummary.wait2Rooms}실 접수 가능</span>`
+            : `<span class="text-gray-400 font-normal text-xs">3순위 대기 마감</span>`);
+
       specTableHtml = `
         <div class="rounded-lg border border-gray-200 bg-gray-50/60 p-3 text-xs space-y-2 mb-3">
           <div class="flex justify-between items-center py-0.5 border-b border-gray-200/80 pb-1.5">
-            <span class="text-gray-500 font-medium">실시간 예약 / 대기</span>
-            <span class="font-extrabold text-sm text-gray-900">${slotsText}</span>
+            <span class="text-gray-500 font-medium">실시간 빈자리</span>
+            <span class="font-extrabold text-sm text-gray-900">${emptySpotHtml}</span>
           </div>
 
           <div class="flex justify-between items-center py-0.5 border-b border-gray-200/80 pb-1.5">
-            <span class="text-gray-500 font-medium">숲나들e 대기 제도</span>
-            <span class="font-bold text-gray-900">객실당 최대 3순위 (미결제 시 24h 자동 승계)</span>
+            <span class="text-gray-500 font-medium">예약 대기 접수</span>
+            <span class="font-extrabold text-sm text-gray-900">${waitSpotHtml}</span>
           </div>
 
           <div class="flex justify-between items-center py-0.5 border-b border-gray-200/80 pb-1.5">
-            <span class="text-gray-500 font-medium">💡 대기 1번 승계 팁</span>
-            <span class="font-bold text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">미결제·취소로 ~50% 승계 유력</span>
+            <span class="text-gray-500 font-medium">💡 대기 승계 제도</span>
+            <span class="font-bold text-amber-900 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">미결제 취소 시 24h 우선권 자동 배정</span>
           </div>
 
           <div class="flex justify-between items-center py-0.5">
@@ -1203,10 +1222,12 @@ document.querySelectorAll(".service-btn").forEach(btn => {
     if (currentService === "knps") {
       document.getElementById("knpsSubTabs").classList.remove("hidden");
       document.getElementById("forestSubTabs").classList.add("hidden");
+      document.getElementById("forestNoticeBanner")?.classList.add("hidden");
       currentFacility = "camp";
     } else {
       document.getElementById("knpsSubTabs").classList.add("hidden");
       document.getElementById("forestSubTabs").classList.remove("hidden");
+      document.getElementById("forestNoticeBanner")?.classList.remove("hidden");
       currentFacility = "all";
     }
     renderAllViews();

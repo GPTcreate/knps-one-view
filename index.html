@@ -99,8 +99,8 @@
         <div class="text-left md:text-right shrink-0">
           <span class="text-xs text-gray-500 block">실시간 예약 / 대기 현황</span>
           <div class="flex flex-wrap items-baseline gap-2 md:justify-end">
-            <span class="text-2xl font-black text-emerald-700">
-              <span id="availableCampCount">0</span>개소 가능
+            <span class="text-2xl font-black text-gray-900" id="availableCampCountWrap">
+              <span id="availableCampCount">0개소 진행 중</span>
             </span>
             <span id="waitlistCampBadge" class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">
               🎯 대기 1순위 <span id="waitlistCampCount">0</span>곳
@@ -138,6 +138,15 @@
         <button class="service-btn px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer text-gray-700 hover:text-gray-900 hover:bg-gray-300/60" data-service="forest">
           🍃 국립자연휴양림 (숲나들e)
         </button>
+      </div>
+    </div>
+
+    <!-- 숲나들e 주말 잔여석 실시간 안내 배너 -->
+    <div id="forestNoticeBanner" class="hidden mb-4 p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 flex items-start gap-2.5 shadow-2xs">
+      <span class="text-base shrink-0">💡</span>
+      <div class="leading-relaxed">
+        <strong class="font-extrabold text-amber-900">숲나들e 주말(토요일) 잔여석 안내:</strong>
+        <span>인기 국립자연휴양림(유명산·산음·변산 등)은 <strong>즉시 예약 가능한 빈자리가 0석(전실 매진)</strong>입니다. 결제 미납·취소표 발생 시 24시간 우선 결제권이 자동 배정되는 <strong>[대기 1순위 신청]</strong>을 추천합니다.</span>
       </div>
     </div>
 
