@@ -15,7 +15,10 @@ let waitlistOnly = false;
 let roomOnlyFilter = false;
 let consecutiveOnly = false;
 let favoritesOnly = false;
-let favorites = JSON.parse(localStorage.getItem("knps_favs") || '["B111003", "B031005", "B081002", "F_YUMYEONG", "F_BYEONSAN"]');
+let favorites = JSON.parse(
+  (typeof localStorage !== "undefined" ? localStorage.getItem("knps_favs") : null) ||
+  '["B111003", "B031005", "B081002", "F_YUMYEONG", "F_BYEONSAN"]'
+);
 let expandedItemIds = new Set(["B111003", "F_YUMYEONG"]); // 닷돈재, 유명산 기본 펼침
 let huntModeActive = false;
 let huntIntervalId = null;
@@ -457,38 +460,217 @@ async function initData() {
   } catch (e) {
     console.warn("[-] status.json 직접 fetch 실패:", e);
   }
+  updateDateChipButtonsUI();
   renderAllViews();
 }
 
-function getDatesForMode() {
-  if (dateMode === "this-sat") {
+// ==========================================
+// KST 기준 동적 날짜 계산 및 프리셋 유틸리티
+// ==========================================
+function getKstTodayInfo(baseDate) {
+  const d = baseDate ? new Date(baseDate) : new Date();
+  const ymd = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Seoul',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(d);
+  const [year, month, dayOfMonth] = ymd.split('-').map(Number);
+  // UTC 12:00으로 생성하여 일광절약시간/타임존 왜곡 방지
+  const utcDate = new Date(Date.UTC(year, month - 1, dayOfMonth, 12, 0, 0));
+  const dayOfWeek = utcDate.getUTCDay(); // 0: 일, 1: 월, 2: 화, 3: 수, 4: 목, 5: 금, 6: 토
+  return { ymd, year, month, dayOfMonth, dayOfWeek, utcDate };
+}
+
+function addDaysToKst(utcDate, days) {
+  const next = new Date(utcDate.getTime());
+  next.setUTCDate(next.getUTCDate() + days);
+  return next;
+}
+
+function formatKstYmd(utcDate) {
+  const y = utcDate.getUTCFullYear();
+  const m = String(utcDate.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(utcDate.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function createDateItem(targetUtcDate, todayYmd, isHighlight, customPrefix, customSuffix) {
+  const ymd = formatKstYmd(targetUtcDate);
+  const m = String(targetUtcDate.getUTCMonth() + 1).padStart(2, '0');
+  const d = String(targetUtcDate.getUTCDate()).padStart(2, '0');
+  const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
+  const dayName = dayNames[targetUtcDate.getUTCDay()];
+
+  // 요일 경계에서 오늘이 아닌 과거/미래 날짜에는 절대 '오늘'을 붙이지 않음
+  const isToday = (ymd === todayYmd);
+  const todayPrefix = isToday ? '오늘 ' : '';
+  const prefix = customPrefix || '';
+  const suffix = customSuffix || (isHighlight ? ' 🎯' : '');
+
+  const label = `${todayPrefix}${prefix}${dayName} (${m}.${d})${suffix}`;
+  return {
+    date: ymd,
+    label,
+    highlight: !!isHighlight
+  };
+}
+
+function getDatesForMode(mode, baseDate) {
+  const currentMode = mode || dateMode;
+  const kst = getKstTodayInfo(baseDate);
+  const todayYmd = kst.ymd;
+  const dow = kst.dayOfWeek; // 0=일, 1=월, 2=화, 3=수, 4=목, 5=금, 6=토
+
+  // 1. 이번 주말 (this-sat)
+  if (currentMode === "this-sat") {
+    let d1, d2, d3;
+    let d1Highlight = false, d2Highlight = false, d3Highlight = false;
+
+    if (dow === 5) {
+      // 금요일 당일: [오늘 금, 토 🎯, 일]
+      d1 = kst.utcDate;
+      d2 = addDaysToKst(kst.utcDate, 1);
+      d3 = addDaysToKst(kst.utcDate, 2);
+      d2Highlight = true;
+    } else if (dow === 6) {
+      // 토요일 당일: [오늘 토 🎯, 일, 월] (금요일은 과거이므로 제외)
+      d1 = kst.utcDate;
+      d2 = addDaysToKst(kst.utcDate, 1);
+      d3 = addDaysToKst(kst.utcDate, 2);
+      d1Highlight = true;
+    } else if (dow === 0) {
+      // 일요일 당일: [오늘 일 🎯, 월, 화] (금/토는 과거이므로 제외)
+      d1 = kst.utcDate;
+      d2 = addDaysToKst(kst.utcDate, 1);
+      d3 = addDaysToKst(kst.utcDate, 2);
+      d1Highlight = true;
+    } else {
+      // 평일(월~목): 다가오는 이번 주 [금, 토 🎯, 일] (과거 날짜 없음)
+      const diffToFri = 5 - dow;
+      d1 = addDaysToKst(kst.utcDate, diffToFri);
+      d2 = addDaysToKst(kst.utcDate, diffToFri + 1);
+      d3 = addDaysToKst(kst.utcDate, diffToFri + 2);
+      d2Highlight = true;
+    }
+
     return [
-      { date: "2026-10-03", label: "오늘 토 (10.03) 🎯", highlight: true },
-      { date: "2026-10-04", label: "일 (10.04)" },
-      { date: "2026-10-05", label: "월 (10.05)" }
+      createDateItem(d1, todayYmd, d1Highlight),
+      createDateItem(d2, todayYmd, d2Highlight),
+      createDateItem(d3, todayYmd, d3Highlight)
     ];
-  } else if (dateMode === "holiday-sat") {
+  }
+
+  // 2. 다음 주말 (next-sat)
+  if (currentMode === "next-sat") {
+    let diffToNextFri;
+    if (dow === 5) {
+      diffToNextFri = 7;
+    } else if (dow === 6) {
+      diffToNextFri = 6;
+    } else if (dow === 0) {
+      diffToNextFri = 5;
+    } else {
+      diffToNextFri = (5 - dow) + 7;
+    }
+
+    const d1 = addDaysToKst(kst.utcDate, diffToNextFri);
+    const d2 = addDaysToKst(kst.utcDate, diffToNextFri + 1);
+    const d3 = addDaysToKst(kst.utcDate, diffToNextFri + 2);
+
     return [
-      { date: "2026-10-09", label: "한글날 금 (10.09) 🍁" },
-      { date: "2026-10-10", label: "토 (10.10) 🎯", highlight: true },
-      { date: "2026-10-11", label: "일 (10.11)" }
+      createDateItem(d1, todayYmd, false),
+      createDateItem(d2, todayYmd, true),
+      createDateItem(d3, todayYmd, false)
     ];
-  } else if (dateMode === "next-sat") {
-    return [
-      { date: "2026-10-16", label: "금 (10.16)" },
-      { date: "2026-10-17", label: "토 (10.17) 🎯", highlight: true },
-      { date: "2026-10-18", label: "일 (10.18)" }
-    ];
-  } else {
-    const val = document.getElementById("customDateInput")?.value || "2026-10-03";
-    const dObj = new Date(val);
-    const dPlus1 = new Date(dObj.getTime() + 86400000).toISOString().split('T')[0];
-    const dPlus2 = new Date(dObj.getTime() + 172800000).toISOString().split('T')[0];
-    return [
-      { date: val, label: `${val.substring(5)} 🎯`, highlight: true },
-      { date: dPlus1, label: `${dPlus1.substring(5)}` },
-      { date: dPlus2, label: `${dPlus2.substring(5)}` }
-    ];
+  }
+
+  // 3. 한글날/연휴 프리셋 (holiday-sat)
+  if (currentMode === "holiday-sat") {
+    if (todayYmd <= "2026-10-11") {
+      const h1 = new Date(Date.UTC(2026, 9, 9, 12, 0, 0));
+      const h2 = new Date(Date.UTC(2026, 9, 10, 12, 0, 0));
+      const h3 = new Date(Date.UTC(2026, 9, 11, 12, 0, 0));
+      return [
+        createDateItem(h1, todayYmd, false, "한글날 ", " 🍁"),
+        createDateItem(h2, todayYmd, true),
+        createDateItem(h3, todayYmd, false)
+      ];
+    } else {
+      let diffToFri;
+      if (dow === 5) diffToFri = 14;
+      else if (dow === 6) diffToFri = 13;
+      else if (dow === 0) diffToFri = 12;
+      else diffToFri = (5 - dow) + 14;
+
+      const d1 = addDaysToKst(kst.utcDate, diffToFri);
+      const d2 = addDaysToKst(kst.utcDate, diffToFri + 1);
+      const d3 = addDaysToKst(kst.utcDate, diffToFri + 2);
+
+      return [
+        createDateItem(d1, todayYmd, false),
+        createDateItem(d2, todayYmd, true),
+        createDateItem(d3, todayYmd, false)
+      ];
+    }
+  }
+
+  // 4. 사용자 지정 날짜 (custom)
+  let customVal = typeof document !== 'undefined' ? document.getElementById("customDateInput")?.value : null;
+  if (!customVal || customVal < todayYmd) {
+    customVal = todayYmd;
+    if (typeof document !== 'undefined') {
+      const input = document.getElementById("customDateInput");
+      if (input) input.value = todayYmd;
+    }
+  }
+
+  const [cy, cm, cd] = customVal.split('-').map(Number);
+  const c1 = new Date(Date.UTC(cy, cm - 1, cd, 12, 0, 0));
+  const c2 = addDaysToKst(c1, 1);
+  const c3 = addDaysToKst(c1, 2);
+
+  return [
+    createDateItem(c1, todayYmd, true),
+    createDateItem(c2, todayYmd, false),
+    createDateItem(c3, todayYmd, false)
+  ];
+}
+
+function updateDateChipButtonsUI() {
+  if (typeof document === 'undefined') return;
+  const kst = getKstTodayInfo();
+  const thisDates = getDatesForMode("this-sat");
+  const nextDates = getDatesForMode("next-sat");
+
+  const thisBtn = document.querySelector('.date-chip[data-date-mode="this-sat"]');
+  if (thisBtn && thisDates.length >= 3) {
+    const d1Str = thisDates[0].date.substring(5).replace('-', '.');
+    const d3Str = thisDates[2].date.substring(5).replace('-', '.');
+    if (kst.dayOfWeek === 6) {
+      thisBtn.textContent = `오늘 토 (${d1Str}) 🎯`;
+    } else if (kst.dayOfWeek === 5) {
+      thisBtn.textContent = `오늘 금 (${d1Str}) 🎯`;
+    } else if (kst.dayOfWeek === 0) {
+      thisBtn.textContent = `오늘 일 (${d1Str}) 🎯`;
+    } else {
+      thisBtn.textContent = `이번 주말 (${d1Str}~${d3Str}) 🎯`;
+    }
+  }
+
+  const nextBtn = document.querySelector('.date-chip[data-date-mode="next-sat"]');
+  if (nextBtn && nextDates.length >= 3) {
+    const d1Str = nextDates[0].date.substring(5).replace('-', '.');
+    const d3Str = nextDates[2].date.substring(5).replace('-', '.');
+    nextBtn.textContent = `다음 주말 (${d1Str}~${d3Str})`;
+  }
+
+  const customInput = document.getElementById("customDateInput");
+  if (customInput) {
+    if (!customInput.value || customInput.value === "2026-10-03") {
+      customInput.value = kst.ymd;
+    }
+    customInput.min = kst.ymd;
   }
 }
 
@@ -1164,9 +1346,10 @@ function playBeep() {
 }
 
 // ----------------------------------------------------
-// 이벤트 핸들러
+// 이벤트 핸들러 (브라우저 환경)
 // ----------------------------------------------------
-document.querySelectorAll(".service-btn").forEach(btn => {
+if (typeof document !== 'undefined') {
+  document.querySelectorAll(".service-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".service-btn").forEach(b => {
       b.classList.remove("active", "bg-emerald-700", "text-white", "shadow-xs");
@@ -1371,10 +1554,25 @@ huntToggleBtn?.addEventListener("click", () => {
   }
 });
 
-window.closeBottomAd = function() {
-  const ad = document.getElementById("stickyBottomAd");
-  if (ad) ad.style.display = "none";
-};
+  if (typeof window !== 'undefined') {
+    window.closeBottomAd = function() {
+      const ad = document.getElementById("stickyBottomAd");
+      if (ad) ad.style.display = "none";
+    };
+  }
 
-// 시작 시 데이터 로드
-initData();
+  // 시작 시 데이터 로드 (브라우저 환경)
+  if (typeof window !== 'undefined' && typeof window.location !== 'undefined') {
+    initData();
+  }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    getKstTodayInfo,
+    getDatesForMode,
+    addDaysToKst,
+    formatKstYmd,
+    createDateItem,
+  };
+}
