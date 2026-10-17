@@ -1,311 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>숲나들e 대기알리미 & 국공뷰어 - 국립자연휴양림 대기 1순위 선점 & 취소표 레이더</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.05);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(100, 116, 139, 0.3);
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(100, 116, 139, 0.5);
-    }
-
-    .sticky-col {
-      position: sticky;
-      left: 0;
-      z-index: 10;
-      background: white;
-    }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#153e35"><meta name="description" content="여러 자연휴양림과 국립공원 야영장의 빈자리와 예약대기 현황을 한곳에서 비교하세요.">
+<title>숲자리 · 빈자리와 예약대기 한눈에</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23153e35'/%3E%3Cpath d='M20 7L8 26h9v7h6v-7h9Z' fill='%23d5eac2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css"><script defer src="core.js"></script><script defer src="app.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-900 antialiased min-h-screen font-sans pb-10">
-
-  <!-- Toast Notification Container -->
-  <div id="toast" class="fixed bottom-16 md:bottom-6 right-4 z-50 transform translate-y-20 opacity-0 transition-all duration-300 max-w-sm bg-gray-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-gray-700">
-    <span class="text-xl">🚀</span>
-    <div class="text-xs">
-      <div id="toastTitle" class="font-bold">공식 예약 사이트로 연결합니다</div>
-      <div id="toastDesc" class="text-gray-300 mt-0.5">안전하게 공식 예약 페이지로 이동합니다.</div>
-    </div>
-  </div>
-
-  <!-- Header (공모주 알리미 Header.tsx 표준 규격) -->
-  <header class="sticky top-0 z-40 w-full border-b border-gray-200 bg-white shadow-2xs">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <!-- 서비스 로고 -->
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center text-white font-black text-sm">
-          숲
-        </div>
-        <div>
-          <div class="flex items-center gap-1.5">
-            <span class="font-bold text-lg text-gray-900 tracking-tight">
-              숲나들e <span class="text-emerald-700 font-extrabold text-base">알리미</span>
-            </span>
-            <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded border border-amber-300">+국공뷰어</span>
-          </div>
-          <p class="text-[11px] text-gray-500 hidden sm:block">
-            자연휴양림 대기 1순위 골든티켓 & 취소석 레이더
-          </p>
-        </div>
-      </div>
-
-      <!-- 네비게이션 & 빠른 액션 -->
-      <nav class="flex items-center gap-1 sm:gap-3 text-sm font-semibold shrink-0">
-        <button id="huntToggleBtn" class="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-lg text-gray-700 hover:text-emerald-700 hover:bg-gray-50 transition-colors cursor-pointer" title="취소표 사냥">
-          <span id="huntDot" class="w-2 h-2 rounded-full bg-gray-400"></span>
-          <span class="hidden sm:inline">취소표 알리미</span>
-          <span class="sm:hidden text-xs">알리미</span>
-        </button>
-        <button id="refreshBtn" class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors shrink-0 cursor-pointer">
-          <svg id="refreshIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-          <span id="refreshTimeText">새로고침</span>
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <!-- 메인 컨테이너 (max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8) -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-
-    <!-- 상단 안내 헤더 카드 -->
-    <div class="bg-white rounded-xl border border-gray-300 p-5 sm:p-7 shadow-2xs mb-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md mb-2 border border-emerald-200">
-            <span>실시간 예약·대기 현황</span>
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-            숲나들e & 국립공원 실시간 현황
-          </h1>
-          <p class="text-sm text-gray-600 mt-1.5 leading-relaxed">
-            전국 주요 자연휴양림 대기 순번 및 국립공원 야영장 잔여석을 안내합니다.
-          </p>
-        </div>
-
-        <div class="text-left md:text-right shrink-0">
-          <span class="text-xs text-gray-500 block font-medium" id="kpiSubTitle">숲나들e 대기 순번 현황</span>
-          <div class="flex flex-wrap items-baseline gap-2 md:justify-end mt-0.5">
-            <span class="text-2xl font-black text-gray-900" id="availableCampCountWrap">
-              <span id="availableCampCount">대기 1순위 12개소</span>
-            </span>
-            <span id="waitlistCampBadge" class="text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-md border border-gray-200">
-              실시간 잔여: <span id="waitlistCampCount">0</span>석
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 1. 대메뉴 탭 (공모주 알리미 세그먼트 컨트롤: bg-gray-200/90 - 휴양림 메인) -->
-    <div class="mb-4">
-      <div class="flex items-center gap-1.5 p-1.5 rounded-xl bg-gray-200/90 text-xs sm:text-sm font-bold overflow-x-auto scrollbar-none touch-pan-x">
-        <button class="service-btn active px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer bg-emerald-700 text-white shadow-xs" data-service="forest">
-          🍃 국립자연휴양림 (숲나들e 메인)
-        </button>
-        <button class="service-btn px-4 py-2.5 rounded-lg whitespace-nowrap transition-all cursor-pointer text-gray-700 hover:text-gray-900 hover:bg-gray-300/60" data-service="knps">
-          🌲 국립공원 (KNPS 48개소)
-        </button>
-      </div>
-    </div>
-
-    <!-- 2. 세부 시설 탭 & 뷰 모드 토글 -->
-    <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
-      <!-- 숲나들e 서브탭 (기본 노출) -->
-      <div id="forestSubTabs" class="flex items-center gap-1.5 text-xs font-bold overflow-x-auto scrollbar-none">
-        <button class="forest-tab active px-3.5 py-2 rounded-lg bg-gray-900 text-white shadow-2xs cursor-pointer" data-facility="all">
-          전체 휴양림 (12개소)
-        </button>
-        <button class="forest-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="house">
-          🏡 숲속의 집 (독채)
-        </button>
-        <button class="forest-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="condo">
-          🏢 산림문화휴양관
-        </button>
-        <button class="forest-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="deck">
-          ⛺ 야영데크
-        </button>
-      </div>
-
-      <!-- 국립공원 서브탭 (knps 전환 시 노출) -->
-      <div id="knpsSubTabs" class="flex items-center gap-1.5 text-xs font-bold overflow-x-auto scrollbar-none hidden">
-        <button class="knps-tab active px-3.5 py-2 rounded-lg bg-gray-900 text-white shadow-2xs cursor-pointer" data-facility="camp">
-          🏕️ 야영장 (48개소)
-        </button>
-        <button class="knps-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="eco">
-          🌲 생태탐방원 생활관
-        </button>
-        <button class="knps-tab px-3.5 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer" data-facility="shelter">
-          🏠 산악 대피소
-        </button>
-      </div>
-
-      <!-- 뷰 모드 토글 (공모주 카드 피드 ↔ 전광판 표) -->
-      <div class="flex items-center gap-1 bg-white p-1 rounded-lg border border-gray-300 text-xs font-bold shrink-0">
-        <button class="view-mode-btn active px-3 py-1.5 rounded-md bg-emerald-700 text-white transition-all cursor-pointer" data-view-mode="card">
-          📱 카드 피드
-        </button>
-        <button class="view-mode-btn px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition-all cursor-pointer" data-view-mode="matrix">
-          📊 전광판 표
-        </button>
-      </div>
-    </div>
-
-    <!-- 3. 필터 & 검색 박스 (정갈한 컨트롤 패널) -->
-    <div class="bg-white rounded-xl border border-gray-300 p-4 mb-6 shadow-2xs space-y-3 text-xs">
-      <!-- 1행: 날짜 선택 -->
-      <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-gray-100">
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="text-gray-500 font-bold mr-1">📅 조회 일정:</span>
-          <button class="date-chip active px-3 py-1.5 rounded-md font-bold transition-all bg-emerald-700 text-white shadow-2xs cursor-pointer" data-date-mode="this-sat">
-            이번 주말 🎯
-          </button>
-          <button class="date-chip px-3 py-1.5 rounded-md font-semibold transition-all bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200 cursor-pointer" data-date-mode="holiday-sat">
-            한글날 연휴 (10.09~11) 🍁
-          </button>
-          <button class="date-chip px-3 py-1.5 rounded-md font-semibold transition-all bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200 cursor-pointer" data-date-mode="next-sat">
-            다음 주말
-          </button>
-          <div class="relative inline-flex items-center">
-            <input type="date" id="customDateInput" class="bg-gray-50 border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-emerald-600">
-          </div>
-        </div>
-
-        <!-- 퀵 체크박스 토글 (대기 1순위 최우선 배치) -->
-        <div class="flex flex-wrap items-center gap-3">
-          <label class="flex items-center gap-1.5 cursor-pointer select-none text-amber-900 font-bold bg-amber-50 px-2.5 py-1 rounded-md border border-amber-300 hover:bg-amber-100 transition-colors shadow-2xs">
-            <input type="checkbox" id="waitlistOnlyToggle" class="rounded text-amber-600 focus:ring-amber-500">
-            <span>🎯 대기 1순위만</span>
-          </label>
-          <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
-            <input type="checkbox" id="availableOnlyToggle" class="rounded text-emerald-700 focus:ring-emerald-600">
-            <span>🟢 즉시 빈자리만</span>
-          </label>
-          <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
-            <input type="checkbox" id="consecutiveOnlyToggle" class="rounded text-emerald-700 focus:ring-emerald-600">
-            <span>🔥 2박(연박)만</span>
-          </label>
-          <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
-            <input type="checkbox" id="roomOnlyToggle" class="rounded text-indigo-700 focus:ring-indigo-600">
-            <span>🏠 방/객실만</span>
-          </label>
-          <label class="flex items-center gap-1 cursor-pointer select-none text-gray-700 font-bold">
-            <input type="checkbox" id="favoritesOnlyToggle" class="rounded text-amber-500 focus:ring-amber-500">
-            <span>⭐ 찜만</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 2행: 권역 및 검색창 -->
-      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <div class="flex flex-wrap items-center gap-1">
-          <span class="text-gray-500 font-medium mr-1">권역:</span>
-          <button class="region-chip active font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-200" data-region="all">전체</button>
-          <button class="region-chip text-gray-600 hover:text-gray-900 px-2 py-1 rounded" data-region="강원">강원</button>
-          <button class="region-chip text-gray-600 hover:text-gray-900 px-2 py-1 rounded" data-region="경기/충청">경기/충청</button>
-          <button class="region-chip text-gray-600 hover:text-gray-900 px-2 py-1 rounded" data-region="전라">전라</button>
-          <button class="region-chip text-gray-600 hover:text-gray-900 px-2 py-1 rounded" data-region="경상">경상</button>
-        </div>
-
-        <div class="relative w-full sm:w-72">
-          <input 
-            type="text" 
-            id="campSearchInput" 
-            placeholder="시설/방 이름 검색 (예: 닷돈재, 유명산, 산음, 변산)..." 
-            class="w-full bg-gray-50 border border-gray-300 rounded-lg pl-8 pr-2.5 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-emerald-600"
-          >
-          <svg class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. 컨텐츠 표시 영역 -->
-    <!-- [VIEW 1]: 공모주 알리미형 피드 카드뷰 (IpoCard 스타일) -->
-    <div id="cardFeedContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <!-- Dynamically rendered by JS (IpoCard 규격) -->
-    </div>
-
-    <!-- [VIEW 2]: 전광판 매트릭스 뷰 (전광판 테이블) -->
-    <div id="matrixViewWrap" class="hidden rounded-xl border border-gray-300 bg-white shadow-2xs overflow-hidden">
-      <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-        <h2 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
-          <span>실시간 잔여석 전광판 표 (<span id="renderedCount">0</span>곳)</span>
-        </h2>
-        <div class="text-[11px] text-gray-400 flex flex-wrap items-center gap-3">
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-emerald-100 border border-emerald-400 text-emerald-600 inline-block"></span> 🟢 즉시 가능</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-amber-100 border border-amber-400 text-amber-600 inline-block"></span> 🟡 대기 1순위 (유력 🎯)</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-orange-100 border border-orange-300 text-orange-600 inline-block"></span> 🟠 대기 2순위</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-rose-100 border border-rose-400 text-rose-600 inline-block"></span> ⚡ 마감임박 (1~2석)</span>
-          <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-xs bg-gray-100 border border-gray-200 text-gray-400 inline-block"></span> 마감/매진</span>
-        </div>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse text-xs">
-          <thead>
-            <tr class="bg-gray-50 text-gray-600 font-bold border-b border-gray-200">
-              <th class="py-3 px-3 w-10 text-center">⭐</th>
-              <th class="py-3 px-4 min-w-[200px] sticky-col border-r border-gray-200">공원 / 시설명 (방 규격)</th>
-              <th class="py-3 px-3 min-w-[130px]">유형 및 특성</th>
-              <th class="py-3 px-3 text-center min-w-[110px]" id="colDate0">토 (10.03) 🎯</th>
-              <th class="py-3 px-3 text-center min-w-[110px] bg-emerald-50/70 font-bold text-emerald-900" id="colDate1">일 (10.04)</th>
-              <th class="py-3 px-3 text-center min-w-[110px]" id="colDate2">월 (10.05)</th>
-              <th class="py-3 px-4 text-center min-w-[110px]">공식 1-클릭 예약</th>
-            </tr>
-          </thead>
-          <tbody id="matrixTableBody" class="divide-y divide-gray-100">
-            <!-- Dynamically populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Empty State -->
-    <div id="emptyState" class="hidden p-14 text-center bg-white border border-gray-300 rounded-xl mt-4">
-      <div class="text-4xl mb-3">🏕️</div>
-      <h3 class="text-sm font-bold text-gray-800">선택한 조건에 일치하는 시설이 없습니다</h3>
-      <p class="text-xs text-gray-400 mt-1">
-        필터 조건을 '전체'로 변경하거나 [빈자리만 보기] 옵션을 해제해 보세요.
-      </p>
-    </div>
-
-    <!-- 단일 구글 애드센스 (하단 비간섭 배치) -->
-    <div class="my-8 rounded-xl border border-gray-200 bg-white p-4 text-center max-w-md mx-auto">
-      <div class="flex items-center justify-between text-[10px] text-gray-400 mb-1">
-        <span>광고</span>
-        <span class="font-mono text-[9px]">Google AdSense</span>
-      </div>
-      <div class="py-1 text-xs text-gray-500 font-medium">
-        아웃도어 & 캠핑 기획전
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="mt-4 p-4 rounded-xl bg-white border border-gray-200 text-xs text-gray-500 flex flex-col md:flex-row items-center justify-between gap-2 shadow-2xs">
-      <div>공식 예약 바로가기 클릭 시 국립공원 및 숲나들e 공식 예약 페이지로 연결됩니다.</div>
-      <div class="text-[11px] text-gray-400" id="lastUpdatedSource">
-        실시간 데이터 연동 중
-      </div>
-    </footer>
-  </main>
-
-  <script src="app.js"></script>
-</body>
-</html>
+<body>
+<a class="skip" href="#results">검색 결과 바로가기</a>
+<header class="header"><div class="shell header-inner"><a class="brand" href="./" aria-label="숲자리 홈"><span class="brand-mark" aria-hidden="true">♠</span>숲자리<span class="version">1.0 RC</span></a><nav aria-label="빠른 메뉴"><button id="connectButton" class="quiet">공식 현황 연결</button><button id="savedTop" class="quiet">♡ <span>저장한 곳</span> <b id="savedCount">0</b></button><button id="helpButton" class="quiet">이용 안내</button></nav></div></header>
+<main>
+<section class="hero"><div class="landscape" aria-hidden="true"><svg viewBox="0 0 900 300" preserveAspectRatio="xMidYMax slice"><circle cx="730" cy="70" r="35" fill="#e5d8ad"/><path d="M0 275 165 90 258 185 390 32 590 243 700 130 900 268V300H0" fill="#bacbbb"/><path d="m60 300 205-157 88 72L530 75l225 225" fill="#87a491"/><path d="m415 300 206-154L823 300" fill="#4e7767"/><path d="M0 255q190-80 395 45H0m630 45q130-130 270-83v83" fill="#264f43"/></svg></div><div class="shell hero-inner"><p class="eyebrow">YOUR NEXT FOREST GETAWAY</p><h1>찾던 숲, 남은 자리.</h1><p class="hero-copy">여러 휴양림의 빈자리와 예약대기,<br class="mobile-break"> 이제 한곳에서 비교하세요.</p><div class="hero-footnote"><span class="small-dot"></span> 숲나들e · 국립공원 공식 현황 기준</div></div></section>
+<div class="shell content-shell">
+<form id="searchForm" class="search-panel" aria-label="휴양림 검색">
+<label class="search-field"><span>어디로 떠날까요?</span><select id="regionInput" aria-label="지역"><option value="">전국 모든 지역</option></select></label>
+<label class="search-field"><span>체크인 · 1박</span><input id="dateInput" type="date" required aria-label="체크인 날짜"></label>
+<label class="search-field guest-field"><span>함께 가는 인원</span><select id="guestsInput" aria-label="인원"><option value="1">1명</option><option value="2" selected>2명</option><option value="3">3명</option><option value="4">4명</option><option value="5">5명</option><option value="6">6명</option><option value="8">8명</option><option value="10">10명 이상</option></select></label>
+<button class="primary search-button" id="searchButton" type="submit"><span aria-hidden="true">⌕</span> 자리 찾아보기</button>
+</form>
+<div class="service-tabs" role="group" aria-label="시설 선택"><button class="service active" data-service="forest" aria-pressed="true">자연휴양림 <span id="forestCount">—</span></button><button class="service" data-service="knps" aria-pressed="false">국립공원 야영장 <span id="campCount">—</span></button><span class="service-caption">예약은 공식 사이트에서 진행해요 ↗</span></div>
+<section class="date-section" aria-label="다른 날짜 둘러보기"><div class="date-label"><div><strong>날짜를 바꾸면, 다른 기회가 보여요</strong><p>하루씩 넘기며 예약 가능한 날을 찾아보세요.</p></div><button id="weekendButton" class="text-button">다가오는 토요일 ↗</button></div><div class="date-navigation"><button id="previousDates" class="day-arrow" aria-label="이전 7일">‹</button><div class="date-strip" id="dateStrip"></div><button id="nextDates" class="day-arrow" aria-label="다음 7일">›</button></div></section>
+<div class="results-layout"><aside class="filters" aria-label="검색 결과 필터"><div class="filter-heading"><strong>원하는 곳만 보기</strong><button id="resetFilters" class="text-button">초기화</button></div><label class="keyword-label" for="queryInput">휴양림 · 공원 · 객실 검색</label><input id="queryInput" class="keyword" type="search" placeholder="유명산, 닷돈재…" autocomplete="off"><fieldset><legend>예약 상태</legend><label><input type="radio" name="status" value="all" checked> 전체 보기</label><label><input type="radio" name="status" value="opportunity"> 빈자리 또는 예약대기</label><label><input type="radio" name="status" value="available"> 바로 예약 가능한 곳</label><label><input type="radio" name="status" value="waitlist"> 예약대기 가능한 곳</label></fieldset><fieldset id="operatorField"><legend>운영 구분</legend><label><input type="radio" name="operator" value="" checked> 전체</label><label><input type="radio" name="operator" value="국립"> 국립휴양림</label><label><input type="radio" name="operator" value="공립"> 공립휴양림</label><label><input type="radio" name="operator" value="사립"> 사립휴양림</label></fieldset><div class="filter-bottom"><label><input id="savedOnly" type="checkbox"> 저장한 곳만 보기</label></div><div class="filter-note"><span>i</span><p>미확인은 매진이 아니에요.<br>확인되지 않은 순번이나<br>취소 확률은 표시하지 않아요.</p></div></aside>
+<section class="results" id="results" aria-label="휴양림 검색 결과" tabindex="-1"><div class="results-top"><div><p class="eyebrow dark" id="resultContext">전국 · 1박</p><h2 id="resultTitle">숲으로 떠날 준비를 해볼까요?</h2></div><div class="result-actions"><button id="refreshButton" class="icon-button" title="현황 다시 확인">↻ <span>새로고침</span></button><button id="alertButton" class="icon-button" aria-pressed="false" title="저장한 시설의 상태 변화 알림">♧ <span>변화 알림</span></button></div></div>
+<div class="source-banner" id="sourceBanner" role="status" aria-live="polite">공식 현황을 확인하고 있습니다.</div><button id="cancelSearch" class="text-button" hidden>진행 중인 공식 조회 중단</button>
+<div class="summary-grid" id="summaryGrid"><div><span>비교할 시설</span><strong id="totalStat">—</strong></div><div><span>빈자리 있는 곳</span><strong class="green" id="availableStat">—</strong></div><div><span>예약대기 가능한 곳</span><strong class="amber" id="waitStat">—</strong></div></div>
+<div class="list-toolbar"><span id="resultCount" role="status" aria-live="polite">조회 준비 중</span><div><label class="sr-only" for="sortInput">결과 정렬</label><select id="sortInput"><option value="opportunity">예약 기회 우선</option><option value="name">이름순</option><option value="region">지역순</option><option value="recent">최근 확인순</option></select><div class="view-switch" role="group" aria-label="보기 방식"><button id="listView" class="active" aria-label="목록 보기" aria-pressed="true">☰</button><button id="tableView" aria-label="표 보기" aria-pressed="false">▦</button></div></div></div>
+<div id="resultList" class="result-list"></div><div id="emptyState" class="empty" hidden><span aria-hidden="true">♧</span><h3>조건에 맞는 결과가 없어요</h3><p id="emptyDescription">날짜를 바꾸거나 필터를 넓혀보세요.</p><button id="emptyReset" class="secondary">필터 초기화</button></div><button id="loadMore" class="load-more" hidden>더 많은 휴양림 보기</button>
+<p class="results-note">정원 미제공 객실은 인원 필터 결과에 포함됩니다. 예약 가능 여부와 대기순번은 공식 사이트에서 최종 확인해 주세요.</p>
+</section></div>
+<section class="how-it-works"><div><p class="eyebrow dark">A LITTLE CLOSER TO NATURE</p><h2>숲을 찾는 시간을 줄여드려요.</h2></div><div><b>01</b><strong>여러 곳을 한 번에</strong><p>지역과 날짜로 휴양림을 모아 비교해요.</p></div><div><b>02</b><strong>빈자리가 없어도</strong><p>예약대기 신청 기회까지 함께 확인해요.</p></div><div><b>03</b><strong>마지막 확인은 공식으로</strong><p>마음에 드는 곳의 공식 예약으로 이동해요.</p></div></section>
+<footer><a class="brand" href="./">숲자리</a><p>숲나들e·국립공원공단과 별개로 운영되는 비공식 탐색 도구입니다.</p><span>조금 더 쉽게, 숲으로.</span></footer>
+</div></main>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="helpDialog"><div class="dialog-head"><h2>숲자리 이용 안내</h2><button id="closeHelp" class="icon-button" aria-label="안내 닫기">×</button></div><p>지역, 체크인 날짜, 인원을 선택하면 1박 기준으로 여러 시설을 비교합니다. 날짜 띠를 눌러 다른 날짜도 빠르게 살펴보세요.</p><h3>예약대기 숫자의 의미</h3><p>공식 응답에 신청 가능한 순위가 명시된 경우에만 표시합니다. 현재 대기 인원과 다음 신청 순위, 내 대기순번은 서로 다른 정보입니다. 개인의 대기순번은 공식 마이페이지에서 확인하세요.</p><h3>데이터 확인</h3><p>현황은 시설별 확인 시각을 기준으로 30분 동안 표시됩니다. 오래된 정보·조회 실패·미조회 날짜는 ‘미확인’으로 구분합니다. 빈자리와 가격을 임의로 만들지 않습니다.</p><h3>변화 알림</h3><p>이 화면이 열려 있는 동안 저장한 시설의 새 관측값을 비교합니다. 첫 조회나 날짜 변경에는 알리지 않습니다. 브라우저를 닫은 뒤의 알림은 지원하지 않습니다.</p><div class="dialog-actions"><a class="secondary" href="https://www.foresttrip.go.kr/main.do?hmpgId=FRIP" target="_blank" rel="noopener noreferrer">숲나들e 열기 ↗</a><a class="secondary" href="https://reservation.knps.or.kr" target="_blank" rel="noopener noreferrer">국립공원 예약 ↗</a></div></dialog>
+<noscript>현황 조회에는 JavaScript가 필요합니다. 숲나들e와 국립공원 공식 사이트에서 확인해 주세요.</noscript>
+</body></html>

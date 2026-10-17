@@ -1,0 +1,1905 @@
+{
+  "version": 1,
+  "collected_at": "2026-10-17T13:00:16.272473+00:00",
+  "source": "https://www.foresttrip.go.kr/main.do?hmpgId=FRIP",
+  "regions": [
+    {
+      "id": "1",
+      "name": "서울/인천/경기"
+    },
+    {
+      "id": "2",
+      "name": "강원"
+    },
+    {
+      "id": "3",
+      "name": "충북"
+    },
+    {
+      "id": "4",
+      "name": "대전/충남"
+    },
+    {
+      "id": "5",
+      "name": "전북"
+    },
+    {
+      "id": "6",
+      "name": "전남광주"
+    },
+    {
+      "id": "7",
+      "name": "대구/경북"
+    },
+    {
+      "id": "8",
+      "name": "부산/경남"
+    },
+    {
+      "id": "9",
+      "name": "제주"
+    }
+  ],
+  "forests": [
+    {
+      "id": "ID02030019",
+      "service": "forest",
+      "name": "(가평군)강씨봉자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030019",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030019"
+    },
+    {
+      "id": "0101",
+      "service": "forest",
+      "name": "(가평군)유명산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0101",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=0101"
+    },
+    {
+      "id": "ID04030007",
+      "service": "forest",
+      "name": "(가평군)청평자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030007",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID04030007"
+    },
+    {
+      "id": "ID02030099",
+      "service": "forest",
+      "name": "(가평군)칼봉산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030099",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030099"
+    },
+    {
+      "id": "ID04030105",
+      "service": "forest",
+      "name": "(강화군)강화자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030105",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID04030105"
+    },
+    {
+      "id": "ID02030071",
+      "service": "forest",
+      "name": "(강화군)석모도자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030071",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030071"
+    },
+    {
+      "id": "ID02030050",
+      "service": "forest",
+      "name": "(남양주시)축령산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030050",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030050"
+    },
+    {
+      "id": "ID02030129",
+      "service": "forest",
+      "name": "(노원구)수락산동막골자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030129",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030129"
+    },
+    {
+      "id": "ID02030023",
+      "service": "forest",
+      "name": "(동두천시)동두천자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030023",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030023"
+    },
+    {
+      "id": "ID02030092",
+      "service": "forest",
+      "name": "(안성시)서운산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030092",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030092"
+    },
+    {
+      "id": "ID02030123",
+      "service": "forest",
+      "name": "(양주시)신암저수지숲속야영장",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030123",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030123"
+    },
+    {
+      "id": "0104",
+      "service": "forest",
+      "name": "(양주시)아세안자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0104",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=0104"
+    },
+    {
+      "id": "0103",
+      "service": "forest",
+      "name": "(양평군)산음자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0103",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=0103"
+    },
+    {
+      "id": "ID02030087",
+      "service": "forest",
+      "name": "(양평군)양평 백운봉 자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030087",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030087"
+    },
+    {
+      "id": "ID04030004",
+      "service": "forest",
+      "name": "(양평군)양평설매재자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030004",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID04030004"
+    },
+    {
+      "id": "ID02030079",
+      "service": "forest",
+      "name": "(양평군)양평쉬자파크",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030079",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030079"
+    },
+    {
+      "id": "0108",
+      "service": "forest",
+      "name": "(양평군)중미산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0108",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=0108"
+    },
+    {
+      "id": "ID02030001",
+      "service": "forest",
+      "name": "(연천군)고대산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030001",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030001"
+    },
+    {
+      "id": "ID02030127",
+      "service": "forest",
+      "name": "(옹진군)덕적도자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030127",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030127"
+    },
+    {
+      "id": "ID02030031",
+      "service": "forest",
+      "name": "(용인시)용인자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030031",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030031"
+    },
+    {
+      "id": "ID02030065",
+      "service": "forest",
+      "name": "(의왕시)의왕바라산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030065",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030065"
+    },
+    {
+      "id": "0303",
+      "service": "forest",
+      "name": "(인천시)무의도자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0303",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=0303"
+    },
+    {
+      "id": "0224",
+      "service": "forest",
+      "name": "(포천시)운악산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0224",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=0224"
+    },
+    {
+      "id": "CBMNT",
+      "service": "forest",
+      "name": "(포천시)천보산자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=CBMNT",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=CBMNT"
+    },
+    {
+      "id": "ID02030118",
+      "service": "forest",
+      "name": "(화성시)무봉산 자연휴양림",
+      "region": "서울/인천/경기",
+      "region_id": "1",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030118",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=1&insttId=ID02030118"
+    },
+    {
+      "id": "0111",
+      "service": "forest",
+      "name": "(강릉시)대관령자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0111",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0111"
+    },
+    {
+      "id": "ID02030100",
+      "service": "forest",
+      "name": "(강릉시)임해자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030100",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030100"
+    },
+    {
+      "id": "0306",
+      "service": "forest",
+      "name": "(고성군)진부령자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0306",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0306"
+    },
+    {
+      "id": "0244",
+      "service": "forest",
+      "name": "(삼척시)검봉산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0244",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0244"
+    },
+    {
+      "id": "ID02030104",
+      "service": "forest",
+      "name": "(삼척시)삼척활기자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030104",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030104"
+    },
+    {
+      "id": "ID02030095",
+      "service": "forest",
+      "name": "(양구군)광치자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030095",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030095"
+    },
+    {
+      "id": "0112",
+      "service": "forest",
+      "name": "(양양군)미천골자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0112",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0112"
+    },
+    {
+      "id": "ID02030049",
+      "service": "forest",
+      "name": "(양양군)송이밸리자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030049",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030049"
+    },
+    {
+      "id": "ID02030067",
+      "service": "forest",
+      "name": "(영월군)망경대산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030067",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030067"
+    },
+    {
+      "id": "0223",
+      "service": "forest",
+      "name": "(원주시)백운산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0223",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0223"
+    },
+    {
+      "id": "ID02030024",
+      "service": "forest",
+      "name": "(원주시)치악산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030024",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030024"
+    },
+    {
+      "id": "ID04030001",
+      "service": "forest",
+      "name": "(원주시)피노키오자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030001",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID04030001"
+    },
+    {
+      "id": "ID02030120",
+      "service": "forest",
+      "name": "(인제군)갯골자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030120",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030120"
+    },
+    {
+      "id": "0109",
+      "service": "forest",
+      "name": "(인제군)방태산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0109",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0109"
+    },
+    {
+      "id": "0102",
+      "service": "forest",
+      "name": "(인제군)용대자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0102",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0102"
+    },
+    {
+      "id": "ID02030018",
+      "service": "forest",
+      "name": "(인제군)하추자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030018",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030018"
+    },
+    {
+      "id": "0113",
+      "service": "forest",
+      "name": "(정선군)가리왕산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0113",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0113"
+    },
+    {
+      "id": "0110",
+      "service": "forest",
+      "name": "(철원군)복주산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0110",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0110"
+    },
+    {
+      "id": "ID02030005",
+      "service": "forest",
+      "name": "(철원군)철원두루웰숲속문화촌",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030005",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030005"
+    },
+    {
+      "id": "ID02030096",
+      "service": "forest",
+      "name": "(춘천시)강원숲체험장",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030096",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030096"
+    },
+    {
+      "id": "0222",
+      "service": "forest",
+      "name": "(춘천시)용화산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0222",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0222"
+    },
+    {
+      "id": "ID02030043",
+      "service": "forest",
+      "name": "(춘천시)집다리골자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030043",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030043"
+    },
+    {
+      "id": "ID02030125",
+      "service": "forest",
+      "name": "(춘천시)춘천숲자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030125",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030125"
+    },
+    {
+      "id": "ID02030022",
+      "service": "forest",
+      "name": "(태백시)태백고원자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030022",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030022"
+    },
+    {
+      "id": "0243",
+      "service": "forest",
+      "name": "(평창군)두타산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0243",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0243"
+    },
+    {
+      "id": "ID02030003",
+      "service": "forest",
+      "name": "(평창군)평창자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030003",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030003"
+    },
+    {
+      "id": "ID02030002",
+      "service": "forest",
+      "name": "(홍천군)가리산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030002",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID02030002"
+    },
+    {
+      "id": "0107",
+      "service": "forest",
+      "name": "(홍천군)삼봉자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0107",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0107"
+    },
+    {
+      "id": "0116",
+      "service": "forest",
+      "name": "(화천군)화천숲속야영장",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0116",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0116"
+    },
+    {
+      "id": "0106",
+      "service": "forest",
+      "name": "(횡성군)청태산자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0106",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=0106"
+    },
+    {
+      "id": "ID04030002",
+      "service": "forest",
+      "name": "(횡성군)횡성자연휴양림",
+      "region": "강원",
+      "region_id": "2",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030002",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=2&insttId=ID04030002"
+    },
+    {
+      "id": "ID02030070",
+      "service": "forest",
+      "name": "(괴산군)성불산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030070",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030070"
+    },
+    {
+      "id": "ID02030008",
+      "service": "forest",
+      "name": "(괴산군)조령산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030008",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030008"
+    },
+    {
+      "id": "ID02030009",
+      "service": "forest",
+      "name": "(단양군)소백산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030009",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030009"
+    },
+    {
+      "id": "ID02030041",
+      "service": "forest",
+      "name": "(단양군)소선암자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030041",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030041"
+    },
+    {
+      "id": "0242",
+      "service": "forest",
+      "name": "(단양군)황정산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0242",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=0242"
+    },
+    {
+      "id": "0115",
+      "service": "forest",
+      "name": "(보은군)속리산말티재자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0115",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=0115"
+    },
+    {
+      "id": "ID02030035",
+      "service": "forest",
+      "name": "(보은군)속리산숲체험휴양마을",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030035",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030035"
+    },
+    {
+      "id": "ID02030032",
+      "service": "forest",
+      "name": "(보은군)충북알프스자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030032",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030032"
+    },
+    {
+      "id": "ID02030107",
+      "service": "forest",
+      "name": "(영동군)민주지산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030107",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030107"
+    },
+    {
+      "id": "ID02030036",
+      "service": "forest",
+      "name": "(옥천군)장령산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030036",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030036"
+    },
+    {
+      "id": "ID02030016",
+      "service": "forest",
+      "name": "(음성군)백야자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030016",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030016"
+    },
+    {
+      "id": "ID02030017",
+      "service": "forest",
+      "name": "(음성군)수레의산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030017",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030017"
+    },
+    {
+      "id": "ID02030062",
+      "service": "forest",
+      "name": "(제천시)박달재자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030062",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030062"
+    },
+    {
+      "id": "ID02030110",
+      "service": "forest",
+      "name": "(제천시)옥전자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030110",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030110"
+    },
+    {
+      "id": "ID02030089",
+      "service": "forest",
+      "name": "(증평군)좌구산휴양랜드",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030089",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030089"
+    },
+    {
+      "id": "ID02030033",
+      "service": "forest",
+      "name": "(진천군)생거진천자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030033",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030033"
+    },
+    {
+      "id": "ID02030132",
+      "service": "forest",
+      "name": "(청주시)미원별빛자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030132",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030132"
+    },
+    {
+      "id": "0300",
+      "service": "forest",
+      "name": "(청주시)상당산성자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0300",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=0300"
+    },
+    {
+      "id": "ID02030054",
+      "service": "forest",
+      "name": "(청주시)옥화자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030054",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030054"
+    },
+    {
+      "id": "ID02030042",
+      "service": "forest",
+      "name": "(충주시)계명산자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030042",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030042"
+    },
+    {
+      "id": "ID02030055",
+      "service": "forest",
+      "name": "(충주시)문성자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030055",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030055"
+    },
+    {
+      "id": "ID02030051",
+      "service": "forest",
+      "name": "(충주시)봉황자연휴양림",
+      "region": "충북",
+      "region_id": "3",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030051",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=3&insttId=ID02030051"
+    },
+    {
+      "id": "ID02030011",
+      "service": "forest",
+      "name": "(공주시)공주산림휴양마을",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030011",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030011"
+    },
+    {
+      "id": "ID02030063",
+      "service": "forest",
+      "name": "(금산군)금산산림문화타운",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030063",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030063"
+    },
+    {
+      "id": "0305",
+      "service": "forest",
+      "name": "(금산군)금산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0305",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=0305"
+    },
+    {
+      "id": "ID02030034",
+      "service": "forest",
+      "name": "(논산시)양촌자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030034",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030034"
+    },
+    {
+      "id": "ID02030111",
+      "service": "forest",
+      "name": "(대전시)만인산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030111",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030111"
+    },
+    {
+      "id": "ID02030106",
+      "service": "forest",
+      "name": "(대전시)장태산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030106",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030106"
+    },
+    {
+      "id": "ID02030078",
+      "service": "forest",
+      "name": "(보령시)성주산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030078",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030078"
+    },
+    {
+      "id": "0191",
+      "service": "forest",
+      "name": "(보령시)오서산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0191",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=0191"
+    },
+    {
+      "id": "ID02030130",
+      "service": "forest",
+      "name": "(보령시)원산도자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030130",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030130"
+    },
+    {
+      "id": "ID02030007",
+      "service": "forest",
+      "name": "(부여군)만수산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030007",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030007"
+    },
+    {
+      "id": "0220",
+      "service": "forest",
+      "name": "(서산시)용현자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0220",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=0220"
+    },
+    {
+      "id": "0187",
+      "service": "forest",
+      "name": "(서천군)희리산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0187",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=0187"
+    },
+    {
+      "id": "ID02030012",
+      "service": "forest",
+      "name": "(아산시)영인산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030012",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030012"
+    },
+    {
+      "id": "ID02030028",
+      "service": "forest",
+      "name": "(예산군)봉수산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030028",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030028"
+    },
+    {
+      "id": "ID02030040",
+      "service": "forest",
+      "name": "(천안시)태학산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030040",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030040"
+    },
+    {
+      "id": "ID02030044",
+      "service": "forest",
+      "name": "(청양군)칠갑산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030044",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030044"
+    },
+    {
+      "id": "ID02030086",
+      "service": "forest",
+      "name": "(태안군)안면도자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030086",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030086"
+    },
+    {
+      "id": "ID02030080",
+      "service": "forest",
+      "name": "(홍성군)용봉산자연휴양림",
+      "region": "대전/충남",
+      "region_id": "4",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030080",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=4&insttId=ID02030080"
+    },
+    {
+      "id": "0301",
+      "service": "forest",
+      "name": "(군산시)신시도자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0301",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=0301"
+    },
+    {
+      "id": "ID02030119",
+      "service": "forest",
+      "name": "(김제시)선암자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030119",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030119"
+    },
+    {
+      "id": "ID04030003",
+      "service": "forest",
+      "name": "(남원시)남원자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030003",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID04030003"
+    },
+    {
+      "id": "0141",
+      "service": "forest",
+      "name": "(무주군)덕유산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0141",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=0141"
+    },
+    {
+      "id": "ID02030108",
+      "service": "forest",
+      "name": "(무주군)무주향로산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030108",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030108"
+    },
+    {
+      "id": "0189",
+      "service": "forest",
+      "name": "(부안군)변산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0189",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=0189"
+    },
+    {
+      "id": "0188",
+      "service": "forest",
+      "name": "(순창군)회문산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0188",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=0188"
+    },
+    {
+      "id": "ID02030025",
+      "service": "forest",
+      "name": "(완주군)고산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030025",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030025"
+    },
+    {
+      "id": "ID02030122",
+      "service": "forest",
+      "name": "(임실군)성수산왕의숲자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030122",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030122"
+    },
+    {
+      "id": "ID02030082",
+      "service": "forest",
+      "name": "(장수군)방화동자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030082",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030082"
+    },
+    {
+      "id": "ID02030084",
+      "service": "forest",
+      "name": "(장수군)와룡자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030084",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030084"
+    },
+    {
+      "id": "ID02030131",
+      "service": "forest",
+      "name": "(정읍시)내장산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030131",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030131"
+    },
+    {
+      "id": "ID02030074",
+      "service": "forest",
+      "name": "(진안군)데미샘자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030074",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=ID02030074"
+    },
+    {
+      "id": "0194",
+      "service": "forest",
+      "name": "(진안군)운장산자연휴양림",
+      "region": "전북",
+      "region_id": "5",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0194",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=5&insttId=0194"
+    },
+    {
+      "id": "ID02030060",
+      "service": "forest",
+      "name": "(강진군)주작산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030060",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030060"
+    },
+    {
+      "id": "ID02030069",
+      "service": "forest",
+      "name": "(고흥군)팔영산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030069",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030069"
+    },
+    {
+      "id": "ID02030061",
+      "service": "forest",
+      "name": "(광양시)백운산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030061",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030061"
+    },
+    {
+      "id": "ID02030091",
+      "service": "forest",
+      "name": "(구례군)산수유자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030091",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030091"
+    },
+    {
+      "id": "ID02030090",
+      "service": "forest",
+      "name": "(보성군)제암산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030090",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030090"
+    },
+    {
+      "id": "0200",
+      "service": "forest",
+      "name": "(순천시)낙안민속자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0200",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=0200"
+    },
+    {
+      "id": "ID02030058",
+      "service": "forest",
+      "name": "(순천시)순천자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030058",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030058"
+    },
+    {
+      "id": "ID02030097",
+      "service": "forest",
+      "name": "(여수시)봉황산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030097",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030097"
+    },
+    {
+      "id": "ID02030121",
+      "service": "forest",
+      "name": "(영암군)기찬자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030121",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030121"
+    },
+    {
+      "id": "ID02030021",
+      "service": "forest",
+      "name": "(완도군)완도자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030021",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030021"
+    },
+    {
+      "id": "0181",
+      "service": "forest",
+      "name": "(장성군)방장산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0181",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=0181"
+    },
+    {
+      "id": "0196",
+      "service": "forest",
+      "name": "(장흥군)천관산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0196",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=0196"
+    },
+    {
+      "id": "0201",
+      "service": "forest",
+      "name": "(진도군)진도자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0201",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=0201"
+    },
+    {
+      "id": "ID02030045",
+      "service": "forest",
+      "name": "(해남군)흑석산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030045",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030045"
+    },
+    {
+      "id": "ID04030010",
+      "service": "forest",
+      "name": "(화순군)무등산편백자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030010",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID04030010"
+    },
+    {
+      "id": "ID02030098",
+      "service": "forest",
+      "name": "(화순군)백아산자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030098",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030098"
+    },
+    {
+      "id": "ID02030088",
+      "service": "forest",
+      "name": "(화순군)한천자연휴양림",
+      "region": "전남광주",
+      "region_id": "6",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030088",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=6&insttId=ID02030088"
+    },
+    {
+      "id": "ID02030027",
+      "service": "forest",
+      "name": "(경주시)토함산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030027",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030027"
+    },
+    {
+      "id": "ID02030026",
+      "service": "forest",
+      "name": "(고령군)미숭산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030026",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030026"
+    },
+    {
+      "id": "ID02030066",
+      "service": "forest",
+      "name": "(구미시)옥성자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030066",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030066"
+    },
+    {
+      "id": "ID02030064",
+      "service": "forest",
+      "name": "(군위군)군위장곡자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030064",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030064"
+    },
+    {
+      "id": "0304",
+      "service": "forest",
+      "name": "(김천시)김천숲속야영장",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0304",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0304"
+    },
+    {
+      "id": "ID02030030",
+      "service": "forest",
+      "name": "(김천시)수도산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030030",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030030"
+    },
+    {
+      "id": "ID02030093",
+      "service": "forest",
+      "name": "(대구시)비슬산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030093",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030093"
+    },
+    {
+      "id": "ID02030094",
+      "service": "forest",
+      "name": "(대구시)화원자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030094",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030094"
+    },
+    {
+      "id": "0245",
+      "service": "forest",
+      "name": "(문경시)대야산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0245",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0245"
+    },
+    {
+      "id": "ID02030102",
+      "service": "forest",
+      "name": "(봉화군)문수산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030102",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030102"
+    },
+    {
+      "id": "0183",
+      "service": "forest",
+      "name": "(봉화군)청옥산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0183",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0183"
+    },
+    {
+      "id": "ID02030039",
+      "service": "forest",
+      "name": "(상주시)성주봉자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030039",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030039"
+    },
+    {
+      "id": "ID02030004",
+      "service": "forest",
+      "name": "(성주군)독용산성자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030004",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030004"
+    },
+    {
+      "id": "ID02030020",
+      "service": "forest",
+      "name": "(안동시)안동호반자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030020",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030020"
+    },
+    {
+      "id": "0182",
+      "service": "forest",
+      "name": "(영덕군)칠보산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0182",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0182"
+    },
+    {
+      "id": "0184",
+      "service": "forest",
+      "name": "(영양군)검마산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0184",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0184"
+    },
+    {
+      "id": "ID02030057",
+      "service": "forest",
+      "name": "(영양군)영양에코둥지",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030057",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030057"
+    },
+    {
+      "id": "ID02030105",
+      "service": "forest",
+      "name": "(영천시)보현산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030105",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030105"
+    },
+    {
+      "id": "ID02030081",
+      "service": "forest",
+      "name": "(영천시)운주산승마자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030081",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030081"
+    },
+    {
+      "id": "ID04030009",
+      "service": "forest",
+      "name": "(예천군)학가산우래자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030009",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID04030009"
+    },
+    {
+      "id": "ID02030073",
+      "service": "forest",
+      "name": "(울진군)구수곡자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030073",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030073"
+    },
+    {
+      "id": "0193",
+      "service": "forest",
+      "name": "(울진군)통고산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0193",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0193"
+    },
+    {
+      "id": "ID02030075",
+      "service": "forest",
+      "name": "(의성군)금봉자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030075",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030075"
+    },
+    {
+      "id": "0195",
+      "service": "forest",
+      "name": "(청도군)운문산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0195",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=0195"
+    },
+    {
+      "id": "ID02030116",
+      "service": "forest",
+      "name": "(청도군)청도자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030116",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030116"
+    },
+    {
+      "id": "ID02030010",
+      "service": "forest",
+      "name": "(청송군)청송자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030010",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030010"
+    },
+    {
+      "id": "ID02030076",
+      "service": "forest",
+      "name": "(칠곡군)송정자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030076",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030076"
+    },
+    {
+      "id": "ID02030006",
+      "service": "forest",
+      "name": "(칠곡군)팔공산금화자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030006",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030006"
+    },
+    {
+      "id": "ID02030052",
+      "service": "forest",
+      "name": "(포항시)비학산자연휴양림",
+      "region": "대구/경북",
+      "region_id": "7",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030052",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=7&insttId=ID02030052"
+    },
+    {
+      "id": "ID02030059",
+      "service": "forest",
+      "name": "(거제시)거제자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030059",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030059"
+    },
+    {
+      "id": "ID02030126",
+      "service": "forest",
+      "name": "(거창군)거창산림레포츠파크",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030126",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030126"
+    },
+    {
+      "id": "ID02030077",
+      "service": "forest",
+      "name": "(거창군)금원산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030077",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030077"
+    },
+    {
+      "id": "ID02030109",
+      "service": "forest",
+      "name": "(거창군)항노화힐링랜드",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030109",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030109"
+    },
+    {
+      "id": "ID02030124",
+      "service": "forest",
+      "name": "(고성군)갈모봉자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030124",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030124"
+    },
+    {
+      "id": "0202",
+      "service": "forest",
+      "name": "(기장군)달음산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0202",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=0202"
+    },
+    {
+      "id": "0302",
+      "service": "forest",
+      "name": "(김해시)용지봉자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0302",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=0302"
+    },
+    {
+      "id": "0192",
+      "service": "forest",
+      "name": "(남해군)남해편백자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0192",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=0192"
+    },
+    {
+      "id": "ID02030115",
+      "service": "forest",
+      "name": "(밀양시)도래재자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030115",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030115"
+    },
+    {
+      "id": "ID02030112",
+      "service": "forest",
+      "name": "(사천시)사천 케이블카 자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030112",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030112"
+    },
+    {
+      "id": "ID02030037",
+      "service": "forest",
+      "name": "(산청군)산청한방자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030037",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030037"
+    },
+    {
+      "id": "ID04030006",
+      "service": "forest",
+      "name": "(산청군)중산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030006",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID04030006"
+    },
+    {
+      "id": "ID02030038",
+      "service": "forest",
+      "name": "(양산시)대운산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030038",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030038"
+    },
+    {
+      "id": "0105",
+      "service": "forest",
+      "name": "(울주군)신불산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0105",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=0105"
+    },
+    {
+      "id": "ID02030113",
+      "service": "forest",
+      "name": "(의령)자굴산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030113",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030113"
+    },
+    {
+      "id": "ID02030114",
+      "service": "forest",
+      "name": "(진주시)진주 월아산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030114",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030114"
+    },
+    {
+      "id": "ID02030015",
+      "service": "forest",
+      "name": "(창녕군)화왕산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030015",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030015"
+    },
+    {
+      "id": "ID02030072",
+      "service": "forest",
+      "name": "(하동군)구재봉자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030072",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030072"
+    },
+    {
+      "id": "ID04030008",
+      "service": "forest",
+      "name": "(하동군)덕원자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "사립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID04030008",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID04030008"
+    },
+    {
+      "id": "ID02030103",
+      "service": "forest",
+      "name": "(하동군)하동편백자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030103",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030103"
+    },
+    {
+      "id": "ID02030046",
+      "service": "forest",
+      "name": "(함양군)대봉산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030046",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030046"
+    },
+    {
+      "id": "ID02030117",
+      "service": "forest",
+      "name": "(함양군)대봉캠핑랜드",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030117",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030117"
+    },
+    {
+      "id": "ID02030048",
+      "service": "forest",
+      "name": "(함양군)산삼자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030048",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030048"
+    },
+    {
+      "id": "ID02030047",
+      "service": "forest",
+      "name": "(함양군)용추자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030047",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030047"
+    },
+    {
+      "id": "0190",
+      "service": "forest",
+      "name": "(함양군)지리산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "국립",
+      "url": "https://www.foresttrip.go.kr/0190",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=0190"
+    },
+    {
+      "id": "ID02030068",
+      "service": "forest",
+      "name": "(합천군)오도산자연휴양림",
+      "region": "부산/경남",
+      "region_id": "8",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030068",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=8&insttId=ID02030068"
+    },
+    {
+      "id": "ID02030014",
+      "service": "forest",
+      "name": "(서귀포시)붉은오름자연휴양림",
+      "region": "제주",
+      "region_id": "9",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030014",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=9&insttId=ID02030014"
+    },
+    {
+      "id": "ID02030013",
+      "service": "forest",
+      "name": "(서귀포시)서귀포자연휴양림",
+      "region": "제주",
+      "region_id": "9",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030013",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=9&insttId=ID02030013"
+    },
+    {
+      "id": "ID02030056",
+      "service": "forest",
+      "name": "(제주시)교래자연휴양림",
+      "region": "제주",
+      "region_id": "9",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030056",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=9&insttId=ID02030056"
+    },
+    {
+      "id": "ID02030053",
+      "service": "forest",
+      "name": "(제주시)제주절물자연휴양림",
+      "region": "제주",
+      "region_id": "9",
+      "operator": "공립",
+      "url": "https://www.foresttrip.go.kr/indvz/main.do?hmpgId=ID02030053",
+      "calendar_url": "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do?hmpgId=FRIP&menuId=001004&upperGoodsClsscCd=01&srchSido=9&insttId=ID02030053"
+    }
+  ]
+}

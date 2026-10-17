@@ -1,0 +1,11 @@
+{
+  "name": "forest-seat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multiple forest stays and reservation waiting opportunities in one view",
+  "scripts": {
+    "start": "python server.py",
+    "test": "node --test tests/core.test.js tests/extractor.test.js",
+    "check": "node --check app.js && node --check core.js"
+  }
+}
