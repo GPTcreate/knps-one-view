@@ -140,6 +140,38 @@ test("disconnected catalog search does not enqueue a job or ask for installation
     0,
   );
 });
+test("first search after pairing detects the connection and starts collection immediately", async (t) => {
+  let connected = false;
+  const { w, doc, requests } = await mount(t, (url) => {
+    if (url.startsWith("/api/status"))
+      return response({ ...payload(), forest_connected: connected });
+    if (url === "/api/forest/refresh")
+      return response(
+        {
+          job: {
+            id: "paired",
+            state: "pending",
+            facilities: catalog.forests,
+            done: 0,
+          },
+        },
+        202,
+      );
+    return null;
+  });
+  connected = true;
+  doc
+    .getElementById("searchForm")
+    .dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
+  await waitFor(() =>
+    requests.some((request) => request.url === "/api/forest/refresh"),
+  );
+  assert.equal(
+    requests.filter((request) => request.url === "/api/forest/refresh").length,
+    1,
+  );
+  assert.doesNotMatch(doc.getElementById("toast").textContent, /연결한 뒤/);
+});
 test("opportunity filters, saved facilities and keyboard focus compose", async (t) => {
   const { w, doc } = await mount(t);
   change(w, doc.querySelector("input[name=status][value=waitlist]"), true);

@@ -145,7 +145,7 @@ class Handler(BaseHTTPRequestHandler):
             except (OSError,ValueError):
                 return self.respond(503,{'error':'Snapshot unavailable'})
         if path=='/api/health':
-            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'connection_verification_deferred','job':dict(job)})
+            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'stable','job':dict(job)})
         if path=='/api/bridge/setup':
             if self.headers.get('Sec-Fetch-Site') not in {None,'same-origin','none'}:
                 return self.respond(403,{'error':'Same-origin access required'})

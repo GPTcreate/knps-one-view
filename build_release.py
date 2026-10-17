@@ -32,14 +32,14 @@ def build():
             raise ValueError(f'Missing or unsafe release input: {name}')
         contents[name] = file.read_bytes()
     manifest = {
-        'version': '1.0.0-rc',
+        'version': '1.0.0',
         'created_at': datetime.now(timezone.utc).isoformat(),
-        'deferred': ['Chrome extension installation and live multi-forest collection verification'],
+        'verified_live_scope': 'Jeju 4 forests, 89 rooms; collection, date navigation, waitlist ranks, cancellation and tab reconnection',
         'sha256': {name: hashlib.sha256(data).hexdigest() for name, data in contents.items()},
     }
     output = ROOT / 'artifacts'
     output.mkdir(exist_ok=True)
-    archive = output / 'forest-seat-1.0-rc.zip'
+    archive = output / 'forest-seat-1.0.zip'
     temporary = archive.with_suffix('.zip.tmp')
     try:
         with zipfile.ZipFile(temporary, 'w', compression=zipfile.ZIP_DEFLATED) as bundle:

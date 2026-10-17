@@ -516,10 +516,12 @@
     }
     if (!state.connected) {
       await loadData();
-      notify(
-        "휴양림 목록을 검색했습니다. 실제 잔여·예약대기 조회는 공식 현황을 연결한 뒤 사용할 수 있어요.",
-      );
-      return;
+      if (!state.connected) {
+        notify(
+          "휴양림 목록을 검색했습니다. 실제 잔여·예약대기 조회는 공식 현황을 연결한 뒤 사용할 수 있어요.",
+        );
+        return;
+      }
     }
     try {
       const response = await fetch("/api/forest/refresh", {
