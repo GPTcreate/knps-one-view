@@ -1,6 +1,7 @@
 "use strict";
 (() => {
   const C = ForestCore,
+    T = ForestTransport,
     $ = (id) => document.getElementById(id),
     h = C.escapeHTML;
   let storage;
@@ -264,6 +265,19 @@
   }
   function renderBanner() {
     const source = state.sources[state.service] || {};
+    if (
+      state.service === "forest" &&
+      T.mode === "web" &&
+      ["login_required", "pending_integration"].includes(source.state) &&
+      !state.error &&
+      !state.loading
+    ) {
+      $("sourceBanner").className = "source-banner warning";
+      $("sourceBanner").textContent =
+        "휴양림 실시간 현황은 공식 데이터 연계 준비 중입니다. 지금은 시설을 찾아 저장하고 공식 현황으로 이동할 수 있어요. 설치나 로그인은 필요하지 않습니다.";
+      $("cancelSearch").hidden = true;
+      return;
+    }
     const banner = $("sourceBanner");
     banner.className = "source-banner";
     $("cancelSearch").hidden =
@@ -275,7 +289,7 @@
     if (state.service === "forest" && state.forestJob?.state === "pending") {
       banner.textContent = state.connected
         ? `공식 현황 조회 중 · ${state.forestJob.done}/${state.forestJob.facilities.length}곳. 확인된 시설부터 비교 목록에 반영합니다.`
-        : "조회 요청이 준비됐어요. 상단의 공식 현황 연결을 눌러 로그인된 숲나들e 탭을 연결해 주세요.";
+        : "조회가 중단됐어요. 숲나들e 연결 상태를 확인한 뒤 다시 검색해 주세요.";
       if (!state.connected) banner.classList.add("warning");
       return;
     }
@@ -299,7 +313,7 @@
         "공식 현황을 확인하고 있어요. 기존 자료는 확인 시각과 함께 표시됩니다.";
       return;
     }
-    if (source.state === "login_required") {
+    if (["login_required", "connection_required"].includes(source.state)) {
       if (state.connected) {
         banner.textContent =
           "공식 현황이 연결됐어요. 지역과 날짜를 선택하고 자리 찾아보기를 누르세요.";
@@ -307,7 +321,12 @@
       }
       banner.classList.add("warning");
       banner.textContent =
-        "현재는 휴양림 목록을 탐색할 수 있어요. 실제 빈자리·예약대기는 공식 현황 연결 후 표시됩니다. 미확인은 매진이 아닙니다.";
+        "숲나들e 연결을 누르고 공식 화면에서 로그인하면 여러 휴양림을 한 번에 조회할 수 있어요. 미확인은 매진이 아닙니다.";
+      return;
+    }
+    if (state.service === "forest" && source.state === "empty") {
+      banner.textContent =
+        "숲나들e 연결이 준비됐어요. 지역과 날짜를 선택해 검색하세요.";
       return;
     }
     const items = currentItems(),
@@ -400,10 +419,15 @@
     const updates = new Map(
       (payload.items || []).map((x) => [`${x.service}:${x.id}`, x]),
     );
-    state.items = state.items.map((item) => ({
-      ...item,
-      ...updates.get(`${item.service}:${item.id}`),
-    }));
+    state.items = state.items.map((item) => {
+      const update = updates.get(`${item.service}:${item.id}`);
+      if (update) return { ...item, ...update };
+      if (item.service === state.service) {
+        const { rooms, checked_at, ...catalogOnly } = item;
+        return catalogOnly;
+      }
+      return item;
+    });
     for (const item of payload.items || [])
       if (
         !state.items.some((x) => x.id === item.id && x.service === item.service)
@@ -448,17 +472,7 @@
     $("refreshButton").disabled = true;
     $("searchButton").disabled = true;
     try {
-      let response = await fetch("/api/status?service=" + state.service, {
-        cache: "no-store",
-        signal,
-      });
-      if (response.status === 404)
-        response = await fetch("availability.json", {
-          cache: "no-store",
-          signal,
-        });
-      if (!response.ok) throw new Error("HTTP " + response.status);
-      const payload = await response.json();
+      const payload = await T.status(state.service, { signal });
       if (generation !== state.generation) return;
       if (!C.validatePayload(payload)) throw new Error("invalid response");
       mergeData(payload);
@@ -514,43 +528,29 @@
       notify("먼저 조회할 휴양림을 저장해 주세요.");
       return;
     }
-    if (!state.connected) {
+    if (T.mode === "web") {
       await loadData();
-      if (!state.connected) {
-        notify(
-          "휴양림 목록을 검색했습니다. 실제 잔여·예약대기 조회는 공식 현황을 연결한 뒤 사용할 수 있어요.",
-        );
-        return;
-      }
+      return;
     }
     try {
-      const response = await fetch("/api/forest/refresh", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          date: state.date,
-          region: state.region,
-          operator: state.operator,
-          ids: state.favoritesOnly ? state.favorites : undefined,
-        }),
-      });
-      if (response.status === 409) {
-        notify(
-          "공식 조회가 진행 중입니다. 다른 조건으로 조회하려면 먼저 중단해 주세요.",
-        );
-        return;
+      if (!state.connected) {
+        await loadData();
+        if (!state.connected) {
+          notify("상단의 숲나들e 연결을 누르고 공식 화면에서 로그인해 주세요.");
+          return;
+        }
       }
-      if (!response.ok) throw new Error("search");
-      state.forestJob = (await response.json()).job;
-      notify(
-        state.connected
-          ? "로그인된 숲나들e에서 선택한 지역을 조회합니다."
-          : "조회 요청을 준비했어요. 공식 현황 연결로 숲나들e 탭을 연결해 주세요.",
-      );
+      await T.start({
+        date: state.date,
+        region: state.region,
+        operator: state.operator,
+        ids: state.favoritesOnly ? state.favorites : undefined,
+      });
       await loadData();
-    } catch {
+    } catch (error) {
       notify(
-        "로컬 연결 서버에서 실행해야 실제 휴양림 현황을 조회할 수 있어요.",
+        error.message ||
+          "조회를 시작하지 못했습니다. 연결 상태를 확인해 주세요.",
       );
     }
   }
@@ -718,24 +718,32 @@
   $("helpButton").addEventListener("click", () => $("helpDialog").showModal());
   $("closeHelp").addEventListener("click", () => $("helpDialog").close());
   $("connectButton").addEventListener("click", async () => {
-    const target = window.open("about:blank", "_blank");
     try {
-      const response = await fetch("/api/bridge/setup");
-      if (!response.ok) throw new Error();
-      const setup = await response.json();
-      if (target) target.location.href = setup.connect_url;
-      else notify("팝업을 허용한 뒤 다시 연결해 주세요.");
-    } catch {
-      target?.close();
-      notify("로컬 서버를 실행한 뒤 연결해 주세요.");
+      await T.connect();
+      notify("열린 숲나들e 탭에서 로그인한 뒤 돌아와 검색하세요.");
+    } catch (error) {
+      notify(error.message);
     }
   });
   $("cancelSearch").addEventListener("click", async () => {
     try {
-      await fetch("/api/forest/cancel", { method: "POST" });
+      await T.cancel();
       await loadData();
-    } catch {
-      notify("조회 중단을 확인하지 못했어요.");
+    } catch (error) {
+      notify(error.message || "조회 중단을 확인하지 못했어요.");
+    }
+  });
+  $("clearData").addEventListener("click", async () => {
+    try {
+      await T.clear();
+      state.items = state.catalog.forests.map((item) => ({ ...item }));
+      state.baseline = null;
+      await loadData();
+      notify(
+        "이 확장에 저장된 객실 조회 기록을 삭제했습니다. 찜은 유지됩니다.",
+      );
+    } catch (error) {
+      notify(error.message);
     }
   });
   setInterval(() => {
@@ -754,6 +762,7 @@
     if (!document.hidden) {
       $("dateInput").min = C.today();
       render();
+      if (!state.loading) loadData();
     }
   });
   function populateRegions() {
@@ -767,6 +776,16 @@
     $("regionInput").value = state.region;
   }
   async function start() {
+    $("connectButton").hidden = T.mode !== "extension";
+    $("clearData").hidden = T.mode !== "extension";
+    $("privacyLink").hidden = T.mode !== "extension";
+    document.querySelector(".version").textContent =
+      T.mode === "extension" ? "확장 1.0 RC" : "웹 미리보기";
+    if (T.mode === "extension") {
+      state.service = "forest";
+      document.querySelector('[data-service="knps"]').hidden = true;
+    }
+
     $("dateInput").value = state.date;
     $("dateInput").min = C.today();
     $("guestsInput").value = String(state.guests);

@@ -7,7 +7,7 @@ const { JSDOM, VirtualConsole } = require("jsdom");
 const C = require("../core.js");
 const root = path.resolve(__dirname, "..");
 const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
-const scripts = ["core.js", "app.js"].map((name) =>
+const scripts = ["core.js", "transport.js", "app.js"].map((name) =>
   fs.readFileSync(path.join(root, name), "utf8"),
 );
 const date = C.addDays(C.today(), 1);
@@ -67,13 +67,13 @@ async function waitFor(check) {
   }
   throw Error("UI condition timed out");
 }
-async function mount(t, override) {
+async function mount(t, override, extension = false) {
   const errors = [],
     requests = [];
   const vc = new VirtualConsole();
   vc.on("jsdomError", (e) => errors.push(e.message));
   const dom = new JSDOM(html, {
-    url: `http://127.0.0.1:8765/#date=${date}&service=forest&guests=2`,
+    url: `${extension ? "chrome-extension://test-extension/index.html" : "http://127.0.0.1:8765/"}#date=${date}&service=forest&guests=2`,
     runScripts: "outside-only",
     virtualConsole: vc,
     pretendToBeVisual: true,
@@ -86,6 +86,17 @@ async function mount(t, override) {
     matchMedia: () => ({ matches: true }),
   });
   w.HTMLElement.prototype.scrollIntoView = function () {};
+  if (extension)
+    w.chrome = {
+      runtime: {
+        sendMessage: async (message) => {
+          const url = "extension:" + message.action;
+          requests.push({ url, options: message.body });
+          const custom = override ? await override(url, message.body) : null;
+          return { ok: true, data: custom ? await custom.json() : payload() };
+        },
+      },
+    };
   w.fetch = async (url, options = {}) => {
     requests.push({ url: String(url), options });
     if (override) {
@@ -105,7 +116,13 @@ async function mount(t, override) {
     w.close();
     assert.deepEqual(errors, []);
   });
-  scripts.forEach((s) => w.eval(s));
+  scripts.forEach((s, index) =>
+    w.eval(
+      extension && index === 1
+        ? fs.readFileSync(path.join(root, "extension/transport.js"), "utf8")
+        : s,
+    ),
+  );
   await waitFor(
     () =>
       w.document.querySelectorAll(".date-card").length === 7 &&
@@ -127,24 +144,82 @@ test("full app renders multiple facilities with actual fixture opportunity types
   assert.match(doc.getElementById("resultList").textContent, /1순위부터/);
   assert.equal(doc.querySelector("input[id*=consecutive]"), null);
 });
-test("disconnected catalog search does not enqueue a job or ask for installation", async (t) => {
-  const { w, doc, requests } = await mount(t);
+test("standalone dashboard uses the extension transport and hides the server-only park tab", async (t) => {
+  const { w, doc, requests } = await mount(
+    t,
+    (url) =>
+      url === "extension:status"
+        ? response({ ...payload(), forest_connected: true })
+        : null,
+    true,
+  );
+  assert.equal(doc.getElementById("connectButton").hidden, false);
+  assert.equal(doc.getElementById("clearData").hidden, false);
+  assert.equal(doc.querySelector("[data-service=knps]").hidden, true);
   doc
     .getElementById("searchForm")
     .dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
   await waitFor(() =>
-    doc.getElementById("toast").textContent.includes("목록을 검색"),
+    requests.some((request) => request.url === "extension:start"),
   );
+  assert.equal(
+    requests.some((request) => request.url.startsWith("/api/")),
+    false,
+  );
+  doc.getElementById("connectButton").click();
+  await waitFor(() =>
+    requests.some((request) => request.url === "extension:connect"),
+  );
+});
+test("web API approval status never asks a visitor to install an extension or log in", async (t) => {
+  const { doc } = await mount(t, (url) =>
+    url.startsWith("/api/status")
+      ? response({
+          ...payload(),
+          items: [],
+          sources: { forest: { state: "pending_integration" } },
+        })
+      : null,
+  );
+  assert.match(
+    doc.getElementById("sourceBanner").textContent,
+    /설치나 로그인은 필요하지 않습니다/,
+  );
+  assert.equal(doc.getElementById("connectButton").hidden, true);
+});
+test("website park refresh still starts the shared server collector without extension access", async (t) => {
+  const { doc, requests } = await mount(t, (url) =>
+    url === "/api/refresh" ? response({ state: "running" }, 202) : null,
+  );
+  doc.querySelector("[data-service=knps]").click();
+  await waitFor(() => !doc.getElementById("searchButton").disabled);
+  doc.getElementById("refreshButton").click();
+  await waitFor(() =>
+    requests.some((request) => request.url === "/api/refresh"),
+  );
+  assert.equal(
+    requests.filter((request) => request.url === "/api/refresh").length,
+    1,
+  );
+  assert.equal(doc.getElementById("connectButton").hidden, true);
+});
+test("website search reads server data without extension setup or job mutations", async (t) => {
+  const { w, doc, requests } = await mount(t);
+  doc
+    .getElementById("searchForm")
+    .dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
+  await waitFor(() => !doc.getElementById("searchButton").disabled);
+  assert.equal(doc.getElementById("connectButton").hidden, true);
+  assert.equal(doc.getElementById("clearData").hidden, true);
   assert.equal(
     requests.filter((x) => x.url === "/api/forest/refresh").length,
     0,
   );
 });
-test("first search after pairing detects the connection and starts collection immediately", async (t) => {
-  let connected = false;
+test("website remains installation-free even when a legacy bridge reports connected", async (t) => {
   const { w, doc, requests } = await mount(t, (url) => {
     if (url.startsWith("/api/status"))
-      return response({ ...payload(), forest_connected: connected });
+      return response({ ...payload(), forest_connected: true });
     if (url === "/api/forest/refresh")
       return response(
         {
@@ -159,16 +234,13 @@ test("first search after pairing detects the connection and starts collection im
       );
     return null;
   });
-  connected = true;
   doc
     .getElementById("searchForm")
     .dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
-  await waitFor(() =>
-    requests.some((request) => request.url === "/api/forest/refresh"),
-  );
+  await waitFor(() => !doc.getElementById("searchButton").disabled);
   assert.equal(
     requests.filter((request) => request.url === "/api/forest/refresh").length,
-    1,
+    0,
   );
   assert.doesNotMatch(doc.getElementById("toast").textContent, /연결한 뒤/);
 });
@@ -201,6 +273,19 @@ test("bad response preserves last good data and reports failure", async (t) => {
     doc.getElementById("sourceBanner").textContent.includes("가져오지 못했"),
   );
   assert.equal(doc.querySelectorAll(".facility-card").length, 2);
+});
+test("an authoritative empty snapshot removes prior room availability from the dashboard", async (t) => {
+  let empty = false;
+  const { doc } = await mount(t, (url) =>
+    url.startsWith("/api/status")
+      ? response({ ...payload(), items: empty ? [] : payload().items })
+      : null,
+  );
+  assert.equal(doc.getElementById("availableStat").textContent, "1곳");
+  empty = true;
+  doc.getElementById("refreshButton").click();
+  await waitFor(() => !doc.getElementById("searchButton").disabled);
+  assert.equal(doc.getElementById("availableStat").textContent, "미확인");
 });
 test("later service selection wins over a delayed earlier response", async (t) => {
   let delayed = false,

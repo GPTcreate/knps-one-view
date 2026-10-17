@@ -16,3 +16,5 @@ jobs:
       - run: npm run format:check
       - run: npm test
       - run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - run: python build_extension.py
+      - run: python build_release.py

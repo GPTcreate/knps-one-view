@@ -43,7 +43,15 @@ class ServerTests(unittest.TestCase):
             (root/'.runtime'/'forest-status.json').write_text('{broken')
             with self.request('/api/status?service=knps') as response:payload=json.load(response)
             self.assertEqual(payload['items'][0]['id'],'camp')
-            self.assertEqual(payload['sources']['forest']['state'],'unavailable')
+            self.assertEqual(payload['sources']['forest']['state'],'pending_integration')
+            self.assertNotIn('forest_connected',payload)
+    def test_consumer_server_does_not_offer_extension_pairing_or_jobs(self):
+        for path in ['/api/bridge/setup','/api/bridge/job']:
+            with self.assertRaises(urllib.error.HTTPError) as caught:self.request(path)
+            self.assertEqual(caught.exception.code,404)
+        with self.request('/api/status?service=forest') as response:payload=json.load(response)
+        self.assertNotIn('forest_job',payload)
+        self.assertEqual(payload['mode'],'web')
     def test_cross_site_mutation_blocked(self):
         for origin in [None,'https://attacker.example','null']:
             headers={} if origin is None else {'Origin':origin}
@@ -59,7 +67,7 @@ class ServerTests(unittest.TestCase):
             self.assertEqual(server.job['state'],'complete')
     def test_empty_saved_selection_cannot_enqueue_every_facility(self):
         facility={'id':'0101','name':'유명산','service':'forest','region':'경기','region_id':'1'}
-        with tempfile.TemporaryDirectory() as directory,patch.object(server,'ROOT',Path(directory)):
+        with tempfile.TemporaryDirectory() as directory,patch.object(server,'ROOT',Path(directory)),patch.object(server,'operator_tools',True):
             (Path(directory)/'catalog.json').write_text(json.dumps({'forests':[facility]}))
             server.forest_job=None
             def post(path,data,paired=False):
@@ -71,7 +79,7 @@ class ServerTests(unittest.TestCase):
             self.assertEqual(caught.exception.code,400)
     def test_forest_import_requires_pairing_and_retains_only_booking_data(self):
         facility={'id':'0101','name':'유명산','service':'forest','region':'경기','region_id':'1'}
-        with tempfile.TemporaryDirectory() as directory,patch.object(server,'ROOT',Path(directory)):
+        with tempfile.TemporaryDirectory() as directory,patch.object(server,'ROOT',Path(directory)),patch.object(server,'operator_tools',True):
             (Path(directory)/'catalog.json').write_text(json.dumps({'forests':[facility]}))
             server.forest_job=None
             headers={'Content-Type':'application/json','Origin':self.base}

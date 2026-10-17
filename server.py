@@ -12,12 +12,14 @@ from scraper_real import atomic_json, run_scraper
 
 ROOT = Path(__file__).resolve().parent
 STATIC = {'/':('index.html','text/html'),'/index.html':('index.html','text/html'),'/app.js':('app.js','text/javascript'),'/core.js':('core.js','text/javascript'),'/styles.css':('styles.css','text/css'),'/catalog.json':('catalog.json','application/json'),'/camps_meta.json':('camps_meta.json','application/json'),'/availability.json':('availability.json','application/json')}
+STATIC.update({'/transport.js':('transport.js','text/javascript'),'/privacy.html':('extension/privacy.html','text/html')})
 job_lock=threading.Lock()
 job={'state':'idle','done':0,'total':0}
 bridge_token=secrets.token_urlsafe(32)
 forest_lock=threading.Lock()
 forest_job=None
 forest_connected_at=None
+operator_tools=False
 
 
 def utcnow():
@@ -96,7 +98,7 @@ def snapshot():
     payload['sources'].setdefault('forest',{'state':'login_required'})
     payload['sources'].setdefault('knps',{'state':'unavailable'})
     forest_path=ROOT/'.runtime'/'forest-status.json'
-    if forest_path.exists():
+    if operator_tools and forest_path.exists():
         try:
             forest=json.loads(forest_path.read_text(encoding='utf-8-sig'))
             if not isinstance(forest,dict) or not isinstance(forest.get('items'),list):
@@ -106,9 +108,13 @@ def snapshot():
         except (OSError,ValueError):
             payload['sources']['forest']={'state':'unavailable','message':'휴양림 저장 현황을 읽지 못했습니다. 다시 조회해 주세요.'}
     payload['job']=dict(job)
-    with forest_lock:
-        payload['forest_job']=job_public()
-    payload['forest_connected']=bool(forest_connected_at and (datetime.now(timezone.utc)-forest_connected_at).total_seconds()<20)
+    if operator_tools:
+        with forest_lock:
+            payload['forest_job']=job_public()
+        payload['forest_connected']=bool(forest_connected_at and (datetime.now(timezone.utc)-forest_connected_at).total_seconds()<20)
+    else:
+        payload['sources']['forest']={'state':'pending_integration','message':'공식 휴양림 데이터 연계 준비 중입니다. 설치나 로그인 없이 시설을 검색하고 공식 예약으로 이동할 수 있습니다.'}
+    payload['mode']='web'
     return payload
 
 
@@ -145,7 +151,9 @@ class Handler(BaseHTTPRequestHandler):
             except (OSError,ValueError):
                 return self.respond(503,{'error':'Snapshot unavailable'})
         if path=='/api/health':
-            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'stable','job':dict(job)})
+            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'web_preview_api_approval_required','job':dict(job)})
+        if path.startswith('/api/bridge/') and not operator_tools:
+            return self.respond(404,{'error':'Operator tools are disabled'})
         if path=='/api/bridge/setup':
             if self.headers.get('Sec-Fetch-Site') not in {None,'same-origin','none'}:
                 return self.respond(403,{'error':'Same-origin access required'})
@@ -169,6 +177,8 @@ class Handler(BaseHTTPRequestHandler):
         global forest_job
         if not self.valid_host():
             return self.respond(403,{'error':'Invalid host'})
+        if (self.path.startswith('/api/bridge/') or self.path.startswith('/api/forest/')) and not operator_tools:
+            return self.respond(404,{'error':'Operator tools are disabled'})
         if self.path in {'/api/bridge/result','/api/bridge/progress'}:
             if not self.valid_bridge():
                 return self.respond(403,{'error':'Invalid pairing'})
@@ -281,7 +291,9 @@ if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser()
     parser.add_argument('--port',type=int,default=8765)
+    parser.add_argument('--operator-tools',action='store_true',help='Enable legacy local developer bridge; not required by website visitors')
     args=parser.parse_args()
+    operator_tools=args.operator_tools
     server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     print(f'Forest Seat: http://127.0.0.1:{args.port}',flush=True)
     server.serve_forever()

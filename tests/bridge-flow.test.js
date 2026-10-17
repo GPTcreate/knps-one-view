@@ -22,11 +22,13 @@ async function waitFor(check) {
   }
   throw Error("Bridge condition timed out");
 }
-async function bridge(t, cancel = false) {
+async function bridge(t, cancel = false, standalone = false) {
   const dom = new JSDOM(
     `<select id="srchSido"><option value="1">수도권</option></select><select id="srchInstt"><option value="0101">유명산</option><option value="0103">산음</option></select><select id="srchForest"><option value="01">숙소</option></select><select id="monthSelectBox"><option value="${month}">10월</option></select><input type="radio" id="inqurSctin01" checked><button id="searchBtn">검색</button><button id="reserve">예약신청</button><div id="monthRsrvtList"></div>`,
     {
-      url: "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do#forest-seat-connect=fixture-only-key",
+      url:
+        "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do" +
+        (standalone ? "" : "#forest-seat-connect=fixture-only-key"),
       runScripts: "outside-only",
     },
   );
@@ -56,7 +58,10 @@ async function bridge(t, cancel = false) {
       sendMessage: async (message) => {
         messages.push(message);
         if (message.path === "/api/bridge/job")
-          return { ok: true, data: { job: structuredClone(task) } };
+          return {
+            ok: true,
+            data: { active: true, job: structuredClone(task) },
+          };
         if (message.path === "/api/bridge/result") {
           if (message.body.item) results.push(message.body.item);
           if (cancel && results.length === 1) {
@@ -85,13 +90,21 @@ async function bridge(t, cancel = false) {
   });
   t.after(() => w.close());
   w.eval(extractor);
-  w.eval(content);
+  w.eval(
+    standalone
+      ? fs.readFileSync(path.join(root, "extension/content.js"), "utf8")
+      : content,
+  );
   await waitFor(
     () =>
       task.state === "complete" ||
       (cancel &&
         doc
-          .getElementById("forest-seat-bridge-panel")
+          .getElementById(
+            standalone
+              ? "forest-seat-extension-panel"
+              : "forest-seat-bridge-panel",
+          )
           .textContent.includes("중단")),
   );
   return { task, results, messages, reserveClicks, w };
@@ -172,4 +185,21 @@ test("background bridge rejects other websites, methods and arbitrary local path
   assert.equal(fetched.length, 0);
   assert.equal((await invoke(valid)).ok, true);
   assert.deepEqual(fetched, ["http://127.0.0.1:8765/api/bridge/job"]);
+});
+test("standalone content collects two facilities without a pairing token, local server, account access or booking", async (t) => {
+  const x = await bridge(t, false, true);
+  assert.equal(x.results.length, 2);
+  assert.equal(x.reserveClicks, 0);
+  assert.ok(
+    x.messages.every(
+      (message) => message.type === "forest-extension" && !("token" in message),
+    ),
+  );
+  assert.equal(x.w.location.hash, "");
+});
+test("standalone content honours cancellation before querying the next facility", async (t) => {
+  const x = await bridge(t, true, true);
+  assert.equal(x.results.length, 1);
+  assert.equal(x.task.state, "cancelled");
+  assert.equal(x.reserveClicks, 0);
 });
