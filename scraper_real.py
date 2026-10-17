@@ -23,15 +23,17 @@ REGIONS = {'설악산':'강원','오대산':'강원','치악산':'강원','태�
 
 def atomic_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile('w', encoding='utf-8', dir=path.parent, delete=False, suffix='.tmp') as f:
-        temporary = Path(f.name)
-        json.dump(payload, f, ensure_ascii=False, separators=(',', ':'))
-        f.flush()
-        os.fsync(f.fileno())
+    temporary = None
     try:
+        with tempfile.NamedTemporaryFile('w', encoding='utf-8', dir=path.parent, delete=False, suffix='.tmp') as f:
+            temporary = Path(f.name)
+            json.dump(payload, f, ensure_ascii=False, separators=(',', ':'), allow_nan=False)
+            f.flush()
+            os.fsync(f.fileno())
         os.replace(temporary, path)
     finally:
-        temporary.unlink(missing_ok=True)
+        if temporary:
+            temporary.unlink(missing_ok=True)
 
 
 class IconParser(HTMLParser):
@@ -90,7 +92,13 @@ def run_scraper(limit: int | None = None, output: Path | None = None, progress=N
     meta = json.loads((ROOT/'camps_meta.json').read_text(encoding='utf-8-sig'))
     if limit:
         meta = meta[:limit]
-    previous = json.loads(output.read_text(encoding='utf-8-sig')) if output.exists() else {'items':[],'sources':{}}
+    try:
+        previous = json.loads(output.read_text(encoding='utf-8-sig')) if output.exists() else {'items':[],'sources':{}}
+        if not isinstance(previous,dict) or not isinstance(previous.get('items'),list):
+            raise ValueError('Invalid old snapshot')
+    except (ValueError,UnicodeError):
+        # Only a successful collection replaces corrupt input. Total failure still preserves its bytes.
+        previous = {'items':[],'sources':{}}
     existing = {x['id']:x for x in previous.get('items',[]) if x.get('service')=='knps'}
     failures = []
     success = 0

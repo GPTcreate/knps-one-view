@@ -4,8 +4,17 @@
   "private": true,
   "description": "Multiple forest stays and reservation waiting opportunities in one view",
   "scripts": {
-    "start": "python server.py",
-    "test": "node --test tests/core.test.js tests/extractor.test.js",
-    "check": "node --check app.js && node --check core.js"
+    "start": "python launcher.py",
+    "serve": "python server.py",
+    "test": "node --test tests/*.test.js",
+    "check": "node --check app.js && node --check core.js && node --check browser-bridge/background.js && node --check browser-bridge/content.js && node --check browser-bridge/extractor.js",
+    "format:check": "prettier --check app.js core.js styles.css index.html browser-bridge/*.js browser-bridge/manifest.json tests/*.test.js package.json .github/workflows/*.yml"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.3",
+    "prettier": "3.9.10"
+  },
+  "engines": {
+    "node": ">=24.15.0"
   }
 }

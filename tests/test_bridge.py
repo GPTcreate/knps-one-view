@@ -31,3 +31,26 @@ class ForestBridgeValidationTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+class ObservationHistoryTests(unittest.TestCase):
+    def test_a_new_month_cannot_refresh_old_dates(self):
+        old={'checked_at':'2026-10-17T00:00:00+00:00','rooms':[{'id':'r','days':{'2026-10-24':{'state':'available'}}}]}
+        new={'id':'0101','checked_at':'2026-10-17T01:00:00+00:00','rooms':[{'id':'r','days':{'2026-11-01':{'state':'waitlist','next_rank':2}}}]}
+        item=server.merge_forest_item(old,new)
+        self.assertEqual(item['rooms'][0]['days']['2026-10-24']['checked_at'],old['checked_at'])
+        self.assertEqual(item['rooms'][0]['days']['2026-11-01']['checked_at'],new['checked_at'])
+    def test_disconnected_job_pauses_and_preserves_its_progress(self):
+        from datetime import timedelta
+        from unittest.mock import patch
+        now=datetime.now(timezone.utc)
+        task={'id':'a','state':'pending','created_at':(now-timedelta(minutes=3)).isoformat(),'done':1,'results':{'0101':'success'}}
+        with patch.object(server,'forest_job',task),patch.object(server,'forest_connected_at',None):
+            public=server.job_public()
+        self.assertEqual(public['state'],'paused');self.assertEqual(public['done'],1);self.assertNotIn('results',public)
+    def test_old_connection_does_not_expire_a_just_created_job(self):
+        from datetime import timedelta
+        from unittest.mock import patch
+        now=datetime.now(timezone.utc)
+        task={'id':'a','state':'pending','created_at':now.isoformat(),'results':{}}
+        with patch.object(server,'forest_job',task),patch.object(server,'forest_connected_at',now-timedelta(hours=1)):
+            self.assertEqual(server.job_public()['state'],'pending')

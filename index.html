@@ -1,38 +1,368 @@
 <!doctype html>
 <html lang="ko">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#153e35"><meta name="description" content="여러 자연휴양림과 국립공원 야영장의 빈자리와 예약대기 현황을 한곳에서 비교하세요.">
-<title>숲자리 · 빈자리와 예약대기 한눈에</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23153e35'/%3E%3Cpath d='M20 7L8 26h9v7h6v-7h9Z' fill='%23d5eac2'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css"><script defer src="core.js"></script><script defer src="app.js"></script>
-</head>
-<body>
-<a class="skip" href="#results">검색 결과 바로가기</a>
-<header class="header"><div class="shell header-inner"><a class="brand" href="./" aria-label="숲자리 홈"><span class="brand-mark" aria-hidden="true">♠</span>숲자리<span class="version">1.0 RC</span></a><nav aria-label="빠른 메뉴"><button id="connectButton" class="quiet">공식 현황 연결</button><button id="savedTop" class="quiet">♡ <span>저장한 곳</span> <b id="savedCount">0</b></button><button id="helpButton" class="quiet">이용 안내</button></nav></div></header>
-<main>
-<section class="hero"><div class="landscape" aria-hidden="true"><svg viewBox="0 0 900 300" preserveAspectRatio="xMidYMax slice"><circle cx="730" cy="70" r="35" fill="#e5d8ad"/><path d="M0 275 165 90 258 185 390 32 590 243 700 130 900 268V300H0" fill="#bacbbb"/><path d="m60 300 205-157 88 72L530 75l225 225" fill="#87a491"/><path d="m415 300 206-154L823 300" fill="#4e7767"/><path d="M0 255q190-80 395 45H0m630 45q130-130 270-83v83" fill="#264f43"/></svg></div><div class="shell hero-inner"><p class="eyebrow">YOUR NEXT FOREST GETAWAY</p><h1>찾던 숲, 남은 자리.</h1><p class="hero-copy">여러 휴양림의 빈자리와 예약대기,<br class="mobile-break"> 이제 한곳에서 비교하세요.</p><div class="hero-footnote"><span class="small-dot"></span> 숲나들e · 국립공원 공식 현황 기준</div></div></section>
-<div class="shell content-shell">
-<form id="searchForm" class="search-panel" aria-label="휴양림 검색">
-<label class="search-field"><span>어디로 떠날까요?</span><select id="regionInput" aria-label="지역"><option value="">전국 모든 지역</option></select></label>
-<label class="search-field"><span>체크인 · 1박</span><input id="dateInput" type="date" required aria-label="체크인 날짜"></label>
-<label class="search-field guest-field"><span>함께 가는 인원</span><select id="guestsInput" aria-label="인원"><option value="1">1명</option><option value="2" selected>2명</option><option value="3">3명</option><option value="4">4명</option><option value="5">5명</option><option value="6">6명</option><option value="8">8명</option><option value="10">10명 이상</option></select></label>
-<button class="primary search-button" id="searchButton" type="submit"><span aria-hidden="true">⌕</span> 자리 찾아보기</button>
-</form>
-<div class="service-tabs" role="group" aria-label="시설 선택"><button class="service active" data-service="forest" aria-pressed="true">자연휴양림 <span id="forestCount">—</span></button><button class="service" data-service="knps" aria-pressed="false">국립공원 야영장 <span id="campCount">—</span></button><span class="service-caption">예약은 공식 사이트에서 진행해요 ↗</span></div>
-<section class="date-section" aria-label="다른 날짜 둘러보기"><div class="date-label"><div><strong>날짜를 바꾸면, 다른 기회가 보여요</strong><p>하루씩 넘기며 예약 가능한 날을 찾아보세요.</p></div><button id="weekendButton" class="text-button">다가오는 토요일 ↗</button></div><div class="date-navigation"><button id="previousDates" class="day-arrow" aria-label="이전 7일">‹</button><div class="date-strip" id="dateStrip"></div><button id="nextDates" class="day-arrow" aria-label="다음 7일">›</button></div></section>
-<div class="results-layout"><aside class="filters" aria-label="검색 결과 필터"><div class="filter-heading"><strong>원하는 곳만 보기</strong><button id="resetFilters" class="text-button">초기화</button></div><label class="keyword-label" for="queryInput">휴양림 · 공원 · 객실 검색</label><input id="queryInput" class="keyword" type="search" placeholder="유명산, 닷돈재…" autocomplete="off"><fieldset><legend>예약 상태</legend><label><input type="radio" name="status" value="all" checked> 전체 보기</label><label><input type="radio" name="status" value="opportunity"> 빈자리 또는 예약대기</label><label><input type="radio" name="status" value="available"> 바로 예약 가능한 곳</label><label><input type="radio" name="status" value="waitlist"> 예약대기 가능한 곳</label></fieldset><fieldset id="operatorField"><legend>운영 구분</legend><label><input type="radio" name="operator" value="" checked> 전체</label><label><input type="radio" name="operator" value="국립"> 국립휴양림</label><label><input type="radio" name="operator" value="공립"> 공립휴양림</label><label><input type="radio" name="operator" value="사립"> 사립휴양림</label></fieldset><div class="filter-bottom"><label><input id="savedOnly" type="checkbox"> 저장한 곳만 보기</label></div><div class="filter-note"><span>i</span><p>미확인은 매진이 아니에요.<br>확인되지 않은 순번이나<br>취소 확률은 표시하지 않아요.</p></div></aside>
-<section class="results" id="results" aria-label="휴양림 검색 결과" tabindex="-1"><div class="results-top"><div><p class="eyebrow dark" id="resultContext">전국 · 1박</p><h2 id="resultTitle">숲으로 떠날 준비를 해볼까요?</h2></div><div class="result-actions"><button id="refreshButton" class="icon-button" title="현황 다시 확인">↻ <span>새로고침</span></button><button id="alertButton" class="icon-button" aria-pressed="false" title="저장한 시설의 상태 변화 알림">♧ <span>변화 알림</span></button></div></div>
-<div class="source-banner" id="sourceBanner" role="status" aria-live="polite">공식 현황을 확인하고 있습니다.</div><button id="cancelSearch" class="text-button" hidden>진행 중인 공식 조회 중단</button>
-<div class="summary-grid" id="summaryGrid"><div><span>비교할 시설</span><strong id="totalStat">—</strong></div><div><span>빈자리 있는 곳</span><strong class="green" id="availableStat">—</strong></div><div><span>예약대기 가능한 곳</span><strong class="amber" id="waitStat">—</strong></div></div>
-<div class="list-toolbar"><span id="resultCount" role="status" aria-live="polite">조회 준비 중</span><div><label class="sr-only" for="sortInput">결과 정렬</label><select id="sortInput"><option value="opportunity">예약 기회 우선</option><option value="name">이름순</option><option value="region">지역순</option><option value="recent">최근 확인순</option></select><div class="view-switch" role="group" aria-label="보기 방식"><button id="listView" class="active" aria-label="목록 보기" aria-pressed="true">☰</button><button id="tableView" aria-label="표 보기" aria-pressed="false">▦</button></div></div></div>
-<div id="resultList" class="result-list"></div><div id="emptyState" class="empty" hidden><span aria-hidden="true">♧</span><h3>조건에 맞는 결과가 없어요</h3><p id="emptyDescription">날짜를 바꾸거나 필터를 넓혀보세요.</p><button id="emptyReset" class="secondary">필터 초기화</button></div><button id="loadMore" class="load-more" hidden>더 많은 휴양림 보기</button>
-<p class="results-note">정원 미제공 객실은 인원 필터 결과에 포함됩니다. 예약 가능 여부와 대기순번은 공식 사이트에서 최종 확인해 주세요.</p>
-</section></div>
-<section class="how-it-works"><div><p class="eyebrow dark">A LITTLE CLOSER TO NATURE</p><h2>숲을 찾는 시간을 줄여드려요.</h2></div><div><b>01</b><strong>여러 곳을 한 번에</strong><p>지역과 날짜로 휴양림을 모아 비교해요.</p></div><div><b>02</b><strong>빈자리가 없어도</strong><p>예약대기 신청 기회까지 함께 확인해요.</p></div><div><b>03</b><strong>마지막 확인은 공식으로</strong><p>마음에 드는 곳의 공식 예약으로 이동해요.</p></div></section>
-<footer><a class="brand" href="./">숲자리</a><p>숲나들e·국립공원공단과 별개로 운영되는 비공식 탐색 도구입니다.</p><span>조금 더 쉽게, 숲으로.</span></footer>
-</div></main>
-<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
-<dialog id="helpDialog"><div class="dialog-head"><h2>숲자리 이용 안내</h2><button id="closeHelp" class="icon-button" aria-label="안내 닫기">×</button></div><p>지역, 체크인 날짜, 인원을 선택하면 1박 기준으로 여러 시설을 비교합니다. 날짜 띠를 눌러 다른 날짜도 빠르게 살펴보세요.</p><h3>예약대기 숫자의 의미</h3><p>공식 응답에 신청 가능한 순위가 명시된 경우에만 표시합니다. 현재 대기 인원과 다음 신청 순위, 내 대기순번은 서로 다른 정보입니다. 개인의 대기순번은 공식 마이페이지에서 확인하세요.</p><h3>데이터 확인</h3><p>현황은 시설별 확인 시각을 기준으로 30분 동안 표시됩니다. 오래된 정보·조회 실패·미조회 날짜는 ‘미확인’으로 구분합니다. 빈자리와 가격을 임의로 만들지 않습니다.</p><h3>변화 알림</h3><p>이 화면이 열려 있는 동안 저장한 시설의 새 관측값을 비교합니다. 첫 조회나 날짜 변경에는 알리지 않습니다. 브라우저를 닫은 뒤의 알림은 지원하지 않습니다.</p><div class="dialog-actions"><a class="secondary" href="https://www.foresttrip.go.kr/main.do?hmpgId=FRIP" target="_blank" rel="noopener noreferrer">숲나들e 열기 ↗</a><a class="secondary" href="https://reservation.knps.or.kr" target="_blank" rel="noopener noreferrer">국립공원 예약 ↗</a></div></dialog>
-<noscript>현황 조회에는 JavaScript가 필요합니다. 숲나들e와 국립공원 공식 사이트에서 확인해 주세요.</noscript>
-</body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#153e35" />
+    <meta
+      name="description"
+      content="여러 자연휴양림과 국립공원 야영장의 빈자리와 예약대기 현황을 한곳에서 비교하세요."
+    />
+    <title>숲자리 · 빈자리와 예약대기 한눈에</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23153e35'/%3E%3Cpath d='M20 7L8 26h9v7h6v-7h9Z' fill='%23d5eac2'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="core.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#results">검색 결과 바로가기</a>
+    <header class="header">
+      <div class="shell header-inner">
+        <a class="brand" href="./" aria-label="숲자리 홈"
+          ><span class="brand-mark" aria-hidden="true">♠</span>숲자리<span
+            class="version"
+            >1.0 RC</span
+          ></a
+        >
+        <nav aria-label="빠른 메뉴">
+          <button id="connectButton" class="quiet">공식 현황 연결</button
+          ><button id="savedTop" class="quiet">
+            ♡ <span>저장한 곳</span> <b id="savedCount">0</b></button
+          ><button id="helpButton" class="quiet">이용 안내</button>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="landscape" aria-hidden="true">
+          <svg viewBox="0 0 900 300" preserveAspectRatio="xMidYMax slice">
+            <circle cx="730" cy="70" r="35" fill="#e5d8ad" />
+            <path
+              d="M0 275 165 90 258 185 390 32 590 243 700 130 900 268V300H0"
+              fill="#bacbbb"
+            />
+            <path d="m60 300 205-157 88 72L530 75l225 225" fill="#87a491" />
+            <path d="m415 300 206-154L823 300" fill="#4e7767" />
+            <path
+              d="M0 255q190-80 395 45H0m630 45q130-130 270-83v83"
+              fill="#264f43"
+            />
+          </svg>
+        </div>
+        <div class="shell hero-inner">
+          <p class="eyebrow">YOUR NEXT FOREST GETAWAY</p>
+          <h1>찾던 숲, 남은 자리.</h1>
+          <p class="hero-copy">
+            여러 휴양림의 빈자리와 예약대기,<br class="mobile-break" />
+            이제 한곳에서 비교하세요.
+          </p>
+          <div class="hero-footnote">
+            <span class="small-dot"></span> 숲나들e · 국립공원 공식 현황 기준
+          </div>
+        </div>
+      </section>
+      <div class="shell content-shell">
+        <form id="searchForm" class="search-panel" aria-label="휴양림 검색">
+          <label class="search-field"
+            ><span>어디로 떠날까요?</span
+            ><select id="regionInput" aria-label="지역">
+              <option value="">전국 모든 지역</option>
+            </select></label
+          >
+          <label class="search-field"
+            ><span>체크인 · 1박</span
+            ><input
+              id="dateInput"
+              type="date"
+              required
+              aria-label="체크인 날짜"
+          /></label>
+          <label class="search-field guest-field"
+            ><span>함께 가는 인원</span
+            ><select id="guestsInput" aria-label="인원">
+              <option value="1">1명</option>
+              <option value="2" selected>2명</option>
+              <option value="3">3명</option>
+              <option value="4">4명</option>
+              <option value="5">5명</option>
+              <option value="6">6명</option>
+              <option value="8">8명</option>
+              <option value="10">10명 이상</option>
+            </select></label
+          >
+          <button class="primary search-button" id="searchButton" type="submit">
+            <span aria-hidden="true">⌕</span> 자리 찾아보기
+          </button>
+        </form>
+        <div class="service-tabs" role="group" aria-label="시설 선택">
+          <button
+            class="service active"
+            data-service="forest"
+            aria-pressed="true"
+          >
+            자연휴양림 <span id="forestCount">—</span></button
+          ><button class="service" data-service="knps" aria-pressed="false">
+            국립공원 야영장 <span id="campCount">—</span></button
+          ><span class="service-caption"
+            >예약은 공식 사이트에서 진행해요 ↗</span
+          >
+        </div>
+        <section class="date-section" aria-label="다른 날짜 둘러보기">
+          <div class="date-label">
+            <div>
+              <strong>날짜를 바꾸면, 다른 기회가 보여요</strong>
+              <p>하루씩 넘기며 예약 가능한 날을 찾아보세요.</p>
+            </div>
+            <button id="weekendButton" class="text-button">
+              다가오는 토요일 ↗
+            </button>
+          </div>
+          <div class="date-navigation">
+            <button id="previousDates" class="day-arrow" aria-label="이전 7일">
+              ‹
+            </button>
+            <div class="date-strip" id="dateStrip"></div>
+            <button id="nextDates" class="day-arrow" aria-label="다음 7일">
+              ›
+            </button>
+          </div>
+        </section>
+        <div class="results-layout">
+          <aside class="filters" aria-label="검색 결과 필터">
+            <div class="filter-heading">
+              <strong>원하는 곳만 보기</strong
+              ><button id="resetFilters" class="text-button">초기화</button>
+            </div>
+            <label class="keyword-label" for="queryInput"
+              >휴양림 · 공원 · 객실 검색</label
+            ><input
+              id="queryInput"
+              class="keyword"
+              type="search"
+              placeholder="유명산, 닷돈재…"
+              autocomplete="off"
+            />
+            <fieldset>
+              <legend>예약 상태</legend>
+              <label
+                ><input type="radio" name="status" value="all" checked /> 전체
+                보기</label
+              ><label
+                ><input type="radio" name="status" value="opportunity" /> 빈자리
+                또는 예약대기</label
+              ><label
+                ><input type="radio" name="status" value="available" /> 바로
+                예약 가능한 곳</label
+              ><label
+                ><input type="radio" name="status" value="waitlist" /> 예약대기
+                가능한 곳</label
+              >
+            </fieldset>
+            <fieldset id="operatorField">
+              <legend>운영 구분</legend>
+              <label
+                ><input type="radio" name="operator" value="" checked />
+                전체</label
+              ><label
+                ><input type="radio" name="operator" value="국립" />
+                국립휴양림</label
+              ><label
+                ><input type="radio" name="operator" value="공립" />
+                공립휴양림</label
+              ><label
+                ><input type="radio" name="operator" value="사립" />
+                사립휴양림</label
+              >
+            </fieldset>
+            <div class="filter-bottom">
+              <label
+                ><input id="savedOnly" type="checkbox" /> 저장한 곳만
+                보기</label
+              >
+            </div>
+            <div class="filter-note">
+              <span>i</span>
+              <p>
+                미확인은 매진이 아니에요.<br />확인되지 않은 순번이나<br />취소
+                확률은 표시하지 않아요.
+              </p>
+            </div>
+          </aside>
+          <section
+            class="results"
+            id="results"
+            aria-label="휴양림 검색 결과"
+            tabindex="-1"
+          >
+            <div class="results-top">
+              <div>
+                <p class="eyebrow dark" id="resultContext">전국 · 1박</p>
+                <h2 id="resultTitle">숲으로 떠날 준비를 해볼까요?</h2>
+              </div>
+              <div class="result-actions">
+                <button
+                  id="refreshButton"
+                  class="icon-button"
+                  title="현황 다시 확인"
+                >
+                  ↻ <span>새로고침</span></button
+                ><button
+                  id="alertButton"
+                  class="icon-button"
+                  aria-pressed="false"
+                  title="저장한 시설의 상태 변화 알림"
+                >
+                  ♧ <span>변화 알림</span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="source-banner"
+              id="sourceBanner"
+              role="status"
+              aria-live="polite"
+            >
+              공식 현황을 확인하고 있습니다.
+            </div>
+            <button id="cancelSearch" class="text-button" hidden>
+              진행 중인 공식 조회 중단
+            </button>
+            <div class="summary-grid" id="summaryGrid">
+              <div>
+                <span>비교할 시설</span><strong id="totalStat">—</strong>
+              </div>
+              <div>
+                <span>빈자리 있는 곳</span
+                ><strong class="green" id="availableStat">—</strong>
+              </div>
+              <div>
+                <span>예약대기 가능한 곳</span
+                ><strong class="amber" id="waitStat">—</strong>
+              </div>
+            </div>
+            <div class="list-toolbar">
+              <span id="resultCount" role="status" aria-live="polite"
+                >조회 준비 중</span
+              >
+              <div>
+                <label class="sr-only" for="sortInput">결과 정렬</label
+                ><select id="sortInput">
+                  <option value="opportunity">예약 기회 우선</option>
+                  <option value="name">이름순</option>
+                  <option value="region">지역순</option>
+                  <option value="recent">최근 확인순</option>
+                </select>
+                <div class="view-switch" role="group" aria-label="보기 방식">
+                  <button
+                    id="listView"
+                    class="active"
+                    aria-label="목록 보기"
+                    aria-pressed="true"
+                  >
+                    ☰</button
+                  ><button
+                    id="tableView"
+                    aria-label="표 보기"
+                    aria-pressed="false"
+                  >
+                    ▦
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="resultList" class="result-list"></div>
+            <div id="emptyState" class="empty" hidden>
+              <span aria-hidden="true">♧</span>
+              <h3>조건에 맞는 결과가 없어요</h3>
+              <p id="emptyDescription">날짜를 바꾸거나 필터를 넓혀보세요.</p>
+              <button id="emptyReset" class="secondary">필터 초기화</button>
+            </div>
+            <button id="loadMore" class="load-more" hidden>
+              더 많은 휴양림 보기
+            </button>
+            <p class="results-note">
+              정원 미제공 객실은 인원 필터 결과에 포함됩니다. 예약 가능 여부와
+              대기순번은 공식 사이트에서 최종 확인해 주세요.
+            </p>
+          </section>
+        </div>
+        <section class="how-it-works">
+          <div>
+            <p class="eyebrow dark">A LITTLE CLOSER TO NATURE</p>
+            <h2>숲을 찾는 시간을 줄여드려요.</h2>
+          </div>
+          <div>
+            <b>01</b><strong>여러 곳을 한 번에</strong>
+            <p>지역과 날짜로 휴양림을 모아 비교해요.</p>
+          </div>
+          <div>
+            <b>02</b><strong>빈자리가 없어도</strong>
+            <p>예약대기 신청 기회까지 함께 확인해요.</p>
+          </div>
+          <div>
+            <b>03</b><strong>마지막 확인은 공식으로</strong>
+            <p>마음에 드는 곳의 공식 예약으로 이동해요.</p>
+          </div>
+        </section>
+        <footer>
+          <a class="brand" href="./">숲자리</a>
+          <p>숲나들e·국립공원공단과 별개로 운영되는 비공식 탐색 도구입니다.</p>
+          <span>조금 더 쉽게, 숲으로.</span>
+        </footer>
+      </div>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <dialog id="helpDialog">
+      <div class="dialog-head">
+        <h2>숲자리 이용 안내</h2>
+        <button id="closeHelp" class="icon-button" aria-label="안내 닫기">
+          ×
+        </button>
+      </div>
+      <p>
+        지역, 체크인 날짜, 인원을 선택하면 1박 기준으로 여러 시설을 비교합니다.
+        날짜 띠를 눌러 다른 날짜도 빠르게 살펴보세요.
+      </p>
+      <h3>예약대기 숫자의 의미</h3>
+      <p>
+        공식 응답에 신청 가능한 순위가 명시된 경우에만 표시합니다. 현재 대기
+        인원과 다음 신청 순위, 내 대기순번은 서로 다른 정보입니다. 개인의
+        대기순번은 공식 마이페이지에서 확인하세요.
+      </p>
+      <h3>데이터 확인</h3>
+      <p>
+        현황은 시설별 확인 시각을 기준으로 30분 동안 표시됩니다. 오래된
+        정보·조회 실패·미조회 날짜는 ‘미확인’으로 구분합니다. 빈자리와 가격을
+        임의로 만들지 않습니다.
+      </p>
+      <h3>변화 알림</h3>
+      <p>
+        이 화면이 열려 있는 동안 저장한 시설의 새 관측값을 비교합니다. 첫 조회나
+        날짜 변경에는 알리지 않습니다. 브라우저를 닫은 뒤의 알림은 지원하지
+        않습니다.
+      </p>
+      <div class="dialog-actions">
+        <a
+          class="secondary"
+          href="https://www.foresttrip.go.kr/main.do?hmpgId=FRIP"
+          target="_blank"
+          rel="noopener noreferrer"
+          >숲나들e 열기 ↗</a
+        ><a
+          class="secondary"
+          href="https://reservation.knps.or.kr"
+          target="_blank"
+          rel="noopener noreferrer"
+          >국립공원 예약 ↗</a
+        >
+      </div>
+    </dialog>
+    <noscript
+      >현황 조회에는 JavaScript가 필요합니다. 숲나들e와 국립공원 공식 사이트에서
+      확인해 주세요.</noscript
+    >
+  </body>
+</html>

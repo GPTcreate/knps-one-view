@@ -20,6 +20,40 @@ forest_job=None
 forest_connected_at=None
 
 
+def utcnow():
+    return datetime.now(timezone.utc)
+
+
+def job_public():
+    """Called with forest_lock held. Results stay server-side and are idempotent."""
+    if not forest_job:
+        return None
+    pending=forest_job['state']=='pending'
+    created=forest_job.get('created_at')
+    if pending and created:
+        last=max(datetime.fromisoformat(created),forest_connected_at or datetime.fromisoformat(created))
+        if (utcnow()-last).total_seconds()>120:
+            forest_job.update(state='paused',message='공식 현황 연결이 끊겼습니다. 다시 연결한 뒤 새로 조회해 주세요.')
+    return {k:copy.deepcopy(v) for k,v in forest_job.items() if k!='results'}
+
+
+def update_job_counts():
+    results=forest_job.get('results',{})
+    forest_job.update(done=len(results),success=sum(v=='success' for v in results.values()),failed=sum(v=='failed' for v in results.values()))
+
+
+def merge_forest_item(previous, current):
+    """Keep older months with their own observation times, never refresh them by accident."""
+    rooms={}
+    for room in (previous or {}).get('rooms',[]):
+        rooms[room['id']]={**room,'days':{day:{**status,'checked_at':status.get('checked_at') or previous['checked_at']} for day,status in room['days'].items()}}
+    for room in current['rooms']:
+        old=rooms.get(room['id'],{})
+        days={**old.get('days',{}),**{day:{**status,'checked_at':current['checked_at']} for day,status in room['days'].items()}}
+        rooms[room['id']]={**room,'days':days}
+    return {**current,'rooms':list(rooms.values())}
+
+
 def validate_forest_item(raw, facility):
     if not isinstance(raw,dict) or raw.get('id') != facility['id'] or not isinstance(raw.get('rooms'),list) or not 0 < len(raw['rooms']) <= 2000:
         raise ValueError('Invalid facility or rooms')
@@ -32,7 +66,7 @@ def validate_forest_item(raw, facility):
         if not isinstance(room,dict):
             raise ValueError('Invalid room')
         rid=str(room.get('id',''))[:180]
-        if not rid or rid in identities or not isinstance(room.get('days'),dict):
+        if not rid or rid in identities or not isinstance(room.get('days'),dict) or len(room['days'])>370:
             raise ValueError('Invalid or duplicate room')
         identities.add(rid)
         days={}
@@ -63,12 +97,17 @@ def snapshot():
     payload['sources'].setdefault('knps',{'state':'unavailable'})
     forest_path=ROOT/'.runtime'/'forest-status.json'
     if forest_path.exists():
-        forest=json.loads(forest_path.read_text(encoding='utf-8-sig'))
-        payload['items']=[x for x in payload['items'] if x.get('service')!='forest']+forest.get('items',[])
-        payload['sources']['forest']=forest.get('source',{'state':'unavailable'})
+        try:
+            forest=json.loads(forest_path.read_text(encoding='utf-8-sig'))
+            if not isinstance(forest,dict) or not isinstance(forest.get('items'),list):
+                raise ValueError('Invalid forest snapshot')
+            payload['items']=[x for x in payload['items'] if x.get('service')!='forest']+forest['items']
+            payload['sources']['forest']=forest.get('source',{'state':'unavailable'})
+        except (OSError,ValueError):
+            payload['sources']['forest']={'state':'unavailable','message':'휴양림 저장 현황을 읽지 못했습니다. 다시 조회해 주세요.'}
     payload['job']=dict(job)
     with forest_lock:
-        payload['forest_job']=copy.deepcopy(forest_job)
+        payload['forest_job']=job_public()
     payload['forest_connected']=bool(forest_connected_at and (datetime.now(timezone.utc)-forest_connected_at).total_seconds()<20)
     return payload
 
@@ -85,7 +124,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Cache-Control','no-store')
         self.send_header('X-Content-Type-Options','nosniff')
         self.send_header('Referrer-Policy','no-referrer')
-        self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'")
+        self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'")
         self.end_headers()
         self.wfile.write(body)
     def valid_host(self):
@@ -106,7 +145,7 @@ class Handler(BaseHTTPRequestHandler):
             except (OSError,ValueError):
                 return self.respond(503,{'error':'Snapshot unavailable'})
         if path=='/api/health':
-            return self.respond(200,{'version':'1.0.0','job':dict(job)})
+            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'connection_verification_deferred','job':dict(job)})
         if path=='/api/bridge/setup':
             if self.headers.get('Sec-Fetch-Site') not in {None,'same-origin','none'}:
                 return self.respond(403,{'error':'Same-origin access required'})
@@ -115,8 +154,10 @@ class Handler(BaseHTTPRequestHandler):
             if not self.valid_bridge():
                 return self.respond(403,{'error':'Invalid pairing'})
             global forest_connected_at
-            forest_connected_at=datetime.now(timezone.utc)
-            return self.respond(200,{'job':forest_job})
+            with forest_lock:
+                current=job_public()
+                forest_connected_at=utcnow()
+            return self.respond(200,{'job':current})
         if path not in STATIC:
             return self.respond(404,{'error':'Not found'})
         name,kind=STATIC[path]
@@ -142,24 +183,41 @@ class Handler(BaseHTTPRequestHandler):
                     if not forest_job or data.get('job_id')!=forest_job['id'] or forest_job['state']!='pending':
                         return self.respond(409,{'error':'Job is no longer active'})
                     if self.path=='/api/bridge/progress':
-                        forest_job.update(done=min(int(data.get('done',forest_job['done'])),len(forest_job['facilities'])),
-                                          success=max(0,int(data.get('success',0))),failed=max(0,int(data.get('failed',0))))
+                        update_job_counts()
+                        if data.get('paused'):
+                            forest_job.update(state='paused',message='공식 조회가 중단되었습니다. 로그인과 연결 상태를 확인한 뒤 다시 조회해 주세요.')
                         if data.get('complete'):
+                            if forest_job['done']!=len(forest_job['facilities']):
+                                return self.respond(409,{'error':'Some facilities have not completed'})
                             forest_job['state']='complete'
+                            forest_job['message']=f"공식 조회 완료 · 성공 {forest_job['success']}곳, 미확인 {forest_job['failed']}곳"
                         return self.respond(200,{'ok':True})
                     facility=next((x for x in forest_job['facilities'] if x['id']==data.get('facility_id')),None)
                     if not facility:
                         raise ValueError('Facility not in job')
+                    results=forest_job.setdefault('results',{})
+                    if results.get(facility['id'])=='success':
+                        return self.respond(200,{'ok':True,'duplicate':True})
                     if 'item' not in data:
-                        forest_job.setdefault('errors',[]).append({'id':facility['id'],'message':str(data.get('error',''))[:150]})
+                        results[facility['id']]='failed'
+                        update_job_counts()
                         return self.respond(200,{'ok':True})
                     item=validate_forest_item(data['item'],facility)
                     file=ROOT/'.runtime'/'forest-status.json'
-                    previous=json.loads(file.read_text(encoding='utf-8-sig')) if file.exists() else {'items':[]}
+                    try:
+                        previous=json.loads(file.read_text(encoding='utf-8-sig')) if file.exists() else {'items':[]}
+                        if not isinstance(previous,dict) or not isinstance(previous.get('items'),list):
+                            raise ValueError('Invalid saved snapshot')
+                    except ValueError:
+                        previous={'items':[]}
+                    old=next((x for x in previous['items'] if x['id']==item['id']),None)
+                    item=merge_forest_item(old,item)
                     previous['items']=[x for x in previous['items'] if x['id']!=item['id']]+[item]
                     previous['source']={'state':'partial','checked_at':item['checked_at'],
                                         'message':'로그인된 공식 월별 현황의 표시값입니다. 미조회 시설·날짜는 미확인으로 표시합니다.'}
                     atomic_json(file,previous)
+                    results[facility['id']]='success'
+                    update_job_counts()
                 return self.respond(200,{'ok':True})
             except (ValueError,TypeError,KeyError,OSError):
                 return self.respond(400,{'error':'Invalid booking snapshot'})
@@ -180,6 +238,8 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError()
                 catalog=json.loads((ROOT/'catalog.json').read_text(encoding='utf-8-sig'))
                 facilities=[x for x in catalog['forests'] if not data.get('region') or x['region']==data['region']]
+                if data.get('operator'):
+                    facilities=[x for x in facilities if x.get('operator')==data['operator']]
                 if 'ids' in data:
                     if not isinstance(data['ids'],list) or not data['ids'] or any(not isinstance(x,str) for x in data['ids']):
                         raise ValueError()
@@ -187,16 +247,18 @@ class Handler(BaseHTTPRequestHandler):
                 if not facilities:
                     raise ValueError()
                 with forest_lock:
+                    job_public()
                     if forest_job and forest_job['state']=='pending':
-                        return self.respond(409,{'error':'A search is already running','job':forest_job})
-                    forest_job={'id':secrets.token_urlsafe(12),'state':'pending','date':day,'facilities':facilities,'done':0,'success':0,'failed':0}
-                return self.respond(202,{'job':forest_job})
+                        return self.respond(409,{'error':'A search is already running','job':job_public()})
+                    forest_job={'id':secrets.token_urlsafe(12),'state':'pending','date':day,'facilities':facilities,'done':0,'success':0,'failed':0,'created_at':utcnow().isoformat(),'results':{}}
+                    public=job_public()
+                return self.respond(202,{'job':public})
             except (ValueError,KeyError,TypeError):
                 return self.respond(400,{'error':'Invalid search conditions'})
         if self.path=='/api/forest/cancel':
             with forest_lock:
                 if forest_job:
-                    forest_job['state']='cancelled'
+                    forest_job.update(state='cancelled',message='공식 조회를 중단했습니다. 이미 확인한 결과는 보존했습니다.')
             return self.respond(200,{'ok':True})
         if self.path!='/api/refresh':
             return self.respond(404,{'error':'Not found'})

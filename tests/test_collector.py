@@ -53,3 +53,11 @@ class CollectorTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+class AtomicFailureTests(unittest.TestCase):
+    def test_serialization_failure_does_not_leave_a_temp_file_or_damage_old_data(self):
+        with tempfile.TemporaryDirectory() as directory:
+            file=Path(directory)/'snapshot.json';file.write_bytes(b'previous')
+            with self.assertRaises(TypeError):scraper.atomic_json(file,{'bad':object()})
+            self.assertEqual(file.read_bytes(),b'previous')
+            self.assertEqual([x.name for x in Path(directory).iterdir()],['snapshot.json'])

@@ -36,6 +36,14 @@ class ServerTests(unittest.TestCase):
     def test_invalid_host_blocked(self):
         with self.assertRaises(urllib.error.HTTPError) as caught:self.request('/api/status',headers={'Host':'attacker.example'})
         self.assertEqual(caught.exception.code,403)
+    def test_damaged_forest_file_does_not_hide_knps_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory,patch.object(server,'ROOT',Path(directory)):
+            root=Path(directory);(root/'.runtime').mkdir()
+            (root/'availability.json').write_text(json.dumps({'schema_version':1,'items':[{'id':'camp','service':'knps'}],'sources':{}}))
+            (root/'.runtime'/'forest-status.json').write_text('{broken')
+            with self.request('/api/status?service=knps') as response:payload=json.load(response)
+            self.assertEqual(payload['items'][0]['id'],'camp')
+            self.assertEqual(payload['sources']['forest']['state'],'unavailable')
     def test_cross_site_mutation_blocked(self):
         for origin in [None,'https://attacker.example','null']:
             headers={} if origin is None else {'Origin':origin}
@@ -74,7 +82,13 @@ class ServerTests(unittest.TestCase):
             with self.assertRaises(urllib.error.HTTPError) as caught:self.request('/api/bridge/result',data=body,headers=headers)
             self.assertEqual(caught.exception.code,403)
             paired={**headers,'Authorization':'Bearer '+server.bridge_token}
+            premature=json.dumps({'job_id':task['id'],'complete':True,'done':999}).encode()
+            with self.assertRaises(urllib.error.HTTPError) as caught:self.request('/api/bridge/progress',data=premature,headers=paired)
+            self.assertEqual(caught.exception.code,409)
             with self.request('/api/bridge/result',data=body,headers=paired) as r:self.assertEqual(r.status,200)
+            with self.request('/api/bridge/result',data=body,headers=paired) as r:self.assertTrue(json.load(r)['duplicate'])
+            self.assertEqual(server.forest_job['done'],1)
+            self.assertEqual(server.forest_job['success'],1)
             with self.request('/api/status?service=forest') as r:
                 payload=json.load(r)
             self.assertEqual(payload['items'][0]['rooms'][0]['days']['2026-10-24']['next_rank'],1)
