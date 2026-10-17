@@ -43,7 +43,7 @@ class ServerTests(unittest.TestCase):
             (root/'.runtime'/'forest-status.json').write_text('{broken')
             with self.request('/api/status?service=knps') as response:payload=json.load(response)
             self.assertEqual(payload['items'][0]['id'],'camp')
-            self.assertEqual(payload['sources']['forest']['state'],'pending_integration')
+            self.assertEqual(payload['sources']['forest']['state'],'shared_pilot')
             self.assertNotIn('forest_connected',payload)
     def test_consumer_server_does_not_offer_extension_pairing_or_jobs(self):
         for path in ['/api/bridge/setup','/api/bridge/job']:

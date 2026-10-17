@@ -11,9 +11,12 @@
     storage = null;
   }
   const initial = new URLSearchParams(location.hash.slice(1));
+  const maxDate = () => C.addDays(C.today(), T.mode === "web" ? 90 : 365);
   const state = {
     date:
-      C.validDate(initial.get("date")) && initial.get("date") >= C.today()
+      C.validDate(initial.get("date")) &&
+      initial.get("date") >= C.today() &&
+      initial.get("date") <= maxDate()
         ? initial.get("date")
         : C.addDays(C.today(), 1),
     region: initial.get("region") || "",
@@ -46,6 +49,7 @@
     forestJob: null,
     connected: false,
     collectJob: null,
+    refresh: null,
   };
   let toastTimer, refreshTimer, requestController;
   function notify(text) {
@@ -88,8 +92,10 @@
   }
   function collectSearch() {
     const date = $("dateInput").value;
-    if (!C.validDate(date) || date < C.today()) {
-      notify("오늘 이후의 날짜를 선택해 주세요.");
+    if (!C.validDate(date) || date < C.today() || date > maxDate()) {
+      notify(
+        `오늘부터 ${T.mode === "web" ? 90 : 365}일 이내 날짜를 선택해 주세요.`,
+      );
       return false;
     }
     state.date = date;
@@ -259,12 +265,41 @@
               )
             ? "예약 기회 없음"
             : "현황 미확인";
-      return `<button class="date-card ${date === state.date ? "active" : ""} ${[0, 6].includes(d.getUTCDay()) ? "weekend" : ""}" data-date="${date}" aria-pressed="${date === state.date}" aria-label="${h(dateText(date))} ${h(hint)}"><span>${h(date === C.today() ? "오늘" : new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC", weekday: "short" }).format(d))}</span><b>${d.getUTCMonth() + 1}.${String(d.getUTCDate()).padStart(2, "0")}</b><small>${h(hint)}</small></button>`;
+      return `<button class="date-card ${date === state.date ? "active" : ""} ${[0, 6].includes(d.getUTCDay()) ? "weekend" : ""}" data-date="${date}" ${date > maxDate() ? "disabled" : ""} aria-pressed="${date === state.date}" aria-label="${h(dateText(date))} ${h(hint)}"><span>${h(date === C.today() ? "오늘" : new Intl.DateTimeFormat("ko-KR", { timeZone: "UTC", weekday: "short" }).format(d))}</span><b>${d.getUTCMonth() + 1}.${String(d.getUTCDate()).padStart(2, "0")}</b><small>${h(hint)}</small></button>`;
     }).join("");
     $("previousDates").disabled = start <= C.today();
+    $("nextDates").disabled = C.addDays(start, 7) > maxDate();
   }
   function renderBanner() {
     const source = state.sources[state.service] || {};
+    if (
+      T.mode === "web" &&
+      state.service === "forest" &&
+      state.refresh &&
+      !state.error &&
+      !state.loading
+    ) {
+      const current = state.refresh,
+        banner = $("sourceBanner");
+      banner.className = "source-banner";
+      $("cancelSearch").hidden = true;
+      if (current.pending) {
+        banner.classList.add("warning");
+        banner.textContent = current.offline
+          ? `갱신 대기 · ${current.pending}곳의 새 현황을 요청했습니다. 수집기 연결을 기다리는 동안 이전 결과와 확인 시각을 볼 수 있어요.`
+          : `새 현황 확인 중 · ${current.running}곳 조회 중, ${current.queued}곳 대기. ${current.total}곳 중 ${current.fresh}곳은 최근 5분 이내 관측 자료입니다.`;
+      } else if (current.failed) {
+        banner.classList.add("warning");
+        banner.textContent = `${current.failed}곳의 새 현황을 확인하지 못했습니다. 이전 관측값과 시각을 유지하며, 만료된 자료는 미확인으로 표시합니다.`;
+      } else if (current.fresh) {
+        banner.textContent = `선택한 ${current.total}곳 중 ${current.fresh}곳은 최근 5분 이내 관측 자료입니다. 운영자가 공식 화면에서 확인한 결과이며 예약 전 공식 현황을 다시 확인해 주세요.`;
+      } else {
+        banner.classList.add("warning");
+        banner.textContent =
+          "새 현황이 필요합니다. 지역과 날짜를 선택해 검색하면 오래된 시설·월만 갱신을 요청합니다. 확인되지 않은 자료는 미확인으로 표시합니다.";
+      }
+      return;
+    }
     if (
       state.service === "forest" &&
       T.mode === "web" &&
@@ -437,6 +472,7 @@
     state.forestJob = payload.forest_job || null;
     state.connected = !!payload.forest_connected;
     state.collectJob = payload.job || null;
+    state.refresh = payload.refresh || null;
     if (state.alerts) {
       const changes = C.detectChanges(
         state.baseline,
@@ -472,7 +508,10 @@
     $("refreshButton").disabled = true;
     $("searchButton").disabled = true;
     try {
-      const payload = await T.status(state.service, { signal });
+      const payload = await T.status(state.service, {
+        signal,
+        conditions: searchConditions(),
+      });
       if (generation !== state.generation) return;
       if (!C.validatePayload(payload)) throw new Error("invalid response");
       mergeData(payload);
@@ -518,6 +557,23 @@
     document.querySelector('input[name=operator][value=""]').checked = true;
     render();
   }
+  function searchConditions() {
+    let ids;
+    if (state.favoritesOnly) ids = state.favorites;
+    if (state.query) {
+      const matched = C.filterItems(state.items, {
+        ...state,
+        status: "all",
+      }).map((item) => item.id);
+      ids = ids ? ids.filter((id) => matched.includes(id)) : matched;
+    }
+    return {
+      date: state.date,
+      region: state.region,
+      operator: state.operator,
+      ...(ids ? { ids } : {}),
+    };
+  }
   async function searchForest() {
     if (
       state.favoritesOnly &&
@@ -529,6 +585,18 @@
       return;
     }
     if (T.mode === "web") {
+      const conditions = searchConditions();
+      if (conditions.ids && !conditions.ids.length) {
+        notify("검색 조건에 맞는 시설이 없습니다. 필터를 넓혀 주세요.");
+        return;
+      }
+      $("searchButton").disabled = true;
+      $("refreshButton").disabled = true;
+      try {
+        await T.start(conditions);
+      } catch (error) {
+        notify(error.message);
+      }
       await loadData();
       return;
     }
@@ -540,12 +608,7 @@
           return;
         }
       }
-      await T.start({
-        date: state.date,
-        region: state.region,
-        operator: state.operator,
-        ids: state.favoritesOnly ? state.favorites : undefined,
-      });
+      await T.start(searchConditions());
       await loadData();
     } catch (error) {
       notify(
@@ -562,14 +625,14 @@
   });
   $("dateStrip").addEventListener("click", (event) => {
     const button = event.target.closest("[data-date]");
-    if (!button) return;
+    if (!button || button.disabled) return;
     state.date = button.dataset.date;
     $("dateInput").value = state.date;
     state.limit = 20;
     state.baseline = null;
     saveSearch();
     render();
-    loadData();
+    state.service === "forest" ? searchForest() : loadData();
   });
   $("previousDates").addEventListener("click", () => {
     state.stripStart = C.addDays(state.stripStart, -7);
@@ -582,7 +645,8 @@
   });
   $("weekendButton").addEventListener("click", () => {
     $("dateInput").value = C.nextSaturday();
-    if (collectSearch()) loadData();
+    if (collectSearch())
+      state.service === "forest" ? searchForest() : loadData();
   });
   document.querySelectorAll(".service").forEach((button) =>
     button.addEventListener("click", () => {
@@ -750,7 +814,8 @@
     if (
       !document.hidden &&
       (state.forestJob?.state === "pending" ||
-        state.collectJob?.state === "running") &&
+        state.collectJob?.state === "running" ||
+        state.refresh?.pending) &&
       !state.loading
     )
       loadData();
@@ -761,6 +826,7 @@
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
       $("dateInput").min = C.today();
+      $("dateInput").max = maxDate();
       render();
       if (!state.loading) loadData();
     }
@@ -788,6 +854,7 @@
 
     $("dateInput").value = state.date;
     $("dateInput").min = C.today();
+    $("dateInput").max = maxDate();
     $("guestsInput").value = String(state.guests);
     try {
       const [catalogResponse, metaResponse] = await Promise.all([

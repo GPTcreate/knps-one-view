@@ -2,17 +2,24 @@
 from __future__ import annotations
 from datetime import datetime, timezone
 import copy
+from collections import defaultdict, deque
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 import json
 from pathlib import Path
 import secrets
 import threading
 import urllib.parse
+import re
+from datetime import timedelta
+import time
+import sqlite3
 from scraper_real import atomic_json, run_scraper
+from shared_queue import SharedQueue, Conflict, QueueFull
+from operator_auth import load_key
 
 ROOT = Path(__file__).resolve().parent
 STATIC = {'/':('index.html','text/html'),'/index.html':('index.html','text/html'),'/app.js':('app.js','text/javascript'),'/core.js':('core.js','text/javascript'),'/styles.css':('styles.css','text/css'),'/catalog.json':('catalog.json','application/json'),'/camps_meta.json':('camps_meta.json','application/json'),'/availability.json':('availability.json','application/json')}
-STATIC.update({'/transport.js':('transport.js','text/javascript'),'/privacy.html':('extension/privacy.html','text/html')})
+STATIC.update({'/transport.js':('transport.js','text/javascript'),'/privacy.html':('privacy.html','text/html')})
 job_lock=threading.Lock()
 job={'state':'idle','done':0,'total':0}
 bridge_token=secrets.token_urlsafe(32)
@@ -20,6 +27,46 @@ forest_lock=threading.Lock()
 forest_job=None
 forest_connected_at=None
 operator_tools=False
+shared_instances={}
+request_times=defaultdict(deque)
+request_lock=threading.Lock()
+
+
+def shared():
+    path=ROOT/'.runtime'/'shared.sqlite3'
+    with forest_lock:
+        if path not in shared_instances:shared_instances[path]=SharedQueue(path)
+        return shared_instances[path]
+
+
+def select_facilities(data):
+    if not isinstance(data,dict):raise ValueError('Invalid conditions')
+    day=data.get('date')
+    if not isinstance(day,str) or len(day)!=10 or datetime.strptime(day,'%Y-%m-%d').strftime('%Y-%m-%d')!=day:raise ValueError('Invalid date')
+    today=(utcnow()+timedelta(hours=9)).date()
+    if not today<=datetime.strptime(day,'%Y-%m-%d').date()<=today+timedelta(days=90):raise ValueError('Date outside supported search window')
+    catalog=json.loads((ROOT/'catalog.json').read_text(encoding='utf-8-sig'))['forests']
+    for key in ('region','operator'):
+        if data.get(key) and not isinstance(data[key],str):raise ValueError('Invalid filter')
+    facilities=[x for x in catalog if (not data.get('region') or x['region']==data['region']) and (not data.get('operator') or x.get('operator')==data['operator'])]
+    if 'ids' in data:
+        if not isinstance(data['ids'],list) or not 0<len(data['ids'])<=len(catalog) or any(not isinstance(x,str) for x in data['ids']):raise ValueError('Invalid facilities')
+        facilities=[x for x in facilities if x['id'] in data['ids']]
+    if not facilities:raise ValueError('No matching facilities')
+    return facilities,day
+
+
+def search_rate_allowed(address):
+    now=time.monotonic()
+    with request_lock:
+        for key in list(request_times):
+            while request_times[key] and request_times[key][0]<now-60:request_times[key].popleft()
+            if not request_times[key]:del request_times[key]
+        if address not in request_times and len(request_times)>=512:return False
+        recent=request_times[address]
+        if len(recent)>=60:return False
+        recent.append(now)
+        return True
 
 
 def utcnow():
@@ -92,7 +139,7 @@ def validate_forest_item(raw, facility):
     return {**facility,'checked_at':checked.isoformat(),'rooms':rooms}
 
 
-def snapshot():
+def snapshot(conditions=None):
     path=ROOT/'availability.json'
     payload=json.loads(path.read_text(encoding='utf-8-sig')) if path.exists() else {'schema_version':1,'items':[],'sources':{}}
     payload['sources'].setdefault('forest',{'state':'login_required'})
@@ -113,7 +160,21 @@ def snapshot():
             payload['forest_job']=job_public()
         payload['forest_connected']=bool(forest_connected_at and (datetime.now(timezone.utc)-forest_connected_at).total_seconds()<20)
     else:
-        payload['sources']['forest']={'state':'pending_integration','message':'공식 휴양림 데이터 연계 준비 중입니다. 설치나 로그인 없이 시설을 검색하고 공식 예약으로 이동할 수 있습니다.'}
+        payload['items']=[x for x in payload['items'] if x.get('service')!='forest']
+        payload['sources']['forest']={'state':'shared_pilot','message':'운영자가 공식 화면에서 확인한 공유 관측 자료입니다. 확인되지 않은 시설·날짜는 미확인으로 표시합니다.'}
+        payload['integrations']={'official_api':'approval_required','shared_collection':'local_pilot'}
+        facilities,day=select_facilities(conditions) if conditions else (None,None)
+        try:
+            if facilities:
+                payload['refresh']=shared().summary([x['id'] for x in facilities],day[:7])
+            # Read data after progress: completion must never stop polling before its data is visible.
+            payload['items']+=shared().items()
+        except (OSError,sqlite3.Error,ValueError):
+            payload.pop('refresh',None)
+            payload['sources']['forest']={'state':'unavailable','message':'휴양림 공유 현황 저장소에 연결하지 못했습니다. 잠시 후 다시 확인해 주세요.'}
+        if conditions:
+            identities=[x['id'] for x in facilities]
+            payload['items']=[x for x in payload['items'] if x.get('service')!='forest' or x['id'] in identities]
     payload['mode']='web'
     return payload
 
@@ -137,21 +198,51 @@ class Handler(BaseHTTPRequestHandler):
         return self.headers.get('Host') in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'}
     def valid_bridge(self):
         return secrets.compare_digest(self.headers.get('Authorization','').encode('utf-8'),('Bearer '+bridge_token).encode('utf-8'))
+    def valid_operator(self):
+        return secrets.compare_digest(self.headers.get('Authorization','').encode('utf-8'),('Bearer '+load_key(ROOT)).encode('utf-8'))
+    def collector_id(self):
+        identity=self.headers.get('X-Collector-ID','')
+        if not re.fullmatch(r'[a-zA-Z0-9_-]{8,80}',identity):raise ValueError('Invalid collector')
+        return identity
+    def read_json(self,maximum=8192):
+        length=int(self.headers.get('Content-Length','0'))
+        if not 0<length<=maximum:raise ValueError('Invalid payload size')
+        data=json.loads(self.rfile.read(length))
+        if not isinstance(data,dict):raise ValueError('Invalid payload')
+        return data
     def do_GET(self):
         if not self.valid_host():
             return self.respond(403,{'error':'Invalid host'})
         path=urllib.parse.urlsplit(self.path).path
         if path=='/api/status':
             try:
-                payload=snapshot()
-                service=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query).get('service',[''])[0]
+                query=urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
+                service=query.get('service',[''])[0]
+                conditions={key:values[0] for key,values in query.items() if key in ('date','region','operator')}
+                if 'ids' in query:conditions['ids']=query['ids'][0].split(',')
+                if service=='forest' and conditions:
+                    try:select_facilities(conditions)
+                    except ValueError:return self.respond(400,{'error':'Invalid search conditions'})
+                payload=snapshot(conditions if service=='forest' and conditions else None)
                 if service in {'forest','knps'}:
                     payload['items']=[x for x in payload['items'] if x.get('service')==service]
                 return self.respond(200,payload)
             except (OSError,ValueError):
                 return self.respond(503,{'error':'Snapshot unavailable'})
+        if path.startswith('/api/operator/'):
+            if not self.valid_operator():return self.respond(403,{'error':'Operator authentication required'})
+            try:
+                collector=self.collector_id()
+                if path=='/api/operator/health':return self.respond(200,{'ok':True,'mode':'local_pilot'})
+                if path=='/api/operator/job':
+                    facilities=json.loads((ROOT/'catalog.json').read_text(encoding='utf-8-sig'))['forests']
+                    assigned=shared().claim(collector,facilities,self.headers.get('X-Active-Lease'))
+                    return self.respond(200,{'active':True,'job':assigned})
+                return self.respond(404,{'error':'Not found'})
+            except sqlite3.Error:return self.respond(503,{'error':'Collection storage unavailable'})
+            except (ValueError,OSError):return self.respond(400,{'error':'Invalid operator request'})
         if path=='/api/health':
-            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'web_preview_api_approval_required','job':dict(job)})
+            return self.respond(200,{'application':'forest-seat','version':'1.0.0','release_status':'shared_collection_local_pilot','job':dict(job)})
         if path.startswith('/api/bridge/') and not operator_tools:
             return self.respond(404,{'error':'Operator tools are disabled'})
         if path=='/api/bridge/setup':
@@ -177,7 +268,25 @@ class Handler(BaseHTTPRequestHandler):
         global forest_job
         if not self.valid_host():
             return self.respond(403,{'error':'Invalid host'})
-        if (self.path.startswith('/api/bridge/') or self.path.startswith('/api/forest/')) and not operator_tools:
+        if self.path.startswith('/api/operator/'):
+            if not self.valid_operator():return self.respond(403,{'error':'Operator authentication required'})
+            try:
+                collector=self.collector_id();data=self.read_json(8*1024*1024)
+                if self.path=='/api/operator/pause':
+                    shared().pause(collector);return self.respond(200,{'ok':True})
+                if not isinstance(data.get('job_id'),str) or len(data['job_id'])>100:raise ValueError('Invalid lease')
+                if self.path=='/api/operator/result':
+                    facility=next((x for x in json.loads((ROOT/'catalog.json').read_text(encoding='utf-8-sig'))['forests'] if x['id']==data.get('facility_id')),None)
+                    if not facility:raise ValueError('Invalid facility')
+                    item=validate_forest_item(data['item'],facility) if 'item' in data else None
+                    return self.respond(200,shared().submit(collector,data['job_id'],facility['id'],item,merge_forest_item))
+                if self.path=='/api/operator/progress':
+                    return self.respond(200,shared().acknowledge(collector,data['job_id'],bool(data.get('paused'))))
+                return self.respond(404,{'error':'Not found'})
+            except Conflict:return self.respond(409,{'error':'Job is no longer active'})
+            except sqlite3.Error:return self.respond(503,{'error':'Collection storage unavailable'})
+            except (ValueError,KeyError,TypeError,OSError):return self.respond(400,{'error':'Invalid booking observation'})
+        if (self.path.startswith('/api/bridge/') or self.path in {'/api/forest/refresh','/api/forest/cancel'}) and not operator_tools:
             return self.respond(404,{'error':'Operator tools are disabled'})
         if self.path in {'/api/bridge/result','/api/bridge/progress'}:
             if not self.valid_bridge():
@@ -235,6 +344,14 @@ class Handler(BaseHTTPRequestHandler):
         origin=self.headers.get('Origin')
         if origin not in {f'http://127.0.0.1:{self.server.server_port}',f'http://localhost:{self.server.server_port}'}:
             return self.respond(403,{'error':'Same-origin request required'})
+        if self.path=='/api/forest/search':
+            try:
+                facilities,day=select_facilities(self.read_json())
+                if not search_rate_allowed(self.client_address[0]):return self.respond(429,{'error':'조회 요청이 많습니다. 기존 결과를 확인하며 잠시 후 다시 시도해 주세요.'})
+                return self.respond(202,{'refresh':shared().enqueue(facilities,day)})
+            except QueueFull:return self.respond(429,{'error':'갱신 요청이 많습니다. 저장된 현황은 계속 확인할 수 있습니다.'})
+            except sqlite3.Error:return self.respond(503,{'error':'갱신 대기열을 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.'})
+            except (ValueError,KeyError,TypeError,OSError):return self.respond(400,{'error':'지역·날짜·조회할 시설을 확인해 주세요.'})
         if self.path=='/api/forest/refresh':
             try:
                 length=int(self.headers.get('Content-Length','0'))

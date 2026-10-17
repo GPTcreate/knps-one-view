@@ -8,7 +8,11 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parent
 FILES = (
-    'index.html', 'styles.css', 'app.js', 'core.js', 'transport.js', 'catalog.json',
+    'shared_queue.py', 'operator_auth.py', 'operator_setup.py', 'build_operator.py',
+    'operator/index.html', 'operator/background.js', 'operator/ui.js',
+    'docs/service-plan.md', 'docs/operator-guide.md', 'tests/operator.test.js',
+    'tests/test_shared_http.py', 'tests/test_shared_queue.py',
+    'index.html', 'privacy.html', 'styles.css', 'app.js', 'core.js', 'transport.js', 'catalog.json',
     'camps_meta.json', 'availability.json', 'server.py', 'scraper_real.py',
     'launcher.py', 'start.cmd', 'refresh_catalog.py', 'build_release.py',
     'README.md', 'package.json', 'package-lock.json', '.gitignore',
@@ -43,7 +47,7 @@ def build():
     manifest = {
         'version': '1.0.0-web-preview',
         'created_at': datetime.now(timezone.utc).isoformat(),
-        'release_status': 'Official web API approval and standalone extension installation/store review are pending',
+        'release_status': 'Local shared queue pilot; actual operator/standalone installation, public sharing rights, API approval and store review are pending',
         'sha256': {name: hashlib.sha256(data).hexdigest() for name, data in contents.items()},
     }
     output = ROOT / 'artifacts'

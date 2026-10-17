@@ -203,7 +203,7 @@ test("website park refresh still starts the shared server collector without exte
   );
   assert.equal(doc.getElementById("connectButton").hidden, true);
 });
-test("website search reads server data without extension setup or job mutations", async (t) => {
+test("website search reads server data without extension setup and queues a shared refresh", async (t) => {
   const { w, doc, requests } = await mount(t);
   doc
     .getElementById("searchForm")
@@ -212,9 +212,56 @@ test("website search reads server data without extension setup or job mutations"
   assert.equal(doc.getElementById("connectButton").hidden, true);
   assert.equal(doc.getElementById("clearData").hidden, true);
   assert.equal(
+    requests.filter((x) => x.url === "/api/forest/search").length,
+    1,
+  );
+  assert.equal(
     requests.filter((x) => x.url === "/api/forest/refresh").length,
     0,
   );
+});
+
+test("website shows offline queue honestly and later replaces it with shared fresh results", async (t) => {
+  let queued = false,
+    completed = false;
+  const { w, doc, requests } = await mount(t, (url) => {
+    if (url === "/api/forest/search") {
+      queued = true;
+      return response({}, 202);
+    }
+    if (url.startsWith("/api/status"))
+      return response({
+        ...payload(),
+        refresh: {
+          total: 2,
+          pending: completed ? 0 : queued ? 2 : 0,
+          queued: completed ? 0 : queued ? 2 : 0,
+          running: 0,
+          failed: 0,
+          fresh: completed ? 2 : 0,
+          offline: !completed,
+        },
+      });
+    return null;
+  });
+  doc
+    .getElementById("searchForm")
+    .dispatchEvent(new w.Event("submit", { cancelable: true, bubbles: true }));
+  await waitFor(() =>
+    doc.getElementById("sourceBanner").textContent.includes("갱신 대기"),
+  );
+  assert.match(doc.getElementById("sourceBanner").textContent, /수집기/);
+  assert.equal(doc.getElementById("cancelSearch").hidden, true);
+  completed = true;
+  doc.querySelector(".date-card:not(.active)").click();
+  await waitFor(() =>
+    doc.getElementById("sourceBanner").textContent.includes("5분"),
+  );
+  assert.equal(
+    requests.filter((r) => r.url === "/api/forest/search").length,
+    2,
+  );
+  assert.equal(doc.getElementById("connectButton").hidden, true);
 });
 test("website remains installation-free even when a legacy bridge reports connected", async (t) => {
   const { w, doc, requests } = await mount(t, (url) => {
@@ -291,7 +338,7 @@ test("later service selection wins over a delayed earlier response", async (t) =
   let delayed = false,
     resolveOld;
   const { w, doc } = await mount(t, (url) => {
-    if (url === "/api/status?service=forest" && delayed)
+    if (url.startsWith("/api/status?service=forest") && delayed)
       return new Promise((resolve) => (resolveOld = resolve));
     if (url === "/api/status?service=knps" && delayed)
       return response({
