@@ -11,7 +11,8 @@
 - 등록 소개 (`listing.txt`), 권한·데이터 처리·테스트 설명 (`review-notes.txt`)
 - 허용 파일만 포함하는 빌드와 ZIP 무결성·SHA-256 검증
 - 모의 월별 표 2시설 조회, 취소, 저장소·워커 복구, 발신 탭 제한, 데이터 필드 검증
-- 전체 Node 53개·Python 28개 PASS. 독립 ZIP 17개 파일과 참조 자산·PNG 크기·JavaScript 문법·무결성 확인
+- 전체 Node 63개·Python 59개, 총 122개 PASS. 독립 ZIP 17개 파일과 참조 자산·PNG 크기·JavaScript 문법·무결성 확인
+- 실제 배포 ZIP 허용 파일·체크섬·로컬 인증키 미포함 자동 검증과 GitHub Actions 다운로드 구성
 
 ## 실제 게시 전 남은 항목
 

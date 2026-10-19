@@ -334,6 +334,28 @@ test("an authoritative empty snapshot removes prior room availability from the d
   await waitFor(() => !doc.getElementById("searchButton").disabled);
   assert.equal(doc.getElementById("availableStat").textContent, "미확인");
 });
+
+test("a shared storage outage retains the last good observations with their real times", async (t) => {
+  let failed = false;
+  const { doc } = await mount(t, (url) =>
+    url.startsWith("/api/status")
+      ? response(
+          failed
+            ? {
+                schema_version: 1,
+                items: [],
+                sources: { forest: { state: "unavailable" } },
+              }
+            : payload(),
+        )
+      : null,
+  );
+  failed = true;
+  doc.getElementById("refreshButton").click();
+  await waitFor(() => !doc.getElementById("searchButton").disabled);
+  assert.equal(doc.getElementById("availableStat").textContent, "1곳");
+  assert.match(doc.getElementById("resultList").textContent, /빈자리 1실/);
+});
 test("later service selection wins over a delayed earlier response", async (t) => {
   let delayed = false,
     resolveOld;

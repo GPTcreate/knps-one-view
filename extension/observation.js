@@ -83,16 +83,23 @@
     return { ...facility, checked_at: new Date(time).toISOString(), rooms };
   }
   function merge(old, current) {
+    const observedMonths = new Set(
+      current.rooms.flatMap((room) =>
+        Object.keys(room.days).map((day) => day.slice(0, 7)),
+      ),
+    );
     const rooms = new Map(
       (old?.rooms || []).map((room) => [
         room.id,
         {
           ...room,
           days: Object.fromEntries(
-            Object.entries(room.days).map(([day, status]) => [
-              day,
-              { ...status, checked_at: status.checked_at || old.checked_at },
-            ]),
+            Object.entries(room.days)
+              .filter(([day]) => !observedMonths.has(day.slice(0, 7)))
+              .map(([day, status]) => [
+                day,
+                { ...status, checked_at: status.checked_at || old.checked_at },
+              ]),
           ),
         },
       ]),
@@ -107,12 +114,14 @@
     });
     return {
       ...current,
-      rooms: [...rooms.values()].map((room) => ({
-        ...room,
-        days: Object.fromEntries(
-          Object.entries(room.days).filter(([day]) => day >= today),
-        ),
-      })),
+      rooms: [...rooms.values()]
+        .map((room) => ({
+          ...room,
+          days: Object.fromEntries(
+            Object.entries(room.days).filter(([day]) => day >= today),
+          ),
+        }))
+        .filter((room) => Object.keys(room.days).length),
     };
   }
   function fit(items, maxBytes = 6000000) {

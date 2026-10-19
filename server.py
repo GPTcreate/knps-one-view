@@ -142,6 +142,7 @@ def validate_forest_item(raw, facility):
 def snapshot(conditions=None):
     path=ROOT/'availability.json'
     payload=json.loads(path.read_text(encoding='utf-8-sig')) if path.exists() else {'schema_version':1,'items':[],'sources':{}}
+    if not isinstance(payload,dict) or not isinstance(payload.get('items'),list) or not isinstance(payload.get('sources'),dict) or any(not isinstance(item,dict) for item in payload['items']):raise ValueError('Invalid snapshot shape')
     payload['sources'].setdefault('forest',{'state':'login_required'})
     payload['sources'].setdefault('knps',{'state':'unavailable'})
     forest_path=ROOT/'.runtime'/'forest-status.json'
@@ -205,6 +206,7 @@ class Handler(BaseHTTPRequestHandler):
         if not re.fullmatch(r'[a-zA-Z0-9_-]{8,80}',identity):raise ValueError('Invalid collector')
         return identity
     def read_json(self,maximum=8192):
+        if self.headers.get('Transfer-Encoding'):raise ValueError('Transfer encoding is unsupported')
         length=int(self.headers.get('Content-Length','0'))
         if not 0<length<=maximum:raise ValueError('Invalid payload size')
         data=json.loads(self.rfile.read(length))
@@ -230,10 +232,10 @@ class Handler(BaseHTTPRequestHandler):
             except (OSError,ValueError):
                 return self.respond(503,{'error':'Snapshot unavailable'})
         if path.startswith('/api/operator/'):
-            if not self.valid_operator():return self.respond(403,{'error':'Operator authentication required'})
             try:
+                if not self.valid_operator():return self.respond(403,{'error':'Operator authentication required'})
                 collector=self.collector_id()
-                if path=='/api/operator/health':return self.respond(200,{'ok':True,'mode':'local_pilot'})
+                if path=='/api/operator/health':return self.respond(200,{'ok':True,'mode':'local_pilot',**shared().diagnostics()})
                 if path=='/api/operator/job':
                     facilities=json.loads((ROOT/'catalog.json').read_text(encoding='utf-8-sig'))['forests']
                     assigned=shared().claim(collector,facilities,self.headers.get('X-Active-Lease'))
@@ -269,8 +271,8 @@ class Handler(BaseHTTPRequestHandler):
         if not self.valid_host():
             return self.respond(403,{'error':'Invalid host'})
         if self.path.startswith('/api/operator/'):
-            if not self.valid_operator():return self.respond(403,{'error':'Operator authentication required'})
             try:
+                if not self.valid_operator():return self.respond(403,{'error':'Operator authentication required'})
                 collector=self.collector_id();data=self.read_json(8*1024*1024)
                 if self.path=='/api/operator/pause':
                     shared().pause(collector);return self.respond(200,{'ok':True})

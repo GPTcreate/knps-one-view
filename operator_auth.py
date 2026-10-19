@@ -4,10 +4,18 @@ import os
 from pathlib import Path
 import secrets
 import re
+import threading
 import urllib.parse
 
 
+_key_lock=threading.Lock()
+
+
 def load_key(root: Path):
+    with _key_lock:return _load_key(root)
+
+
+def _load_key(root: Path):
     configured=os.environ.get('FOREST_OPERATOR_KEY')
     if configured:
         if not re.fullmatch(r'[a-zA-Z0-9_-]{32,200}',configured):raise ValueError('Invalid operator key configuration')
@@ -30,4 +38,6 @@ def server_origin(value):
         raise ValueError('Use only a server origin, without credentials or a path')
     if url.scheme!='https' and not (url.scheme=='http' and url.hostname in ('127.0.0.1','localhost')):
         raise ValueError('HTTPS is required except on loopback')
+    if url.port is not None and not 1<=url.port<=65535:raise ValueError('Invalid server port')
+    if not re.fullmatch(r'[a-zA-Z0-9.-]+',url.hostname):raise ValueError('Invalid server hostname')
     return urllib.parse.urlunsplit((url.scheme,url.netloc,'','',''))

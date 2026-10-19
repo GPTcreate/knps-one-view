@@ -8,6 +8,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parent
 FILES = (
+    'prepare_operator.py', 'start-operator.cmd', 'maintenance.py', 'verify_release.py',
+    'tests/test_operations.py', 'tests/test_release.py', 'docs/remaining.md',
     'shared_queue.py', 'operator_auth.py', 'operator_setup.py', 'build_operator.py',
     'operator/index.html', 'operator/background.js', 'operator/ui.js',
     'docs/service-plan.md', 'docs/operator-guide.md', 'tests/operator.test.js',

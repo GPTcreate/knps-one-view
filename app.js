@@ -272,6 +272,13 @@
   }
   function renderBanner() {
     const source = state.sources[state.service] || {};
+    if (source.state === "unavailable" && !state.error && !state.loading) {
+      $("sourceBanner").className = "source-banner warning";
+      $("sourceBanner").textContent =
+        "새 현황에 연결하지 못했습니다. 이전 관측 결과와 확인 시각을 유지합니다. 잠시 후 다시 확인해 주세요.";
+      $("cancelSearch").hidden = true;
+      return;
+    }
     if (
       T.mode === "web" &&
       state.service === "forest" &&
@@ -458,6 +465,8 @@
       const update = updates.get(`${item.service}:${item.id}`);
       if (update) return { ...item, ...update };
       if (item.service === state.service) {
+        if (payload.sources?.[state.service]?.state === "unavailable")
+          return item;
         const { rooms, checked_at, ...catalogOnly } = item;
         return catalogOnly;
       }
@@ -564,6 +573,7 @@
       const matched = C.filterItems(state.items, {
         ...state,
         status: "all",
+        guests: 1,
       }).map((item) => item.id);
       ids = ids ? ids.filter((id) => matched.includes(id)) : matched;
     }

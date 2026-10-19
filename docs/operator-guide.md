@@ -6,9 +6,9 @@
 
 일반 방문자는 웹 주소로 접속한다. Python과 확장을 설치하는 사람은 운영자뿐이다.
 
-1. 소스 폴더에서 `python launcher.py` 또는 `start.cmd`로 웹을 실행한다.
-2. `python operator_setup.py`를 실행한다. `.runtime/operator-connection.json`이 생성된다. 인증키가 들어 있으므로 다른 사용자에게 보내거나 웹에 올리지 않는다.
-3. `python build_operator.py`로 운영자 수집기를 만든다. 개인용 확장과 다른 패키지다.
+1. 소스 폴더의 **`start-operator.cmd`를 더블클릭**한다. 웹 실행·운영자 설정 생성·수집기 빌드·연결 점검을 한 번에 처리한다. 명령행에서는 `python prepare_operator.py`이며 브라우저 없이 준비하려면 `python prepare_operator.py --no-browser`다.
+2. `.runtime/operator-connection.json`이 생성된다. 인증키가 들어 있으므로 다른 사용자에게 보내거나 웹에 올리지 않는다. 설정 파일 경로만 화면에 표시한다.
+3. 빌드된 `artifacts/operator-extension`은 개인용 확장과 다른 패키지다. 다른 폴더에서 실행한 서버와 인증이 맞지 않으면 준비를 중단하며 그 프로세스를 임의로 종료하지 않는다.
 4. Chrome 확장 관리에서 개발자 모드를 켜고 **압축해제된 확장 프로그램을 로드**로 `artifacts/operator-extension` 폴더를 선택한다. 이미 설치했다면 다시 로드한다.
 5. ‘숲자리 운영자 수집기’ 아이콘을 눌러 연결 설정 파일로 2번 JSON을 선택한다. 관측 결과 공유 체크 후 ‘숲나들e 연결·수집 시작’을 누른다.
 6. 열린 숲나들e 공식 탭에서 직접 로그인한다. 기존 로그인 연결이 유효하면 그대로 사용할 수 있다. 수집 중에는 이 탭의 지역·시설·월을 직접 변경하지 않는다.
@@ -28,6 +28,8 @@
 - 전체 대기 작업 최대 512개, 한 IP의 검색 요청은 분당 60회다. 로컬 소규모 시험 정책이며 공개 배포 전 부하·제공 조건에 맞게 조정한다.
 
 ## 저장과 인증
+
+운영 상태를 확인하려면 `python maintenance.py doctor`를 실행한다. 서버·운영자 인증·저장소·관측 시설 수·연결 여부만 표시하며 인증키는 출력하지 않는다. `python maintenance.py backup`은 사용 중인 SQLite의 일관된 백업을 `.runtime/backups/`에 만들고 무결성을 검사한다. 기존 백업 파일은 덮어쓰지 않는다. 이 백업은 관측·대기열용이며 인증키와 연결 설정은 별도로 안전하게 보관해야 한다. 복구는 서버를 중지한 뒤 현재 DB와 WAL/SHM 파일을 별도 보존하고 검증된 백업을 `shared.sqlite3`로 복사해 시작한다.
 
 `.runtime/shared.sqlite3`에 대기열과 공유 관측, 수집기 연결 상태를 저장한다. 서버를 다시 켜도 유지된다. `.runtime/operator.key`는 운영자 인증키이며 반복 설정 실행으로 바뀌지 않는다. `.runtime` 파일은 정적 웹으로 다운로드할 수 없고 모든 배포 ZIP에서 제외한다.
 

@@ -156,6 +156,43 @@ const observation = (id = "0101", state = "waitlist") => ({
     },
   ],
 });
+test("rechecking a month removes vanished rooms and dates while keeping other months' original times", () => {
+  const later = C.addDays(day, 32),
+    time = new Date().toISOString();
+  const previous = {
+    id: "0101",
+    checked_at: time,
+    rooms: [
+      {
+        id: "old",
+        name: "old room",
+        days: { [day]: { state: "available" }, [later]: { state: "full" } },
+      },
+      { id: "removed", days: { [day]: { state: "available" } } },
+    ],
+  };
+  const current = {
+    id: "0101",
+    checked_at: time,
+    rooms: [
+      {
+        id: "new",
+        name: "new room",
+        days: { [day]: { state: "full", checked_at: time } },
+      },
+    ],
+  };
+  const result = O.merge(previous, current);
+  assert.equal(result.rooms.length, 2);
+  assert.ok(!result.rooms.some((room) => room.id === "removed"));
+  const old = result.rooms.find((room) => room.id === "old");
+  assert.ok(!old.days[day]);
+  assert.equal(old.days[later].checked_at, time);
+  assert.equal(
+    result.rooms.find((room) => room.id === "new").days[day].state,
+    "full",
+  );
+});
 test("standalone extension uses only local storage and packaged catalog; no localhost or external server", async () => {
   const w = await started();
   assert.equal(w.tabs.length, 1);

@@ -1,6 +1,7 @@
 # 숲자리 · 웹과 Chrome 확장
 
 운영 방식: [서비스 기획](docs/service-plan.md). 웹 중심·선택형 개인 확장·별도 운영자 수집기 구조를 로컬 시험 환경에 구현했습니다. [운영자 설치·연결 가이드](docs/operator-guide.md).
+현재 완료 범위와 소유자가 직접 진행할 항목은 [출시 인계](docs/remaining.md)에 정리했습니다.
 
 여러 휴양림의 1박 빈자리와 예약대기 신청 기회를 비교합니다. 연박 기능은 제외합니다.
 두 제품을 병행하며 설치 대상과 데이터 확보 방식을 구분합니다.
@@ -41,6 +42,7 @@ Python 3.10 이상. Windows에서는 `start.cmd`로 실행할 수 있습니다. 
 웹 화면은 서버 현황을 읽고 확장 설치·숲나들e 로그인 연결을 요구하지 않습니다.
 휴양림 검색·날짜 이동·새로 확인은 오래되거나 없는 시설·월의 갱신을 요청합니다. 동일 요청은 합쳐지고 최근 5분 내 관측은 재사용합니다. 운영자 수집기가 오프라인이면 갱신 대기를 표시하며 이전 결과는 보존합니다.
 운영자는 `python operator_setup.py`, `python build_operator.py`를 실행해 별도 수집기를 준비합니다. 연결 키는 `.runtime`에만 생성하며 ZIP과 웹 응답에 넣지 않습니다. 실제 설치 순서는 위 가이드를 따릅니다.
+Windows에서는 **`start-operator.cmd` 한 번으로 웹 실행·설정 생성·수집기 빌드·인증 점검**을 마칩니다. 명령행은 `python prepare_operator.py`입니다. `python maintenance.py doctor`로 서버·인증·저장소·연결 상태를 확인하고 `python maintenance.py backup`으로 일관된 SQLite 백업을 만듭니다. 인증키는 출력하지 않습니다.
 기존 개발 연결 API는 기본적으로 비활성화했습니다. 개발 목적으로만 `python server.py --operator-tools`로 켤 수 있습니다.
 
 ## 공식 API 경로
@@ -76,10 +78,14 @@ npm run check
 npm run format:check
 npm test
 python -m unittest discover -s tests -p "test_*.py" -v
+python build_extension.py
+python build_operator.py
 python build_release.py
+python verify_release.py --syntax
 ```
 
 웹 운영자용 소스 묶음은 `artifacts/forest-seat-web-preview.zip`입니다. 로컬 세션·로그·Git·node_modules를 제외합니다.
 이전 `forest-seat-1.0.zip`은 제품 구분 이전의 개발판입니다. 일반 사용자 제품은 웹과 개인용 확장이며, 운영자만 쓰는 `forest-seat-operator-1.0.0.zip`을 별도로 준비합니다.
 현재 범위와 검증 구분은 [두 제품 운영 기준](docs/two-tracks.md), [검증 기록](docs/1.0-validation.md)에 정리합니다.
+GitHub Actions의 Validate Forest Seat 실행에서 테스트·패키지 검증이 성공하면 `forest-seat-tested-packages` 다운로드에 웹/개인용 확장 ZIP과 SHA-256 파일을 제공합니다. 운영자 설정과 키·DB는 포함하지 않습니다. 국립공원 수집 워크플로는 수동 실행만 준비합니다.
 기존 `browser-bridge/`와 `status.json`은 개발·이전 자료이며 정식 확장 또는 웹 실시간 API로 표시하지 않습니다.

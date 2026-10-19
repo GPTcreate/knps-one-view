@@ -159,3 +159,28 @@ class SharedQueue:
 
     def items(self):
         with self.connection() as db:return [json.loads(row['payload']) for row in db.execute('SELECT payload FROM observations ORDER BY facility_id')]
+
+    def diagnostics(self):
+        with self.connection() as db:
+            states={row['state']:row['total'] for row in db.execute('SELECT state,count(*) AS total FROM work GROUP BY state')}
+            count=db.execute('SELECT count(*) FROM observations').fetchone()[0]
+            last=db.execute('SELECT max(last_seen) FROM collectors WHERE paused=0').fetchone()[0]
+            return {'storage':'ok','observed_facilities':count,'work':states,'collector_online':bool(last and self.clock()-last<20)}
+
+    def backup(self,destination):
+        destination=Path(destination)
+        if destination.resolve()==self.path.resolve() or destination.exists():raise ValueError('Choose a new backup file')
+        destination.parent.mkdir(parents=True,exist_ok=True)
+        try:
+            with self.connection() as source:
+                target=sqlite3.connect(destination)
+                try:source.backup(target)
+                finally:target.close()
+            check=sqlite3.connect(destination)
+            try:
+                if check.execute('PRAGMA integrity_check').fetchone()[0]!='ok':raise ValueError('Backup integrity check failed')
+            finally:check.close()
+        except Exception:
+            destination.unlink(missing_ok=True)
+            raise
+        return destination
