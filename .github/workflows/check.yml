@@ -1,0 +1,34 @@
+name: Validate Forest Seat
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm run format:check
+      - run: npm test
+      - run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - run: python build_extension.py
+      - run: python build_operator.py
+      - run: python build_release.py
+      - run: python verify_release.py --syntax
+      - uses: actions/upload-artifact@v7
+        with:
+          name: forest-seat-tested-packages
+          path: |
+            artifacts/forest-seat-extension-1.0.0.zip
+            artifacts/forest-seat-extension-1.0.0.zip.sha256
+            artifacts/forest-seat-web-preview.zip
+            artifacts/forest-seat-web-preview.zip.sha256
+          if-no-files-found: error
+          retention-days: 14

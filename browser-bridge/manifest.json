@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "숲자리 공식현황 연결",
+  "version": "1.0.0",
+  "description": "로그인된 숲나들e 공식 월별 화면의 객실 잔여·예약대기 정보만 로컬 숲자리에 연결합니다. 예약 신청이나 쿠키 수집은 하지 않습니다.",
+  "host_permissions": ["http://127.0.0.1/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do*"
+      ],
+      "js": ["extractor.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

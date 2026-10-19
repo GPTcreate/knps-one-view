@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.runtime/
+artifacts/
+.env
+*.cookie
+*.cookies
+node_modules/

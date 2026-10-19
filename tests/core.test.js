@@ -1,0 +1,283 @@
+"use strict";
+const test = require("node:test"),
+  assert = require("node:assert/strict");
+const C = require("../core.js");
+const now = Date.parse("2026-10-17T12:00:00Z"),
+  fresh = new Date(now - 60000).toISOString(),
+  date = "2026-10-24";
+function item(status, id = "one", time = fresh) {
+  return {
+    id,
+    service: "forest",
+    name: "유명산",
+    region: "경기",
+    checked_at: time,
+    rooms: [
+      { id: "r1", name: "객실 1", capacity: 4, days: { [date]: status } },
+    ],
+  };
+}
+test("KST midnight and UTC date boundary", () => {
+  assert.equal(C.today(new Date("2026-10-16T15:00:00Z")), "2026-10-17");
+  assert.equal(C.today(new Date("2026-10-16T14:59:59Z")), "2026-10-16");
+});
+test("strict date validation includes leap years and rejects normalized invalid dates", () => {
+  assert.equal(C.validDate("2028-02-29"), true);
+  for (const x of [
+    "2026-02-29",
+    "2026-13-01",
+    "2026-04-31",
+    "bad",
+    "2026-1-01",
+    null,
+  ])
+    assert.equal(C.validDate(x), false);
+});
+test("single-night date navigation crosses months and years", () => {
+  assert.equal(C.addDays("2026-12-31", 1), "2027-01-01");
+  assert.equal(C.addDays("2028-03-01", -1), "2028-02-29");
+  assert.equal(C.nextSaturday("2026-10-18"), "2026-10-24");
+  assert.equal(C.nextSaturday("2026-10-17"), "2026-10-17");
+});
+test("unknown and missing dates do not become sold out or available", () => {
+  const s = C.summarize(item({ state: "available" }), "2026-10-25", 2, now);
+  assert.equal(s.state, "unknown");
+  assert.equal(s.available, 0);
+  assert.equal(s.full, 0);
+});
+test("expired, invalid and future timestamps cannot report current availability", () => {
+  for (const t of [
+    "bad",
+    null,
+    new Date(now - 31 * 60000).toISOString(),
+    new Date(now + 2 * 60000).toISOString(),
+  ])
+    assert.equal(
+      C.summarize(item({ state: "available" }, "one", t), date, 2, now).state,
+      "unknown",
+    );
+});
+test("actual zero availability and closed status remain distinct", () => {
+  assert.equal(
+    C.summarize(item({ state: "full" }), date, 2, now).state,
+    "full",
+  );
+  assert.equal(
+    C.summarize(item({ state: "closed" }), date, 2, now).state,
+    "closed",
+  );
+});
+test("waiting availability does not invent a rank", () => {
+  const s = C.summarize(item({ state: "waitlist" }), date, 2, now);
+  assert.equal(s.waitlist, 1);
+  assert.equal(s.nextRank, null);
+  assert.equal(
+    C.summarize(item({ state: "waitlist", next_rank: 2 }), date, 2, now)
+      .nextRank,
+    2,
+  );
+});
+test("insufficient capacity excluded while unknown capacity remains explicit", () => {
+  const x = item({ state: "available" });
+  assert.equal(C.summarize(x, date, 5, now).available, 0);
+  x.rooms[0].capacity = null;
+  const s = C.summarize(x, date, 5, now);
+  assert.equal(s.available, 1);
+  assert.equal(s.capacityUnknown, true);
+});
+test("search room names, opportunity and favorites filters compose", () => {
+  const x = item({ state: "waitlist" });
+  const f = {
+    date,
+    guests: 2,
+    service: "forest",
+    status: "opportunity",
+    query: "객실",
+    favoritesOnly: true,
+    favorites: ["one"],
+  };
+  assert.equal(C.filterItems([x], f, now).length, 1);
+  assert.equal(
+    C.filterItems([x], { ...f, status: "available" }, now).length,
+    0,
+  );
+  assert.equal(C.filterItems([x], { ...f, favorites: [] }, now).length, 0);
+});
+test("official links reject injection, lookalike hosts, credentials and insecure URLs", () => {
+  for (const s of [
+    "javascript:alert(1)",
+    "https://foresttrip.go.kr.evil.test",
+    "http://www.foresttrip.go.kr",
+    "https://user:pw@www.foresttrip.go.kr",
+  ])
+    assert.equal(C.safeURL(s), "");
+  assert.ok(C.safeURL("https://www.foresttrip.go.kr/0101"));
+  assert.ok(C.safeURL("https://reservation.knps.or.kr/"));
+});
+test("all rendered special characters are escaped", () =>
+  assert.equal(
+    C.escapeHTML(`<img a="'">&`),
+    "&lt;img a=&quot;&#39;&quot;&gt;&amp;",
+  ));
+test("corrupt or inaccessible favorites storage recovers", () => {
+  assert.deepEqual(
+    C.readSaved(
+      {
+        getItem() {
+          throw Error();
+        },
+      },
+      "x",
+      [],
+    ),
+    [],
+  );
+  assert.deepEqual(
+    C.readSaved(
+      {
+        getItem() {
+          return "{bad";
+        },
+      },
+      "x",
+      [],
+    ),
+    [],
+  );
+  assert.deepEqual(
+    C.readSaved(
+      {
+        getItem() {
+          return "[1]";
+        },
+      },
+      "x",
+      ["fallback"],
+    ),
+    ["fallback"],
+  );
+});
+test("first load, date/guest changes, unsaved or unknown prior samples never alert", () => {
+  const current = item({ state: "available" }),
+    p = { date, guests: 2, items: [item({ state: "full" })] };
+  assert.deepEqual(C.detectChanges(null, [current], date, ["one"], 2, now), []);
+  assert.deepEqual(
+    C.detectChanges(
+      { ...p, date: "2026-10-23" },
+      [current],
+      date,
+      ["one"],
+      2,
+      now,
+    ),
+    [],
+  );
+  assert.deepEqual(C.detectChanges(p, [current], date, [], 2, now), []);
+  assert.deepEqual(
+    C.detectChanges({ ...p, guests: 4 }, [current], date, ["one"], 2, now),
+    [],
+  );
+});
+test("new fresh availability transition alerts exactly once", () => {
+  const old = item(
+      { state: "full" },
+      "one",
+      new Date(now - 120000).toISOString(),
+    ),
+    next = item({ state: "available" });
+  const p = { date, guests: 2, items: [old] };
+  assert.equal(C.detectChanges(p, [next], date, ["one"], 2, now).length, 1);
+  assert.equal(
+    C.detectChanges(
+      { date, guests: 2, items: [next] },
+      [next],
+      date,
+      ["one"],
+      2,
+      now,
+    ).length,
+    0,
+  );
+});
+test("waiting opening or verified rank improvement alerts, existing availability does not", () => {
+  const p = {
+    date,
+    guests: 2,
+    items: [
+      item(
+        { state: "waitlist", next_rank: 3 },
+        "one",
+        new Date(now - 120000).toISOString(),
+      ),
+    ],
+  };
+  assert.equal(
+    C.detectChanges(
+      p,
+      [item({ state: "waitlist", next_rank: 1 })],
+      date,
+      ["one"],
+      2,
+      now,
+    ).length,
+    1,
+  );
+  assert.equal(
+    C.detectChanges(p, [item({ state: "waitlist" })], date, ["one"], 2, now)
+      .length,
+    0,
+  );
+  assert.equal(
+    C.detectChanges(
+      {
+        ...p,
+        items: [
+          item(
+            { state: "unknown" },
+            "one",
+            new Date(now - 120000).toISOString(),
+          ),
+        ],
+      },
+      [item({ state: "available" })],
+      date,
+      ["one"],
+      2,
+      now,
+    ).length,
+    0,
+  );
+});
+
+test("older day observations are not refreshed by a different month collection", () => {
+  const x = item({
+    state: "available",
+    checked_at: new Date(now - 40 * 60000).toISOString(),
+  });
+  assert.equal(C.summarize(x, date, 2, now).state, "unknown");
+});
+test("known insufficient capacity removes a facility while unknown capacity is retained", () => {
+  const x = item({ state: "available" });
+  const f = { date, guests: 5, service: "forest" };
+  assert.equal(C.filterItems([x], f, now).length, 0);
+  x.rooms[0].capacity = null;
+  assert.equal(C.filterItems([x], f, now).length, 1);
+});
+test("malformed snapshots cannot replace a good payload", () => {
+  const x = item({ state: "waitlist", next_rank: 1 });
+  const good = {
+    schema_version: 1,
+    items: [x],
+    sources: { forest: { state: "ready" } },
+  };
+  assert.equal(C.validatePayload(good), true);
+  for (const bad of [
+    null,
+    { ...good, schema_version: 2 },
+    { ...good, items: [x, x] },
+    { ...good, items: [{ ...x, rooms: null }] },
+  ])
+    assert.equal(C.validatePayload(bad), false);
+  x.rooms[0].days[date].next_rank = "1";
+  assert.equal(C.validatePayload(good), false);
+});

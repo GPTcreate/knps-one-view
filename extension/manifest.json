@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "숲자리 · 휴양림 빈자리와 예약대기 비교",
+  "version": "1.0.0",
+  "minimum_chrome_version": "120",
+  "description": "숲나들e 공식 화면에서 여러 자연휴양림의 1박 빈자리와 대기 신청 가능 순위를 비교합니다. 예약·결제는 공식 사이트에서 직접 진행합니다.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.foresttrip.go.kr/*"],
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_title": "숲자리 열기",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png" }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.foresttrip.go.kr/rep/or/sssn/monthRsrvtStatus.do*"
+      ],
+      "js": ["extractor.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+  }
+}

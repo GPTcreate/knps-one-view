@@ -1,64 +1,91 @@
-# 국공뷰어 (KNPS One-View) - 국립공원 야영장·객실·대피소 실시간 잔여석 통합 뷰어
+# 숲자리 · 웹과 Chrome 확장
 
-> **"더미 데이터 제로(0%)! 국립공원공단 공식 실시간 시스템 완전 연동"**  
-> 전국 48개 국립공원 야영장의 **2,543개 개별 방/사이트(호실·동) 단위 잔여석**과 **생태탐방원 생활관 객실**, **산악 대피소 침상**을 1개 전광판으로 실시간 조회하고 1초 만에 공식 예약 딥링크로 직행하는 웹앱입니다.
+운영 방식: [서비스 기획](docs/service-plan.md). 웹 중심·선택형 개인 확장·별도 운영자 수집기 구조를 로컬 시험 환경에 구현했습니다. [운영자 설치·연결 가이드](docs/operator-guide.md).
+현재 완료 범위와 소유자가 직접 진행할 항목은 [출시 인계](docs/remaining.md)에 정리했습니다.
 
----
+여러 휴양림의 1박 빈자리와 예약대기 신청 기회를 비교합니다. 연박 기능은 제외합니다.
+두 제품을 병행하며 설치 대상과 데이터 확보 방식을 구분합니다.
 
-## 🌟 핵심 특징 & 구현 기능
+| 제품 | 사용자 이용 | 현재 상태 |
+| --- | --- | --- |
+| 웹 | 웹사이트 접속, 확장·Python 설치 불필요 | 저장 현황·찜·공식 이동·국립공원 현황, 휴양림 갱신 대기열과 공유 관측 반영 구현. 현재 로컬 시험 |
+| Chrome 확장 | 확장 설치 후 자체 비교 화면, 숲나들e 직접 로그인 | 로컬 서버 없는 독립 MV3 패키지. 자동 검증 완료, 새 패키지 실설치·웹스토어 심사 대기 |
 
-### 1. 100% 공단 공식 실시간 데이터 (더미 데이터 Zero)
-- 국립공원공단 예약시스템(`reservation.knps.or.kr`)의 공식 엔드포인트(`POST /reservation/campsiteList.do`) 직접 연동.
-- 전국 48개 야영장의 실제 사이트명(예: `설악동 카라반 1~8호`, `닷돈재 풀옵션 산막 1~15호`, `몽산포 A영지 1~30` 등 총 2,543개 실)을 실시간 파싱.
+공식 예약·대기 신청·결제는 공식 사이트에서 직접 진행합니다. 숲자리와 산림청·숲나들e는 별개입니다.
 
-### 2. 세부 방/객실 단위 아코디언 인스펙터 (Room-level Inspector)
-- 각 야영장 행에서 **`[🔑 방/사이트별 N곳 펼치기 ▼]`** 클릭 시, 하단에 개별 방/호실/사이트 카드가 그리드로 전개.
-- 각 방마다 금/토/일 날짜별 예약 가능 여부(`예약가능 ↗` / `마감`)가 표시되며, 클릭 시 해당 객실 예약 페이지로 바로 직행.
-- **방/객실 전용 필터:** `[🏠 방/객실(카라반·산막·숙소)만 보기]` 토글 지원.
+## Chrome 확장 빌드
 
-### 3. 3대 시설 탭 확장
-- **🏕️ 국립공원 야영장 (48개소):** 오토캠핑, 데크, 카라반, 풀옵션 산막텐트
-- **🌲 생태탐방원 생활관 (객실 9개원):** 북한산, 지리산, 설악산, 소백산, 한려해상 등 2~8인실 숙소
-- **🏠 산악 대피소 (침상/방):** 지리산 장터목·세석, 설악산 희운각 등
-
-### 4. 0원 서버리스 실시간 취소표 사냥 모드
-- Web Audio API를 활용하여 브라우저에서 20초 주기로 백그라운드 폴링.
-- 찜(⭐)한 시설 또는 특정 방에 취소표가 감지되면 즉각 비프음(띵동)과 토스트 알림 발송.
-
----
-
-## 📁 프로젝트 파일 구성
-
-```text
-knps-one-view/
-├── index.html                    # 프론트엔드 단일 페이지 웹앱 (Tailwind CSS, 모바일 반응형)
-├── app.js                        # 실시간 데이터 로더, 방 단위 인스펙터, 필터, 딥링크 로직
-├── scraper_real.py               # 공단 실시간 48개 야영장 2,543개 방 수집기 (소요시간 ~35초)
-├── camps_meta.json               # 전국 48개 국립공원 야영장 고유 dept_id 공식 매핑 메타데이터
-├── status.json                   # 수집된 전국 48개소 2,543개 방/사이트 실시간 잔여석 데이터셋
-├── .github/workflows/scrape.yml  # GitHub Actions 15분 주기 0원 무료 Cron 자동화 워크플로
-└── README.md                     # 프로젝트 안내 및 배포 가이드
+```powershell
+python build_extension.py
 ```
 
----
+- 스토어 업로드 ZIP: `artifacts/forest-seat-extension-1.0.0.zip`
+- 실설치 QA 폴더: `artifacts/chrome-extension/`
+- ZIP 루트에 manifest.json이 있으며 Python·localhost·연결 키를 사용하지 않습니다.
+- 클릭한 확장 아이콘 → 숲자리 → 숲나들e 연결 → 공식 로그인 → 숲자리 검색 순서입니다.
+- 권한은 storage와 숲나들e 사이트 접근으로 제한됩니다. 쿠키·비밀번호·개인 예약 내역을 읽지 않습니다.
+- 관측값은 기기에 저장하며 화면에서 삭제할 수 있습니다. 개발자 서버 전송·광고 SDK·원격 실행 코드는 없습니다.
 
-## 🚀 로컬 실행 & 배포 가이드
+[정식 출시 준비](docs/chrome-store/release.md), [등록 문안](docs/chrome-store/listing.txt), [심사 설명](docs/chrome-store/review-notes.txt), [개인정보 안내](extension/privacy.html).
+개발자 계정·지원 연락처·공개 개인정보 안내 URL·실제 화면 이미지와 실설치 검증을 마친 뒤 심사 제출합니다. ZIP 준비를 정식 출시라고 부르지 않습니다.
 
-### 1. 로컬에서 즉시 실행
-* `index.html` 파일을 더블 클릭하여 웹 브라우저(Chrome, Edge 등)에서 바로 열 수 있습니다.
-* 또는 파이썬 내장 웹 서버 실행:
-  ```bash
-  python -m http.server 8080
-  # 브라우저에서 http://localhost:8080 접속
-  ```
+## 웹 운영자 실행
 
-### 2. 최신 실시간 데이터 수동 갱신 (선택)
-```bash
-# 48개 국립공원 야영장의 실시간 데이터를 35초 만에 status.json으로 갱신
+```powershell
+python launcher.py
+# http://127.0.0.1:8765
+```
+
+Python 3.10 이상. Windows에서는 `start.cmd`로 실행할 수 있습니다. 이는 웹 운영자용 소스 실행 방식이며 방문자에게 Python을 요구하는 제품이 아닙니다.
+기존 서버 재사용, 다른 포트 소유자 보호, `.runtime/server.log` 기록을 지원합니다. 브라우저 없이 시작하려면 `python launcher.py --no-browser`.
+현재 로컬 미리보기만 실행하며 원격 공개 배포는 수행하지 않았습니다.
+웹 화면은 서버 현황을 읽고 확장 설치·숲나들e 로그인 연결을 요구하지 않습니다.
+휴양림 검색·날짜 이동·새로 확인은 오래되거나 없는 시설·월의 갱신을 요청합니다. 동일 요청은 합쳐지고 최근 5분 내 관측은 재사용합니다. 운영자 수집기가 오프라인이면 갱신 대기를 표시하며 이전 결과는 보존합니다.
+운영자는 `python operator_setup.py`, `python build_operator.py`를 실행해 별도 수집기를 준비합니다. 연결 키는 `.runtime`에만 생성하며 ZIP과 웹 응답에 넣지 않습니다. 실제 설치 순서는 위 가이드를 따릅니다.
+Windows에서는 **`start-operator.cmd` 한 번으로 웹 실행·설정 생성·수집기 빌드·인증 점검**을 마칩니다. 명령행은 `python prepare_operator.py`입니다. `python maintenance.py doctor`로 서버·인증·저장소·연결 상태를 확인하고 `python maintenance.py backup`으로 일관된 SQLite 백업을 만듭니다. 인증키는 출력하지 않습니다.
+기존 개발 연결 API는 기본적으로 비활성화했습니다. 개발 목적으로만 `python server.py --operator-tools`로 켤 수 있습니다.
+
+## 공식 API 경로
+
+국립자연휴양림관리소의 휴양림 서비스가 디지털서비스 개방 수시신청 대상에 포함됩니다.
+기관 선정·이용약관·검증서비스 승인·연계 테스트 후 운영 인증키를 받는 구조입니다.
+신청 자격이 없는 조회 전용 서비스의 이용 가능 여부, 공립·사립 범위와 다음 대기 신청 가능 순위 제공은 아직 확정되지 않았습니다.
+존재가 확인되지 않은 API URL이나 응답 필드를 만들어 연결된 것처럼 표시하지 않습니다.
+
+[조사 결과와 공식 출처](docs/api/findings.md), [조회 전용 문의 초안](docs/api/inquiry.txt), [이용계획 초안](docs/api/usage-plan.txt).
+공식 HWP 원본 3개는 `docs/api/official-forms/`에 있습니다. 초안 발송·기관 신청·약관 체결은 아직 하지 않았습니다.
+
+## 공개 자료 갱신
+
+```powershell
 python scraper_real.py
+python refresh_catalog.py
 ```
 
-### 3. GitHub Pages / Cloudflare Pages 무료 배포 (0원 운영)
-1. GitHub 저장소 생성 후 본 폴더 파일 푸시
-2. `.github/workflows/scrape.yml`에 의해 매 15분마다 GitHub Actions가 자동으로 `scraper_real.py`를 실행하여 최신 `status.json`을 갱신 및 커밋
-3. Cloudflare Pages 또는 GitHub Pages와 연동하면 서버 유지비 0원으로 영구 운영 가능
+각각 국립공원 48곳의 공개 현황, 숲나들e 186곳·9권역의 시설 목록을 갱신합니다. 시설 목록은 잔여 현황이 아닙니다.
+전체 실패는 이전 파일을 보존하고 부분 실패는 시설별 이전 관측 시각을 유지합니다.
+30분을 넘긴 관측값·누락·실패는 현재 빈자리나 매진으로 추정하지 않습니다.
+대1·대2·대3은 다음 대기 신청 가능 순위이며 개인 대기순번이 아닙니다. 없는 순위·정원·취소 확률을 추정하지 않습니다.
+알림은 열린 화면에서 저장한 시설의 새로운 관측 변화만 비교하며 브라우저 종료 후 백그라운드 알림은 제공하지 않습니다.
+
+## 개발 검증과 소스 묶음
+
+Node.js 24.15 이상. 웹·확장 실행에 npm 라이브러리는 필요하지 않으며 테스트에만 사용합니다.
+
+```powershell
+npm ci --ignore-scripts
+npm run check
+npm run format:check
+npm test
+python -m unittest discover -s tests -p "test_*.py" -v
+python build_extension.py
+python build_operator.py
+python build_release.py
+python verify_release.py --syntax
+```
+
+웹 운영자용 소스 묶음은 `artifacts/forest-seat-web-preview.zip`입니다. 로컬 세션·로그·Git·node_modules를 제외합니다.
+이전 `forest-seat-1.0.zip`은 제품 구분 이전의 개발판입니다. 일반 사용자 제품은 웹과 개인용 확장이며, 운영자만 쓰는 `forest-seat-operator-1.0.0.zip`을 별도로 준비합니다.
+현재 범위와 검증 구분은 [두 제품 운영 기준](docs/two-tracks.md), [검증 기록](docs/1.0-validation.md)에 정리합니다.
+GitHub Actions의 Validate Forest Seat 실행에서 테스트·패키지 검증이 성공하면 `forest-seat-tested-packages` 다운로드에 웹/개인용 확장 ZIP과 SHA-256 파일을 제공합니다. 운영자 설정과 키·DB는 포함하지 않습니다. 국립공원 수집 워크플로는 수동 실행만 준비합니다.
+기존 `browser-bridge/`와 `status.json`은 개발·이전 자료이며 정식 확장 또는 웹 실시간 API로 표시하지 않습니다.
